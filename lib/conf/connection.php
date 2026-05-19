@@ -38,7 +38,5 @@
         public function close(){
             pg_close($this->link);
         }
-
-
     } 
 ?>
