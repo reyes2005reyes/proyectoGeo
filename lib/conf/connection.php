@@ -28,6 +28,7 @@
                 }else{
                     echo "Conexion exitosa";
                 }
+
         }
 
         public function getConnect(){
