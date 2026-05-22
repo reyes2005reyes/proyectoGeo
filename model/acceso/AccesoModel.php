@@ -1,4 +1,4 @@
 <?php
 
-    include_once '../model/'
+    include_once '../model/MasterModel.php';
 ?>
