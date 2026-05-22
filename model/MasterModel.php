@@ -27,7 +27,7 @@
                 return $result;
             }else{
                 echo "No se encontro ningun registro";
-            }    
+            }
         }
         public function autoincrement($table, $field){
             $sql = "SELECT MAX($field) FROM $table";
