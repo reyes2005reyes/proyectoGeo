@@ -1,3 +1,8 @@
+<!-- Este index no tiene nada que ver con lo de NICOLAS. LO cree yo
+Victor, con el proposito de hacer mas facil la navegacion entre archivos
+php y asi. NO eliminar por favor. -->
+
+
 <?php
 
 
@@ -46,7 +51,7 @@ foreach ($files as $file) {
     if (is_dir($newPath)) {
         echo "<li>📁 <a href='?path=$newPath'>$file</a></li>";
     } else {
-        echo "<li>📄 <a href='$newPath' target='_blank'>$file</a></li>";
+        echo "<li>📄 <a href='$newPath' >$file</a></li>";
     }
 }
 ?>

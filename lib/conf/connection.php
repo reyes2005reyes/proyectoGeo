@@ -8,7 +8,7 @@
         private $link;
 
         function __construct(){
-            $this-> setConnection();
+            $this-> setConnection(); //Asigna los parametros de conexion 
             $this-> connect();
         }
 
