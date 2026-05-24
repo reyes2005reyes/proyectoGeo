@@ -1,12 +1,16 @@
-<div class="panel" style="width:20%; height:100%; background-color: green;">
-    <h3 style="text-align: center;">
-    <div class="listaSolicitudes">
-        <?php
-            $method = "POST";
-            $action = "listar.php";
-            $text = "listar Solicitudes";
+<html lang="en">
+<link rel="stylesheet" href="vistas.css">
 
-            include __DIR__ . '/partials/button.php';
-            ?>
+<body>
+
+    //Aqui reutilizo el button.php 
+    <div class="listarSolicitudes">
+        <form method="<?= $method ?>" action="<?= $action ?>">
+            <button type="submit"><?= $text ?></button>
+        </form> 
     </div>
-</div>
+
+
+</body>
+
+</html>
