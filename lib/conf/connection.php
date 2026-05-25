@@ -25,8 +25,6 @@
                 $this->link = pg_connect("host={$this->server} port={$this->port} dbname={$this->database} user={$this->user} password={$this->password}");
                 if(!$this->link){
                     die(pg_last_error($this->link));
-                }else{
-                    echo "Conexion exitosa";
                 }
 
         }

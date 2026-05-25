@@ -1,3 +1,8 @@
+
+<?php
+    include_once '../lib/helpers.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +15,7 @@
             background: #f0f2f5;
             height: 100vh;
             display: flex;
-            align-self: center;
+            align-items: center;
             justify-content: center;
         }
         .login-container{
@@ -19,23 +24,46 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        .login{
+            width: 320px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            animation: aparecer 0.8s ease;
+        }
+
+        @keyframes aparecer{
+        from{
+        opacity: 0;
+        transform: translateY(40px);
+        }
+        to{
+        opacity: 1;
+        transform: translateY(0);
+        }
+}
     </style>
 </head>
 <body>
-    
-    <div class="card login-card">
-        
+    <div class="login">
         <div class="card-body">
             <h3 class="text-center mb-4">Iniciar sesión</h3>
-            <form action="" method="POST">
+            <form action="<?php echo getUrl("acceso","acceso", "login", false, "ajax"); ?>" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Documento</label>
-                    <input type="text" class="form-control" id="" name="" required placeholder="Ingrese su documento">
+                    <input type="text" class="form-control" id="" name="numero_documento" required placeholder="Ingrese su documento">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-control" id="password" name="contrasena" required placeholder="Ingrese su contraseña">
                 </div>
+
+                <?php
+                if(isset($_SESSION['error'])){
+                    echo "<div class='alert alert-danger' role='alert'>".$_SESSION['error']."</div>";
+                    unset($_SESSION['error']);
+                }
+                ?>
                 <button type="submit" class="btn btn-primary w-100">Ingresar</button>
                 <div class="text-center mt-3">
                     <a href="">¿Olvidaste tu contraseña?</a>
@@ -43,7 +71,6 @@
             </form>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

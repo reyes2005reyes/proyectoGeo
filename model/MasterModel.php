@@ -1,8 +1,8 @@
 <?php
 
-    include_once('../lib/conf/conecction.php');
+    include_once('../lib/conf/Connection.php');
 
-    class MasterModel extends Conecction{
+    class MasterModel extends Connection{
 
         public function select($sql){
             $result = pg_query($this -> getConnect(),$sql);
@@ -23,7 +23,7 @@
         public function findOne($table, $fields, $condition){
             $sql = "SELECT $fields FROM $table WHERE $condition";
             $result = pg_query($this -> getConnect(),$sql);
-            if(pg_nums_rows($result) > 0){
+            if(pg_num_rows($result) > 0){
                 return $result;
             }else{
                 echo "No se encontro ningun registro";
