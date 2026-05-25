@@ -13,7 +13,7 @@ echo "<div class='container'>";
 
     if(isset($_GET['modulo']))
     {
-        // ver video Nicolar Estructura minuto 33 y asi
+        // ver video Nicolas Estructura minuto 33 y asi
     }
 echo "</div>";
 

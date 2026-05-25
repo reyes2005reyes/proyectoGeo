@@ -4,6 +4,19 @@
 
     class MasterModel extends Conecction{
 
+
+    protected function query($sql, $params = []) {
+        $result = pg_query_params($this->getConnect(), $sql, $params);
+
+        if (!$result) {
+            throw new Exception(pg_last_error($this->getConnect()));
+        }
+
+        return $result;
+    }
+    // Métodos CRUD genéricos
+
+        //SELECT Sirve para LISTAR por si acaso.
         public function select($sql){
             $result = pg_query($this -> getConnect(),$sql);
             return $result;
@@ -29,6 +42,8 @@
                 echo "No se encontro ningun registro";
             }
         }
+
+
         public function autoincrement($table, $field){
             $sql = "SELECT MAX($field) FROM $table";
             $result = pg_query($this -> getConnect(),$sql);

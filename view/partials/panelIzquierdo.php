@@ -14,6 +14,10 @@
     <form method="POST" action="vistaSolicitudes.php">
         <button type="submit">Listar Solicitudes</button>
     </form> 
+  <!-- ------------------------------------------- -->
+    <form method="POST" action="">
+        <button type="submit">Inserte texto</button>
+    </form> 
 
     <form method="POST" action="">
         <button type="submit">Inserte texto</button>
@@ -21,6 +25,13 @@
 
     <form method="POST" action="">
         <button type="submit">Inserte texto</button>
+    </form> 
+
+    <form method="POST" action="">
+        <button type="submit">Inserte texto</button>
+    </form> 
+    <form method="POST" action="">
+        <button type="submit">Cerrar Sesion</button>
     </form> 
 
 </div>

@@ -1,5 +1,7 @@
 /* Panel izquierdo tipo dashboard */
 .PanelIzquierdo {
+    margin: 10px;
+    margin-left: 0;
     width: 15%;
     height: 100vh;
     display: flex;
