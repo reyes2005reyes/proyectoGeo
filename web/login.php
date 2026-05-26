@@ -46,6 +46,8 @@
 </head>
 <body>
     <div class="login">
+        <img src="assets/img/logoGeo.png" alt="logo" class="navbar-brand d-block mx-auto mb-3" height="100">
+        <h3 class="text-center mb-4">SIAV</h3>
         <div class="card-body">
             <h3 class="text-center mb-4">Iniciar sesión</h3>
             <form action="<?php echo getUrl("acceso","acceso", "login", false, "ajax"); ?>" method="POST">
@@ -67,6 +69,9 @@
                 <button type="submit" class="btn btn-primary w-100">Ingresar</button>
                 <div class="text-center mt-3">
                     <a href="">¿Olvidaste tu contraseña?</a>
+                </div>
+                <div class="text-center mt-2">
+                    <a href="../view/registro/Registro.php">¿No tienes una cuenta? Regístrate</a>
                 </div>
             </form>
         </div>

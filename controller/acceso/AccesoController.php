@@ -20,6 +20,7 @@
             $_SESSION['primer_apellido'] = $usuario['primer_apellido'];
             $_SESSION['numero_documento'] = $usuario['numero_documento'];
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
+            $_SESSION['id_rol'] = $usuario['id_rol'];
             $_SESSION['auth'] = "ok";
     
             redirect('index.php');

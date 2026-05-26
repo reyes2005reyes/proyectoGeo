@@ -1,6 +1,5 @@
 <?php
 
-//Esto lo redirecciona a uno
 session_start();
 function redirect($url)
 {
