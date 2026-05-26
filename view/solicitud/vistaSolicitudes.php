@@ -6,7 +6,7 @@
     <title>Listado de Solicitudesss</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 
-    <?php include_once __DIR__ . '/header.php'; ?>
+    <?php include_once __DIR__ . '/../partials/header.php'; ?>
 
     <style>
         body {
@@ -92,12 +92,13 @@
             text-decoration: none;
         }
     </style>
+
 </head>
 
 <body>
 
 <div class="content-wrapper">
-    <?php include_once __DIR__ . '/panelIzquierdo.php'; ?>
+    <?php include_once __DIR__ . '/../partials/panelIzquierdo.php'; ?>
     
     <div class="main-content">
         <div class="solicitudes-container">
@@ -106,13 +107,12 @@
             <h2>📋 Listado de Solicitudes</h2>
 
             <?php
-                // Obtener solicitudes desde el DAO si vienen del controlador
-                if(empty($solicitudes)) {
-                    // Si no existen, obtenerlas aquí directamente
-                    require_once __DIR__ . '/../../model/SolicitudDao.php';
+                // Si el controlador no pasa $solicitudes, obtenerlas aquí como fallback
+                if(!isset($solicitudes) || empty($solicitudes)) {
+                    require_once __DIR__ . '/../../model/solicitud/Solicitud.php';
                     try {
-                        $dao = new SolicitudDao();
-                        $solicitudes = $dao->listarSolicitudes();
+                        $model = new Solicitud();
+                        $solicitudes = $model->listarSolicitudes();
                     } catch (Exception $e) {
                         $solicitudes = [];
                         error_log("Error al cargar solicitudes: " . $e->getMessage());

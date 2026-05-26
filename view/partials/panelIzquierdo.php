@@ -29,7 +29,7 @@
                     <a href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
                         <i class="fas fa-user"></i>
                         <p>Mi Perfil</p>
-                    </a>
+                    </a>    
                 </li>
 
                 <li class="nav-item">

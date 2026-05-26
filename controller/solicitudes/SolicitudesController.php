@@ -2,14 +2,13 @@
 
 require_once __DIR__ . '/../../model/solicitud/Solicitud.php';
 
-class SolicitudController {
+class SolicitudesController {
 
-    public function index() {
+    public function listar() {
         $model = new Solicitud();
         $solicitudes = $model->listarSolicitudes();
 
         require_once __DIR__ . '/../../view/solicitud/vistaSolicitudes.php';
     }
 }
-
 ?>
