@@ -1,16 +1,15 @@
 <?php
 
-
-require_once "../model/SolicitudDAO.php";
+require_once __DIR__ . "/../model/SolicitudDao.php";
 
 class SolicitudController {
 
     public function index() {
 
-        $dao = new SolicitudDAO();
+        $dao = new SolicitudDao();
         $solicitudes = $dao->listarSolicitudes();
 
-        require "./view/partials/solicitudes/vistaSolicitudes.php";
+        require __DIR__ . "/../view/partials/vistaSolicitudes.php";
     }
 }
 

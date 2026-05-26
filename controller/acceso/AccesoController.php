@@ -1,5 +1,5 @@
 <?php
-    include_once '../model/acceso/AccesoModel.php';
+    include_once __DIR__ . '/../model/acceso/AccesoModel.php';
     
     class AccesoController {
 

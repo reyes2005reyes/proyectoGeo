@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ProyectoGeo</title>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 
-<!-- 
-Agrego el header.php para tener mis css  -->
-<?php include_once __DIR__ . '/header.php'; ?>
-
-
-
-
+    <?php include_once __DIR__ . '/header.php'; ?>
+</head>
 
 <body>
 

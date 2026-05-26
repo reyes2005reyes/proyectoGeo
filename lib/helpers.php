@@ -41,11 +41,14 @@ function resolve()
     
     // TODA RUTA EMPIEZA DESDE index.php --> carpeta web
 
-    if (is_dir("../controller/$modulo")) { //is_dir verifica si el directorio existe en la ruta especificada
+    $controllerPath = __DIR__ . "/../controller/$modulo";
+    $controllerFile = $controllerPath . "/" . $controlador . "Controller.php";
 
-        if (is_file("../controller/$modulo/".$controlador ."Controller.php")) { //is_file verifica si el archivo existe en la ruta especificada
+    if (is_dir($controllerPath)) { //is_dir verifica si el directorio existe en la ruta especificada
 
-            include_once "../controller/$modulo/$controlador"."Controller.php";
+        if (is_file($controllerFile)) { //is_file verifica si el archivo existe en la ruta especificada
+
+            include_once $controllerFile;
 
             $nombreClase = $controlador."Controller";
 

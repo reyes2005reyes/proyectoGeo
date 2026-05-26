@@ -1,13 +1,13 @@
 <?php
     
-    include_once '../lib/helpers.php';
-    include_once '../lib/helpersLogin.php';
-    include_once '../view/partials/header.php';
+    include_once __DIR__ . '/../lib/helpers.php';
+    include_once __DIR__ . '/../lib/helpersLogin.php';
+    include_once __DIR__ . '/../view/partials/header.php';
     
     echo "<body>";
 
         echo "<div class='container'>";
-            include_once "../view/partials/navbar.php";
+            include_once __DIR__ . "/../view/partials/navbar.php";
 
             if(isset($_GET["modulo"])){
                 resolve();
@@ -15,7 +15,7 @@
                 session_destroy();
             }
 
-            include_once "../view/partials/footer.php";
+            include_once __DIR__ . "/../view/partials/footer.php";
         echo "</div>";
     
     echo "</body>";
