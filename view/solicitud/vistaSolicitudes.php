@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Listado de Solicitudes</title>
+    <title>Listado de Solicitudesss</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 
     <?php include_once __DIR__ . '/header.php'; ?>
