@@ -14,7 +14,7 @@
 
         return $result;
     }
-    // Métodos CRUD genéricos
+
 
         //SELECT Sirve para LISTAR por si acaso.
         public function select($sql){

@@ -4,4 +4,4 @@
     if(isset($_GET["modulo"])){
         resolve();
     }
-?>
+?>  
