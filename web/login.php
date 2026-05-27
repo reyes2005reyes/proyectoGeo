@@ -1,3 +1,20 @@
+<?php
+// Error 5: verificar que los recursos del sistema están disponibles
+if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.php')) {
+?>
+<!DOCTYPE html>
+<html>
+<head><title>Error</title></head>
+<body style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;">
+    <h3>No fue posible cargar la página</h3>
+    <p>Hay un problema con los recursos del sistema.</p>
+    <button onclick="location.reload()" class="btn btn-primary">Reintentar</button>
+</body>
+</html>
+<?php
+    exit;
+}
+?>
 
 <?php
     include_once '../lib/helpers.php';
@@ -29,19 +46,9 @@
             padding: 30px;
             background: white;
             border-radius: 12px;
-            animation: aparecer 0.8s ease;
         }
 
-        @keyframes aparecer{
-        from{
-        opacity: 0;
-        transform: translateY(40px);
-        }
-        to{
-        opacity: 1;
-        transform: translateY(0);
-        }
-}
+
     </style>
 </head>
 <body>
@@ -53,11 +60,11 @@
             <form action="<?php echo getUrl("acceso","acceso", "login", false, "ajax"); ?>" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Documento</label>
-                    <input type="text" class="form-control" id="" name="numero_documento" required placeholder="Ingrese su documento">
+                    <input type="text" class="form-control" id="" name="numero_documento" required placeholder="Ingrese su documento" oninvalid="this.setCustomValidity('Por favor ingresa tu número de documento')"oninput="this.setCustomValidity('')">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="contrasena" required placeholder="Ingrese su contraseña">
+                    <input type="password" class="form-control" id="password" name="contrasena" required placeholder="Ingrese su contraseña" oninvalid="this.setCustomValidity('Por favor ingresa tu contraseña')" oninput="this.setCustomValidity('')">
                 </div>
 
                 <?php
