@@ -1,12 +1,11 @@
 <?php
-    include_once '../model/acceso/AccesoModel.php';
+    include_once '../model/inicioSesion/AccesoModel.php';
     
-    class AccesoController {
+    class InicioSesionController {
 
    public function login() {
     try {
         $obj = new AccesoModel();
-
         // Error 1: Fallo en la conexión con la base de datos durante la validación de credenciales.
         if (!$obj->getConnect()) {
             $_SESSION['error'] = 'No es posible validar en este momento por un problema técnico. Intente más tarde.';
@@ -16,8 +15,16 @@
 
         $numero_documento = $_POST['numero_documento'];
         $contrasena = $_POST['contrasena'];
-        // Error 2: El servidor no responde al intentar autenticar al usuario (tiempo de espera agotado del servidor).
+        
+
         $resultado = @$obj->select("SELECT * FROM usuarios WHERE numero_documento = '$numero_documento'");
+        
+        // solo acepta numeros en el campo de documento, si ingresa String, le mostrara que solo acepta numeros, y no se ejecutara la consulta
+        if (!is_numeric($numero_documento)) {
+            $_SESSION['error'] = 'El número de identificación debe contener solo dígitos.';
+            redirect('login.php');
+            return;
+        }
 
         if ($resultado === false) {
             $_SESSION['error'] = 'Tiempo de espera agotado. Verifique su conexión o intente nuevamente más tarde.';

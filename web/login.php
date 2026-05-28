@@ -57,7 +57,7 @@ if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.
         <h3 class="text-center mb-4">SIAV</h3>
         <div class="card-body">
             <h3 class="text-center mb-4">Iniciar sesión</h3>
-            <form action="<?php echo getUrl("acceso","acceso", "login", false, "ajax"); ?>" method="POST">
+            <form action="<?php echo getUrl("inicioSesion","inicioSesion", "login", false, "ajax"); ?>" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Documento</label>
                     <input type="text" class="form-control" id="" name="numero_documento" required placeholder="Ingrese su documento" oninvalid="this.setCustomValidity('Por favor ingresa tu número de documento')"oninput="this.setCustomValidity('')">
@@ -72,7 +72,12 @@ if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.
                     echo "<div class='alert alert-danger' role='alert'>".$_SESSION['error']."</div>";
                     unset($_SESSION['error']);
                 }
+                if(isset($_SESSION['exito_registro'])) {
+                    echo "<div class='alert alert-success' role='alert'>".$_SESSION['exito_registro']."</div>";
+                    unset($_SESSION['exito_registro']);
+                }
                 ?>
+
                 <button type="submit" class="btn btn-primary w-100">Ingresar</button>
                 <div class="text-center mt-3">
                     <a href="">¿Olvidaste tu contraseña?</a>
