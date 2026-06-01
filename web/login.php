@@ -76,11 +76,14 @@ if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.
                     echo "<div class='alert alert-success' role='alert'>".$_SESSION['exito_registro']."</div>";
                     unset($_SESSION['exito_registro']);
                 }
+                if(isset($_SESSION['exito_login'])) {
+                    echo "<div class='alert alert-success' role='alert'>".$_SESSION['exito_login']."</div>";
+                    unset($_SESSION['exito_login']);
+                }
                 ?>
-
                 <button type="submit" class="btn btn-primary w-100">Ingresar</button>
                 <div class="text-center mt-3">
-                    <a href="">¿Olvidaste tu contraseña?</a>
+                    <a href="../view/recuperarContraseña/SolicitarCodigo.php">¿Olvidaste tu contraseña?</a>
                 </div>
                 <div class="text-center mt-2">
                     <a href="../view/registro/Registro.php">¿No tienes una cuenta? Regístrate</a>

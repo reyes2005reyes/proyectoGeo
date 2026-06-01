@@ -28,7 +28,6 @@
                     // include_once '../view/partials/mapa.php';
                 }
                 ?>
-
             </div>
         </div>
         <?php include_once '../view/partials/footer.php'; ?>

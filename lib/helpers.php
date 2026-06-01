@@ -20,7 +20,12 @@ function getUrl($modulo, $controlador, $funcion, $parametros=false, $pagina = fa
         $pagina = "index";
     }
 
-    $url = "$pagina.php?modulo=$modulo&controlador=$controlador&funcion=$funcion";
+       // Si es ajax, usar ruta absoluta
+    if($pagina == 'ajax'){
+        $url = "/proyectoGeo/web/ajax.php?modulo=$modulo&controlador=$controlador&funcion=$funcion";
+    } else {
+        $url = "$pagina.php?modulo=$modulo&controlador=$controlador&funcion=$funcion";
+    }
 
     if($parametros != false){
         foreach ($parametros as $key => $value) {
