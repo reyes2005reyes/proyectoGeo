@@ -3,7 +3,7 @@
 <?php include_once '../view/partials/navbar.php'; ?>
 
     <div class="main-panel">
-        <?php include_once '../view/partials/panelIzquierdo.php'; ?>
+
 
         <div class="container">
             <div class="page-inner">

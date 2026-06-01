@@ -6,7 +6,7 @@
 				<!-- Logo Header -->
 				<div class="logo-header" data-background-color="dark">
 					<a href="index.php" class="logo">
-						<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+						<img src="assets/img/logoGeoNav.png" alt="navbar brand" class="navbar-brand" height="60">
 					</a>
 					<div class="nav-toggle">
 						<button class="btn btn-toggle toggle-sidebar">
@@ -31,8 +31,8 @@
 						<!-- ===================== -->
 						<li class="nav-item active">
 							<a href="index.php">
-								<i class="fas fa-home"></i>
-								<p>Inicio</p>
+								<i class="fas fa-map-marked-alt"></i>
+								<p>Mapa</p>
 							</a>
 						</li>
 
@@ -40,20 +40,69 @@
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
 							</span>
-							<h4 class="text-section">Gestión</h4>
+							<h4 class="text-section">Sistema</h4>
 						</li>
+						
+						<li class="nav-item">
+                    		<a href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
+                        		<i class="fas fa-user"></i>
+                        		<p>Mi Perfil</p>
+                    		</a>    
+                		</li>
 
 						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#solicitudes">
+                    		<a href="<?php echo getUrl('listaUsuarios','listaUsuarios','lista',false); ?>">
+                        		<i class="fas fa-users"></i>
+								<p>Usuarios</p>
+                    		</a>    
+                		</li>
+
+						<li class="nav-item">
+							<a data-bs-toggle="collapse" href="#solicitudesMenu" aria-expanded="false">
 								<i class="fas fa-file-alt"></i>
 								<p>Solicitudes</p>
 								<span class="caret"></span>
 							</a>
-							<div class="collapse" id="solicitudes">
+							<div class="collapse" id="solicitudesMenu">
 								<ul class="nav nav-collapse">
 									<li>
-										<a href="<?php echo getUrl('solicitudes','solicitudes','listar',false); ?>">
-											<span class="sub-item">Ver Solicitudes</span>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">Mis Solicitudes</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">Reportar Accidente</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">Reportar Señal en mal estado</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">Solicitar Nueva Señalizacion</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">Reductor De Velocidad En Mal Estado</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">Solicitar Nuevo Reductor De Velocidad</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">Via Publica En Mal Estado</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+											<span class="sub-item">PQRSF</span>
 										</a>
 									</li>
 								</ul>
@@ -61,21 +110,18 @@
 						</li>
 
 						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#usuarios">
-								<i class="fas fa-users"></i>
-								<p>Usuarios</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="usuarios">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="<?php echo getUrl('usuarios','usuarios','listar',false); ?>">
-											<span class="sub-item">Ver Usuarios</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
+                    		<a href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
+                        		<i class="fas fa-file-invoice"></i>
+								<p>Reportes</p>
+                    		</a>    
+                		</li>
+
+						<li class="nav-item">
+                    		<a href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
+                        		<i class="fas fa-info-circle"></i>
+								<p>¡Informate!</p>
+                    		</a>    
+                		</li>
 
 						<li class="nav-item">
 							<a href="<?php echo getUrl('inicioSesion','inicioSesion','logout',false); ?>">
@@ -88,6 +134,9 @@
 				</div>
 			</div>
 		</div>
+		
+
+		
 		<!-- End Sidebar -->
 
 		<div class="main-panel">
@@ -96,7 +145,7 @@
 					<!-- Logo Header -->
 					<div class="logo-header" data-background-color="dark">
 						<a href="index.php" class="logo">
-							<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+							<img src="assets/img/logoGeoNav.png" alt="navbar brand" class="navbar-brand" height="60">
 						</a>
 						<div class="nav-toggle">
 							<button class="btn btn-toggle toggle-sidebar">
@@ -117,37 +166,13 @@
 				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
 					<div class="container-fluid">
 
-						<nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<button type="submit" class="btn btn-search pe-1">
-										<i class="fa fa-search search-icon"></i>
-									</button>
-								</div>
-								<input type="text" placeholder="Buscar ..." class="form-control">
-							</div>
-						</nav>
-
 						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-
-							<!-- Notificaciones -->
-							<li class="nav-item topbar-icon dropdown hidden-caret">
-								<a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-bell"></i>
-									<span class="notification">0</span>
-								</a>
-								<ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
-									<li>
-										<div class="dropdown-title">Sin notificaciones nuevas</div>
-									</li>
-								</ul>
-							</li>
 
 							<!-- Perfil usuario -->
 							<li class="nav-item topbar-user dropdown hidden-caret">
 								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
 									<div class="avatar-sm">
-										<img src="assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+										<img src="assets/img/logoUser.png" alt="..." class="avatar-img rounded-circle">
 									</div>
 									<span class="profile-username">
 										<span class="op-7">Hola,</span>
@@ -159,7 +184,7 @@
 										<li>
 											<div class="user-box">
 												<div class="avatar-lg">
-													<img src="assets/img/profile.jpg" alt="image profile" class="avatar-img rounded">
+													<img src="assets/img/logoUser.png" alt="image profile" class="avatar-img rounded">
 												</div>
 												<div class="u-text">
 													<h4><?php echo isset($_SESSION['primer_nombre']) ? $_SESSION['primer_nombre'] . ' ' . $_SESSION['primer_apellido'] : 'Usuario'; ?></h4>
