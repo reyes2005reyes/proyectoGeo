@@ -1,5 +1,6 @@
 <?php
-    include_once '../model/MasterModel.php';
+   require_once __DIR__ . '/../MasterModel.php';
+   
 class RegistroModel extends MasterModel {
     
 
