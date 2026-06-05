@@ -42,13 +42,6 @@
 							</span>
 							<h4 class="text-section">Sistema</h4>
 						</li>
-						
-						<li class="nav-item">
-                    		<a href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
-                        		<i class="fas fa-user"></i>
-                        		<p>Mi Perfil</p>
-                    		</a>    
-                		</li>
 
 						<li class="nav-item">
                     		<a href="<?php echo getUrl('listaUsuarios','listaUsuarios','lista',false); ?>">
@@ -195,6 +188,9 @@
     										<li>
         										<div class="dropdown-divider"></div>
        											<?php if (isset($_SESSION['auth']) && $_SESSION['auth'] === 'ok'): ?>
+            										<a class="dropdown-item" href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
+                										<i class="fas fa-user me-2"></i>Mi Perfil
+            										</a>
             										<a class="dropdown-item text-danger" href="<?php echo getUrl('inicioSesion','inicioSesion','logout',false); ?>">
                 										<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
             										</a>
