@@ -4,7 +4,6 @@ if (!isset($perfil) || !is_array($perfil)) {
     return;
 }
 ?>
-?>
 
 <style>
     .perfil-card {
@@ -41,7 +40,7 @@ if (!isset($perfil) || !is_array($perfil)) {
         <form id="formPerfil" action="index.php?modulo=perfil&controlador=perfil&funcion=actualizar" method="POST">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Tipo de documento</label>
+                    <label for="id_tipo_documento" class="form-label">Tipo de documento</label>
                     <select class="form-select perfil-campo" id="id_tipo_documento" name="id_tipo_documento" required disabled>
                         <option value="">Seleccione...</option>
                         <option value="1" <?php echo ($perfil['id_tipo_documento'] == 1 ? 'selected' : ''); ?>>Cedula de Ciudadania</option>
@@ -51,51 +50,51 @@ if (!isset($perfil) || !is_array($perfil)) {
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Numero de identificacion</label>
+                    <label for="numero_documento" class="form-label">Numero de identificacion</label>
                     <input type="number" class="form-control perfil-campo" id="numero_documento" name="numero_documento" value="<?php echo htmlspecialchars($perfil['numero_documento'] ?? ''); ?>" required readonly>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Primer nombre</label>
+                    <label for="primer_nombre" class="form-label">Primer nombre</label>
                     <input type="text" class="form-control perfil-campo" id="primer_nombre" name="primer_nombre" value="<?php echo htmlspecialchars($perfil['primer_nombre'] ?? ''); ?>" required readonly>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Segundo nombre</label>
+                    <label for="segundo_nombre" class="form-label">Segundo nombre</label>
                     <input type="text" class="form-control perfil-campo" id="segundo_nombre" name="segundo_nombre" value="<?php echo htmlspecialchars($perfil['segundo_nombre'] ?? ''); ?>" readonly>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Primer apellido</label>
+                    <label for="primer_apellido" class="form-label">Primer apellido</label>
                     <input type="text" class="form-control perfil-campo" id="primer_apellido" name="primer_apellido" value="<?php echo htmlspecialchars($perfil['primer_apellido'] ?? ''); ?>" required readonly>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Segundo apellido</label>
+                    <label for="segundo_apellido" class="form-label">Segundo apellido</label>
                     <input type="text" class="form-control perfil-campo" id="segundo_apellido" name="segundo_apellido" value="<?php echo htmlspecialchars($perfil['segundo_apellido'] ?? ''); ?>" readonly>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Correo electronico</label>
+                    <label for="correo" class="form-label">Correo electronico</label>
                     <input type="email" class="form-control perfil-campo" id="correo" name="correo" value="<?php echo htmlspecialchars($perfil['correo'] ?? ''); ?>" required readonly>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Telefono</label>
+                    <label for="telefono" class="form-label">Telefono</label>
                     <input type="number" class="form-control perfil-campo" id="telefono" name="telefono" value="<?php echo htmlspecialchars($perfil['telefono'] ?? ''); ?>" required readonly>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Direccion de residencia</label>
+                <label for="direccion" class="form-label">Direccion de residencia</label>
                 <input type="text" class="form-control perfil-campo" id="direccion" name="direccion" value="<?php echo htmlspecialchars($perfil['direccion'] ?? ''); ?>" required readonly>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="contrasena">Contrasena</label>
+                <label for="contrasena" class="form-label" for="contrasena">Contrasena</label>
                 <input type="password" class="form-control" id="contrasena" value="********" readonly>
                 <small class="text-muted">Por seguridad, la contrasena no se muestra desde el perfil.</small>
             </div>
