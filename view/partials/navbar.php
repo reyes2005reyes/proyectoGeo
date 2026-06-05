@@ -103,14 +103,14 @@
 						</li>
 
 						<li class="nav-item">
-                    		<a href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
+                    		<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
                         		<i class="fas fa-file-invoice"></i>
 								<p>Reportes</p>
                     		</a>    
                 		</li>
 
 						<li class="nav-item">
-                    		<a href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
+                    		<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
                         		<i class="fas fa-info-circle"></i>
 								<p>¡Informate!</p>
                     		</a>    
