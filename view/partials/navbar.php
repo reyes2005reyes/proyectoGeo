@@ -181,23 +181,29 @@
 								</a>
 								<ul class="dropdown-menu dropdown-user animated fadeIn">
 									<div class="dropdown-user-scroll scrollbar-outer">
-										<li>
-											<div class="user-box">
-												<div class="avatar-lg">
-													<img src="assets/img/logoUser.png" alt="image profile" class="avatar-img rounded">
-												</div>
-												<div class="u-text">
-													<h4><?php echo isset($_SESSION['primer_nombre']) ? $_SESSION['primer_nombre'] . ' ' . $_SESSION['primer_apellido'] : 'Usuario'; ?></h4>
-													<p class="text-muted"><?php echo isset($_SESSION['numero_documento']) ? 'Doc: ' . $_SESSION['numero_documento'] : ''; ?></p>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="dropdown-divider"></div>
-											<a class="dropdown-item" href="<?php echo getUrl('inicioSesion','inicioSesion','logout',false); ?>">
-												<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-											</a>
-										</li>
+    										<li>
+        										<div class="user-box">
+            										<div class="avatar-lg">
+                										<img src="assets/img/logoUser.png" alt="image profile" class="avatar-img rounded">
+            										</div>
+            										<div class="u-text">
+                										<h4><?php echo isset($_SESSION['primer_nombre']) ? $_SESSION['primer_nombre'] . ' ' . $_SESSION['primer_apellido'] : 'Invitado'; ?></h4>
+                										<p class="text-muted"><?php echo isset($_SESSION['numero_documento']) ? 'Doc: ' . $_SESSION['numero_documento'] : 'No has iniciado sesión'; ?></p>
+            										</div>
+        										</div>
+    										</li>
+    										<li>
+        										<div class="dropdown-divider"></div>
+       											<?php if (isset($_SESSION['auth']) && $_SESSION['auth'] === 'ok'): ?>
+            										<a class="dropdown-item text-danger" href="<?php echo getUrl('inicioSesion','inicioSesion','logout',false); ?>">
+                										<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+            										</a>
+        										<?php else: ?>
+            										<a class="dropdown-item text-primary" href="login.php">
+                										<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+            										</a>
+        										<?php endif; ?>
+    										</li>
 									</div>
 								</ul>
 							</li>
