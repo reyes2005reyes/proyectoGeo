@@ -207,9 +207,5 @@
 				</nav>
 				<!-- End Navbar -->
 			</div>
-
 			<div class="container">
-				<div class="page-inner"></div>
-            </div>
-        </div>
-    
+    			<div class="page-inner">

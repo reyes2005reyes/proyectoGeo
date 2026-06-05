@@ -2,9 +2,9 @@
 
     $server = "localhost";      // Host de PostgreSQL
     $port = "5432";             // Puerto (5432 es el estándar)
-    $database = "hola";  // Nombre de la BD
+    $database = "sistema_geo";  // Nombre de la BD
     $user = "postgres";         // Usuario
-    $password = "123";             // Contraseña (vacía para sistemas sin contraseña)
+    $password = "";             // Contraseña (vacía para sistemas sin contraseña)
 
 
     //Hola, te preguntaras porque no hay contrasenia, en mi caso
