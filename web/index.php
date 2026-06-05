@@ -12,14 +12,18 @@
 
     <?php
     if(isset($_GET["modulo"])){
-        $modulosProtegidos = ['usuarios', 'solicitudes', 'reportes'];
+        $modulosProtegidos = [
+            'listausuarios',
+            'solicitud',
+            'solicitudes'
+        ];
         $modulo = strtolower($_GET['modulo']);
         if(in_array($modulo, $modulosProtegidos)){
             include_once '../lib/helpersLogin.php';
         }
         resolve();
     } else {
-        // include_once '../view/partials/mapa.php';
+        
     }
     ?>
 
