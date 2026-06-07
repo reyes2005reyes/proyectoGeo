@@ -38,16 +38,15 @@ class SolicitudesModel extends MasterModel {
     public function listarSolicitudes() {
         try {
             $sql = "
-                SELECT 
-                    s.id_solicitud,
-                    s.descripcion,
-                    s.fecha_solicitud,
-                    s.id_estado_solicitud,
-                    s.id_usuario,
-                    s.tipo_solicitud,
-                    s.direccion
+                SELECT
+                s.id_solicitud,
+                s.descripcion,
+                s.fecha_solicitud,
+                s.id_estado_solicitud,
+                s.id_usuario,
+                s.id_tipo_solicitud,
+                s.direccion
                 FROM solicitudes s
-                ORDER BY s.id_solicitud DESC
             ";
 
             $result = $this->select($sql);
@@ -64,7 +63,7 @@ class SolicitudesModel extends MasterModel {
                 $sol->setFechaCreacion($row['fecha_solicitud']);
                 $sol->setIdEstadoSolicitud($row['id_estado_solicitud']);
                 $sol->setIdUsuario($row['id_usuario']);
-                $sol->setTipoSolicitud($row['tipo_solicitud']);
+                $sol->setTipoSolicitud($row['id_tipo_solicitud']);
                 $sol->setDireccion($row['direccion']);
                 $lista[] = $sol;
             }

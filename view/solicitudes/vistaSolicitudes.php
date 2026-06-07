@@ -98,7 +98,6 @@
 <body>
 
 <div class="content-wrapper">
-    <?php include_once __DIR__ . '/../partials/panelIzquierdo.php'; ?>
     
     <div class="main-content">
         <div class="solicitudes-container">
@@ -109,9 +108,9 @@
             <?php
                 // Si el controlador no pasa $solicitudes, obtenerlas aquí como fallback
                 if(!isset($solicitudes) || empty($solicitudes)) {
-                    require_once __DIR__ . '/../../model/solicitud/Solicitud.php';
+                    require_once __DIR__ . '/../../model/solicitudes/SolicitudesModel.php';
                     try {
-                        $model = new Solicitud();
+                        $model = new SolicitudesModel();
                         $solicitudes = $model->listarSolicitudes();
                     } catch (Exception $e) {
                         $solicitudes = [];
