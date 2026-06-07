@@ -1,0 +1,412 @@
+<?php   
+    include_once '../model/usuarios/UsuariosModel.php';
+    require_once '../vendor/autoload.php';
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+    
+class UsuariosController{
+        // esta funcion es para el registro del usuario
+        public function postRegistrar() {
+        try {
+            // Error 1: Fallo en la conexión con la base de datos durante el almacenamiento de la información del usuario.
+            $obj = new UsuariosModel();
+            if (!$obj->getConnect()) {
+                $_SESSION['error_registro'] = 'No es posible completar el registro por un problema técnico. Intente nuevamente más tarde.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            // El usuario deja uno o más campos obligatorios sin diligenciar
+            if (empty($_POST['primer_nombre']) || empty($_POST['primer_apellido']) ||
+                empty($_POST['numero_documento']) || empty($_POST['correo']) ||
+                empty($_POST['telefono']) || empty($_POST['direccion']) ||
+                empty($_POST['contrasena']) || empty($_POST['id_tipo_documento'])) {
+                $_SESSION['error_registro'] = 'Existen campos obligatorios sin completar.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            // Criterio 1:  El usuario intenta registrarse con un número de identificación que ya existe en el sistema
+            if ($obj->existeDocumento($_POST['numero_documento'])) {
+                $_SESSION['error_registro'] = 'El número de identificación ingresado ya se encuentra registrado. Verifique la información e intente nuevamente.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            // Criterio 2: El usuario intenta registrarse con un correo electrónico previamente registrado.
+            if ($obj->existeCorreo($_POST['correo'])) {
+                $_SESSION['error_registro'] = 'El correo electrónico ingresado ya se encuentra asociado a una cuenta existente. Verifique la información e intente nuevamente.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            // Error 4:  Fallo en el proceso de almacenamiento o cifrado de la contraseña.
+            $hash = password_hash($_POST['contrasena'], PASSWORD_BCRYPT);
+            if (!$hash) {
+                $_SESSION['error_registro'] = 'Ocurrió un error técnico durante la creación de la cuenta. Intente nuevamente.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            // Error 2:  El servidor no responde durante el proceso de registro
+            $resultado = @$obj->registrar($_POST);
+            if ($resultado === false) {
+                $_SESSION['error_registro'] = 'Tiempo de espera agotado. Verifique su conexión o intente nuevamente más tarde.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            // Criterio 5: Si el registro se realiza correctamente, el sistema debe crear la cuenta y mostrar el siguiente mensaje:
+            if ($resultado) {
+                $_SESSION['exito_registro'] = 'Registro realizado correctamente. Su cuenta ha sido creada exitosamente.';
+                redirect('/proyectoGeo/web/login.php');
+            } else {
+                $_SESSION['error_registro'] = 'No fue posible completar el registro. Intente nuevamente.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+            }
+
+        } catch (Exception $e) {
+            // Error 3: error interno inesperado
+            $_SESSION['error_registro'] = 'Error inesperado. Estamos trabajando para solucionarlo.';
+            redirect('/proyectoGeo/view/registro/Registro.php');
+        }
+    }
+    // aqui finaliza la funcion del registro del usuario
+
+
+
+    //aqui comienza la funcion para enviar el correo de recuperacion de contraseña
+    // Paso 1: procesar documento + correo
+    public function enviarCodigo() {
+        try {
+            $obj = new UsuariosModel();
+
+            $numero_documento = $_POST['numero_documento'] ?? '';
+            $correo = $_POST['correo'] ?? '';
+
+            if (empty($numero_documento) || empty($correo)) {
+                $_SESSION['error_recuperacion'] = 'Todos los campos son obligatorios.';
+                redirect('../view/recuperarContraseña/SolicitarCodigo.php');
+                return;
+            }
+
+            // Buscar usuario (sin revelar si existe o no)
+            $resultado = $obj->buscarUsuario($numero_documento, $correo);
+
+            if (pg_num_rows($resultado) > 0) {
+                $usuario = pg_fetch_assoc($resultado);
+                $id_usuario = $usuario['id_usuario'];
+
+
+                // Generar código de 6 dígitos
+                $codigo = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+                // Error 1: guardar código en BD
+                $guardado = $obj->guardarCodigo($id_usuario, $codigo);
+                if (!$guardado) {
+                    $_SESSION['error_recuperacion'] = 'Error interno. No se pudo procesar su solicitud. Intente más tarde.';
+                    redirect('../view/recuperarContraseña/SolicitarCodigo.php');
+                    return;
+                }
+
+                // Enviar correo con PHPMailer
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'reyesmontoyamonor@gmail.com';
+                    $mail->Password = 'cakm eitt cdvd galn';
+                    $mail->SMTPSecure = 'tls';
+                    $mail->Port = 587;
+                    $mail->CharSet = 'UTF-8';
+                    $mail->setFrom('reyesmontoyamonor@gmail.com', 'SIAV');
+                    $mail->addAddress($correo);
+                    $mail->Subject = 'Código de recuperación de contraseña - SIAV';
+                    $mail->Body    = "Tu código de verificación es: <b>$codigo</b><br>
+                                    Válido por 15 minutos.<br>
+                                    Si no solicitaste este código, ignora este mensaje.";
+                    $mail->isHTML(true);
+                    $mail->send();
+                } catch (Exception $e) {
+                    // Error 4: fallo al enviar correo
+                    $_SESSION['error_recuperacion'] = 'Fallo en la conexión. Intente más tarde.';
+                    redirect('../view/recuperarContraseña/SolicitarCodigo.php');
+                    return;
+                }
+
+                $_SESSION['id_usuario_recuperacion'] = $id_usuario;
+                $_SESSION['msg_recuperacion'] = 'Se ha enviado un código de 6 dígitos a su correo electrónico.';
+                redirect('../view/recuperarContraseña/VerificarCodigo.php');
+            }else{
+                // No revelar si el usuario existe o no, pero mostrar mensaje genérico
+                $_SESSION['error_recuperacion'] = 'El número de documento o correo ingresado no se encuentra registrado en el sistema.';
+                redirect('../view/recuperarContraseña/SolicitarCodigo.php');
+            }
+        } catch (Exception $e) {
+            $_SESSION['error_recuperacion'] = 'Error interno. No se pudo procesar su solicitud. Intente más tarde.';
+            redirect('../view/recuperarContraseña/SolicitarCodigo.php');
+        }
+    }
+
+    // Paso 2: procesar código
+    public function validarCodigo() {
+    try {
+        $obj = new UsuariosModel();
+        $id_usuario = $_SESSION['id_usuario_recuperacion'] ?? null;
+
+        if (!$id_usuario) {
+            redirect('../view/recuperarContraseña/SolicitarCodigo.php');
+            return;
+        }
+
+        $codigo = $_POST['codigo'] ?? '';
+
+        $resultado = $obj->verificarCodigo($id_usuario, $codigo);
+        $intentos = $obj->getIntentos($id_usuario);
+
+        if ($intentos === 0 && pg_num_rows($obj->verificarCodigo($id_usuario, $codigo)) === 0) {
+            $_SESSION['error_verificacion'] = 'El código ya no está disponible. Solicite uno nuevo.';
+            redirect('../view/recuperarContraseña/VerificarCodigo.php');
+            return;
+        }
+
+        if (pg_num_rows($resultado) > 0) {
+            // Código correcto
+            $obj->marcarCodigoUsado($id_usuario);
+            $_SESSION['recuperacion_verificada'] = true;
+            redirect('../view/recuperarContraseña/NuevaContraseña.php');
+        } else {
+
+                $codigoExiste = $obj->existeCodigo($id_usuario, $codigo);
+        //Invalida el código y notifica en pantalla que debe solicitar uno nuevo
+        if (pg_num_rows($codigoExiste) > 0) {
+            $obj->eliminarCodigo($id_usuario);
+            $_SESSION['error_verificacion'] = 'El código ha expirado. Debe solicitar uno nuevo.';
+            redirect('../view/recuperarContraseña/VerificarCodigo.php');
+            return;
+        }
+        // Incrementar intentos
+        $obj->incrementarIntentos($id_usuario);
+
+        // Obtener intentos actualizados
+        $intentos_actuales = $obj->getIntentos($id_usuario);
+
+        // se bloquea el formulario y le notifica que sus intentos finalizaron que solicite un nuevo código 
+        if ($intentos_actuales >= 3) {
+            $obj->eliminarCodigo($id_usuario);
+            $_SESSION['error_verificacion'] = 'Sus intentos han finalizado. Solicite un nuevo código.';
+            redirect('../view/recuperarContraseña/VerificarCodigo.php');
+            return;
+        } else {
+            $restantes = 3 - $intentos_actuales;
+            $_SESSION['error_verificacion'] = "Código no válido. Revise el número. " .
+            ($restantes == 1 ? "Le queda 1 intento." : "Le quedan $restantes intentos.");
+        }
+
+            redirect('../view/recuperarContraseña/VerificarCodigo.php');
+        }
+
+    } catch (Exception $e) {
+        $_SESSION['error_verificacion'] = 'Error inesperado. Intente más tarde.';
+        redirect('../view/recuperarContraseña/VerificarCodigo.php');
+    }
+}
+
+    // mostrar formulario nueva contraseña
+    public function nuevaContrasena() {
+        if (!isset($_SESSION['recuperacion_verificada'])) {
+            redirect('../../view/recuperarContraseña/SolicitarCodigo.php');
+            return;
+        }
+        include_once '../../view/recuperarContraseña/NuevaContraseña.php';
+    }
+
+    // guardar nueva contraseña
+    public function guardarContrasena() {
+        try {
+            if (!isset($_SESSION['recuperacion_verificada'])) {
+                redirect('../../view/recuperarContraseña/SolicitarCodigo.php');
+                return;
+            }
+
+            $id_usuario = $_SESSION['id_usuario_recuperacion'];
+            $nueva = $_POST['nueva_contrasena'] ?? '';
+            $confirmar = $_POST['confirmar_contrasena'] ?? '';
+
+            if (empty($nueva) || empty($confirmar)) {
+                $_SESSION['error_nueva'] = 'Todos los campos son obligatorios.';
+                redirect('../view/recuperarContraseña/NuevaContraseña.php');
+                return;
+            }
+
+            if ($nueva !== $confirmar) {
+                $_SESSION['error_nueva'] = 'Las contraseñas no coinciden.';
+                redirect('../view/recuperarContraseña/NuevaContraseña.php');
+                return;
+            }
+
+            if (strlen($nueva) < 8) {
+                $_SESSION['error_nueva'] = 'La contraseña debe tener mínimo 8 caracteres.';
+                redirect('../view/recuperarContraseña/NuevaContraseña.php');
+                return;
+            }
+
+            $obj = new UsuariosModel();
+            $resultado = $obj->actualizarContrasena($id_usuario, $nueva);
+
+            if ($resultado) {
+                // Limpiar sesión de recuperación
+                unset($_SESSION['id_usuario_recuperacion']);
+                unset($_SESSION['recuperacion_verificada']);
+
+                $_SESSION['exito_login'] = 'Contraseña actualizada. Ya puede iniciar sesión con sus nuevas credenciales.';
+                redirect('/proyectoGeo/web/login.php');
+            } else {
+                $_SESSION['error_nueva'] = 'No fue posible actualizar la contraseña. Intente nuevamente.';
+                redirect('../view/recuperarContraseña/NuevaContraseña.php');
+            }
+
+        } catch (Exception $e) {
+            $_SESSION['error_nueva'] = 'Error inesperado. Intente más tarde.';
+            redirect('../view/recuperarContraseña/NuevaContraseña.php');
+        }
+    }
+    // aqui finaliza la funcion para enviar el correo de recuperacion de contraseña
+
+
+    // esta funcion es para mostrar la lista de usuarios
+    public function lista() {
+        $numeroDocumento = isset($_GET['numero_documento']) ? trim($_GET['numero_documento']) : '';
+
+        $model = new UsuariosModel();
+        $usuarios = $model->obtenerUsuarios($numeroDocumento);
+
+        // pasar variables a la vista
+        require_once __DIR__ . '/../../view/listaUsuarios/listaUsuarios.php'; // Se corrigio la ruta del archivo de vista para que apunte a la carpeta correcta
+    }
+
+
+
+    // falta terminarlo xd
+
+
+
+
+
+
+
+    // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
+
+    public function ver()
+    {
+        if (!isset($_SESSION['id_usuario'])) {
+            redirect('login.php');
+            return;
+        }
+
+        $model = new UsuariosModel();
+        $perfil = $model->obtenerPerfil($_SESSION['id_usuario']);
+
+        require_once __DIR__ . '/../../view/verPerfil/verPerfil.php';
+    }
+
+    public function actualizar()
+    {
+        if (!isset($_SESSION['id_usuario'])) {
+            redirect('login.php');
+            return;
+        }
+
+        $idUsuario = $_SESSION['id_usuario'];
+        $camposObligatorios = [
+            'id_tipo_documento',
+            'numero_documento',
+            'primer_nombre',
+            'primer_apellido',
+            'correo',
+            'telefono',
+            'direccion'
+        ];
+
+        foreach ($camposObligatorios as $campo) {
+            if (!isset($_POST[$campo]) || trim($_POST[$campo]) === '') {
+                $_SESSION['error_perfil'] = 'Existen campos obligatorios sin completar.';
+                redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+                return;
+            }
+        }
+
+        if (!is_numeric($_POST['id_tipo_documento']) || !is_numeric($_POST['numero_documento']) || !is_numeric($_POST['telefono'])) {
+            $_SESSION['error_perfil'] = 'Documento, tipo de documento y telefono deben tener valores validos.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        if (!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error_perfil'] = 'Ingresa un correo electronico valido.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        try {
+            $model = new UsuariosModel();
+
+            if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
+                $_SESSION['error_perfil'] = 'El numero de identificacion ya pertenece a otro usuario.';
+                redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+                return;
+            }
+
+            if ($model->correoExisteEnOtroUsuario($_POST['correo'], $idUsuario)) {
+                $_SESSION['error_perfil'] = 'El correo electronico ya pertenece a otro usuario.';
+                redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+                return;
+            }
+
+            $datos = [
+                'id_tipo_documento' => $_POST['id_tipo_documento'],
+                'numero_documento' => $_POST['numero_documento'],
+                'primer_nombre' => trim($_POST['primer_nombre']),
+                'segundo_nombre' => trim($_POST['segundo_nombre'] ?? ''),
+                'primer_apellido' => trim($_POST['primer_apellido']),
+                'segundo_apellido' => trim($_POST['segundo_apellido'] ?? ''),
+                'correo' => trim($_POST['correo']),
+                'telefono' => $_POST['telefono'],
+                'direccion' => trim($_POST['direccion'])
+            ];
+
+            $model->actualizarPerfil($idUsuario, $datos);
+
+            $_SESSION['primer_nombre'] = $datos['primer_nombre'];
+            $_SESSION['primer_apellido'] = $datos['primer_apellido'];
+            $_SESSION['numero_documento'] = $datos['numero_documento'];
+            $_SESSION['exito_perfil'] = 'Datos actualizados correctamente.';
+        } catch (Exception $e) {
+            $_SESSION['error_perfil'] = 'No fue posible actualizar los datos. Intente nuevamente.';
+        }
+
+        redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} 
+
+?>

@@ -44,7 +44,7 @@
 						</li>
 
 						<li class="nav-item">
-                    		<a href="<?php echo getUrl('listaUsuarios','listaUsuarios','lista',false); ?>">
+                    		<a href="<?php echo getUrl('usuarios','usuarios','lista',false); ?>">
                         		<i class="fas fa-users"></i>
 								<p>Usuarios</p>
                     		</a>    
@@ -117,7 +117,7 @@
                 		</li>
 
 						<li class="nav-item">
-							<a href="<?php echo getUrl('inicioSesion','inicioSesion','logout',false); ?>">
+							<a href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
 								<i class="fas fa-sign-out-alt"></i>
 								<p>Cerrar Sesión</p>
 							</a>
@@ -188,10 +188,10 @@
     										<li>
         										<div class="dropdown-divider"></div>
        											<?php if (isset($_SESSION['auth']) && $_SESSION['auth'] === 'ok'): ?>
-            										<a class="dropdown-item" href="<?php echo getUrl('perfil','perfil','ver',false); ?>">
+            										<a class="dropdown-item" href="<?php echo getUrl('usuarios', 'usuarios', 'ver', false); ?>">
                 										<i class="fas fa-user me-2"></i>Mi Perfil
             										</a>
-            										<a class="dropdown-item text-danger" href="<?php echo getUrl('inicioSesion','inicioSesion','logout',false); ?>">
+            										<a class="dropdown-item text-danger" href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
                 										<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
             										</a>
         										<?php else: ?>

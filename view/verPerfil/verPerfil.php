@@ -1,6 +1,7 @@
+
 <?php
 if (!isset($perfil) || !is_array($perfil)) {
-    echo "<div class='alert alert-danger mt-3'>No hay datos del perfil. Perfil: " . var_export($perfil, true) . "</div>";
+    echo "<div class='alert alert-danger mt-3'>No hay datos del perfil. Perfil: No disponible</div>";
     return;
 }
 ?>
@@ -37,7 +38,7 @@ if (!isset($perfil) || !is_array($perfil)) {
             </div>
         <?php endif; ?>
 
-        <form id="formPerfil" action="index.php?modulo=perfil&controlador=perfil&funcion=actualizar" method="POST">
+        <form action="<?php echo getUrl('usuarios', 'usuarios', 'actualizar', false); ?>" method="POST">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="id_tipo_documento" class="form-label">Tipo de documento</label>

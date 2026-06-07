@@ -1,7 +1,7 @@
 <?php
-    include_once '../model/inicioSesion/AccesoModel.php';
+    include_once '../model/acceso/AccesoModel.php';
     
-    class InicioSesionController{
+    class AccesoController{
 
    public function login() {
     try {

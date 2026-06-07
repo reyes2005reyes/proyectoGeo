@@ -38,7 +38,7 @@ function formatEstado($estado)
         <h4 class="mb-0">Lista de Usuarios</h4>
     </div>
     <div class="card-body">
-        <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?modulo=listaUsuarios&controlador=listaUsuarios&funcion=lista" class="row gy-3 gx-2 align-items-end">
+        <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?modulo=usuarios&controlador=usuarios&funcion=lista" class="row gy-3 gx-2 align-items-end">
             <div class="col-md-4">
                 <label for="numero_documento" class="form-label">Ingrese número de cédula</label>
                 <input

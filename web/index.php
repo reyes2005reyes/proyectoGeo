@@ -13,9 +13,7 @@
     <?php
     if(isset($_GET["modulo"])){
         $modulosProtegidos = [
-            'listausuarios',
-            'solicitud',
-            'solicitudes'
+            'usuarios',
         ];
         $modulo = strtolower($_GET['modulo']);
         if(in_array($modulo, $modulosProtegidos)){

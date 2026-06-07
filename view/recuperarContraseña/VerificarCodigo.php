@@ -43,7 +43,7 @@
     <?php endif; ?>
 
 
-    <form action="<?php echo getUrl('recuperarContrañera', 'RecuperarContraseña', 'validarCodigo', false, 'ajax'); ?>" method="POST">
+    <form action="<?php echo getUrl('usuarios', 'usuarios', 'validarCodigo', false, 'ajax'); ?>" method="POST">
 
         <div class="mb-3">
             <label class="text-center mb-2">Código de 6 dígitos</label>

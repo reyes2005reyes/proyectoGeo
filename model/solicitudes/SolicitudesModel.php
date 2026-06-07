@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../MasterModel.php';
 
-class Solicitud extends MasterModel {
+class SolicitudesModel extends MasterModel {
 
     private $id_solicitud;
     private $descripcion;
@@ -58,7 +58,7 @@ class Solicitud extends MasterModel {
 
             $lista = [];
             while ($row = pg_fetch_assoc($result)) {
-                $sol = new Solicitud();
+                $sol = new SolicitudesModel();
                 $sol->setIdSolicitud($row['id_solicitud']);
                 $sol->setDescripcion($row['descripcion']);
                 $sol->setFechaCreacion($row['fecha_solicitud']);
@@ -74,6 +74,31 @@ class Solicitud extends MasterModel {
         } catch (Exception $e) {
             error_log('Excepción en listarSolicitudes: ' . $e->getMessage());
             return [];
+        }
+    }
+
+    // 🔹 Listar todas las solicitudes con joins útiles
+    public function obtenerSolicitudes() {
+        try {
+            $sql = "
+                SELECT 
+                    s.id_solicitud,
+                    s.fecha_creacion,
+                    s.descripcion,
+                    es.nombre_estado,
+                    u.nombre AS nombre_usuario
+                FROM solicitudes s
+                INNER JOIN estados_solicitud es 
+                    ON s.id_estado_solicitud = es.id_estado_solicitud
+                INNER JOIN usuarios u 
+                    ON s.id_usuario = u.id_usuario
+                ORDER BY s.fecha_creacion DESC
+            ";
+
+        } catch (PDOException $e) {
+            return [
+                "error" => $e->getMessage()
+            ];
         }
     }
 }

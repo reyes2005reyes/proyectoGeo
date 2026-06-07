@@ -54,7 +54,7 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
 <div class="card">
     <img src="../../web/assets/img/logoGeo.png" alt="logo" class="navbar-brand d-block mx-auto mb-3" height="100">
     <h3 class="text-center mb-4">SIAV - Crear cuenta</h3>
-    <form action="<?php echo getUrl('registroUsuario','registroUsuario','postRegistrar', false, '../../web/ajax'); ?>" method="POST">
+    <form action="<?php echo getUrl('usuarios','usuarios','postRegistrar', false, '../../web/ajax'); ?>" method="POST">
 
         <div class="mb-3">
             <label class="form-label">Tipo de documento</label>

@@ -37,7 +37,7 @@
         </div>
     <?php endif; ?>
 
-    <form action="<?php echo getUrl('recuperarContrañera', 'RecuperarContraseña', 'enviarCodigo', false, 'ajax'); ?>" method="POST">
+    <form action="<?php echo getUrl('usuarios', 'usuarios', 'enviarCodigo', false, 'ajax'); ?>" method="POST">
 
         <div class="mb-3">
             <label class="form-label">Número de documento</label>
