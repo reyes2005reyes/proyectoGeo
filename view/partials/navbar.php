@@ -64,17 +64,17 @@
 										</a>
 									</li>
 									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+										<a href="<?php echo getUrl('solicitudes','solicitudes','reportar_accidente',false); ?>">
 											<span class="sub-item">Reportar Accidente</span>
 										</a>
 									</li>
 									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+										<a href="<?php echo getUrl('solicitudes','solicitudes','reportar_senal_mal_estado',false); ?>">
 											<span class="sub-item">Reportar Señal en mal estado</span>
 										</a>
 									</li>
 									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+										<a href="<?php echo getUrl('solicitudes','solicitudes','solicitar_nueva_senalizacion',false); ?>">
 											<span class="sub-item">Solicitar Nueva Señalizacion</span>
 										</a>
 									</li>
