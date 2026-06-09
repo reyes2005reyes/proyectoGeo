@@ -1,5 +1,5 @@
 <div class="mt-5"> 
-    <h1 class="dlisplay-4">Registro Rol</h1>
+    <h1 class="display-4">Registro Rol</h1>
 </div>
 <div class="mt-5">
     <form action="<?php echo getUrl("roles", "roles", "postCreate");?>" method="post">
@@ -9,10 +9,6 @@
                 <label for="rol_nombre">Nombre</label>
                 <input type="text" class="form-control" id="rol_nombre" name="rol_nombre">            
             </div>
-            <div class="col-4 mt-3">
-                <label for="rol_descripcion">Descripcion</label>
-                <input type="text" class="form-control" id="rol_descripcion" name="rol_descripcion">            
-            </div>  
         </div>
         <div class="mt-5">
             <table class="table table-striped table-hover">
@@ -37,7 +33,7 @@
                             echo "<td>{$accion['nombre_accion']}</td>";
 
                             foreach($modulosArray as $modulo){
-                                echo "<td><input type='checkbox' name='permisos['".$modulo['id_modulo']."][".$accion['id_accion']."]' value='1'></td>";
+                                echo "<td><input type='checkbox' name='permisos[".$modulo['id_modulo']."][".$accion['id_accion']."]' value='1'></td>";
                             }
 
                             echo "</tr>";

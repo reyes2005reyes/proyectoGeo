@@ -22,18 +22,15 @@ class RolesController{
         $rol_nombre = $_POST['rol_nombre'];
         $rol_id = $obj ->autoincrement("roles", "id_rol");
 
-        $sql = "INSERT INTO roles VALUES($rol_id, '$rol_nombre')";
+        $sql = "INSERT INTO roles (id_rol, nombre_rol) VALUES($rol_id, '$rol_nombre')";
         $obj->insert($sql);
 
-        $permisos = $_POST['permisos'];
-        dd($permisos);
+        $permisos = $_POST['permisos'] ?? [];
 
-        $permisosFormateados = [];
         foreach ($permisos as $modulo_id => $acciones) {
             foreach ($acciones as $accion_id => $valor) {
-                // $permisosFormateados[$modulo_id][] = $accion_id;
                 $per_id = $obj->autoincrement("permisos", "id_permiso");
-                $sql = "INSERT INTO permisos VALUES($per_id, $rol_id, $modulo_id, $accion_id)";
+                $sql = "INSERT INTO permisos (id_permiso, id_rol, id_modulo, id_accion) VALUES($per_id, $rol_id, $modulo_id, $accion_id)";
                 
                 $obj->insert($sql);
             }
@@ -64,7 +61,7 @@ class RolesController{
         $sql = "SELECT * FROM acciones";
         $acciones = $obj->select($sql);
 
-        $sql = "SELECT * FROM permisos WHERE rol_id = $id_rol";
+        $sql = "SELECT * FROM permisos WHERE id_rol = $id_rol";
         $permisos = $obj->select($sql);
 
         $permisos_rol = [];
@@ -84,7 +81,7 @@ class RolesController{
         $sql = "UPDATE roles SET nombre_rol = '$rol_nombre' WHERE id_rol = $id_rol";
         $obj->update($sql);
 
-        $permisos = $_POST['permisos'];
+        $permisos = $_POST['permisos'] ?? [];
 
         // Eliminar permisos anteriores
         $sql = "DELETE FROM permisos WHERE id_rol = $id_rol";
@@ -95,7 +92,7 @@ class RolesController{
             foreach ($acciones as $accion_id => $valor) {
 
                 $per_id = $obj->autoincrement("permisos", "id_permiso");
-                $sql = "INSERT INTO permisos VALUES($per_id, $id_rol, $modulo_id, $accion_id)";
+                $sql = "INSERT INTO permisos (id_permiso, id_rol, id_modulo, id_accion) VALUES($per_id, $id_rol, $modulo_id, $accion_id)";
                 
                 $obj->insert($sql);
             }

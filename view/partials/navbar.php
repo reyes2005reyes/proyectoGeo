@@ -57,7 +57,7 @@
 										</a>
 									</li>
 									<li>
-										<a href="<?php echo getUrl('roles','roles','list',false); ?>">
+										<a href="<?php echo getUrl('roles','roles','getRoles',false); ?>">
 											<span class="sub-item">Lista de Roles</span>
 										</a>
 									</li>
