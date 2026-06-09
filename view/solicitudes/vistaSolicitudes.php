@@ -150,7 +150,7 @@
                         <tr>
                             <td colspan="5">
                                 <div class="empty-message">
-                                    ⚠️ No hay solicitudes disponibles
+                                    No hay solicitudes disponibles
                                 </div>
                             </td>
                         </tr>
