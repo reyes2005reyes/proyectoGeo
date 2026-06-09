@@ -1,5 +1,4 @@
 <?php
-// Error 5: verificar que los recursos del sistema están disponibles
 if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.php')) {
 ?>
 <!DOCTYPE html>
@@ -8,89 +7,107 @@ if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.
 <body style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;">
     <h3>No fue posible cargar la página</h3>
     <p>Hay un problema con los recursos del sistema.</p>
-    <button onclick="location.reload()" class="btn btn-primary">Reintentar</button>
+    <button onclick="location.reload()">Reintentar</button>
 </body>
 </html>
 <?php
     exit;
 }
 ?>
-
-<?php
-    include_once '../lib/helpers.php';
-?>
+<?php include_once '../lib/helpers.php'; ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" >
-    <style>
-        body{
-            background: #f0f2f5;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-container{
-            width: 100%;
-            max-width: 400px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .login{
-            width: 320px;
-            padding: 30px;
-            background: white;
-            border-radius: 12px;
-        }
-
-
-    </style>
+    <title>SIAV Iniciar sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../web/assets/css/login.css">
 </head>
 <body>
-    <div class="login">
-        <img src="assets/img/logoGeo.png" alt="logo" class="navbar-brand d-block mx-auto mb-3" height="100">
-        <h3 class="text-center mb-4">SIAV</h3>
-        <div class="card-body">
-            <h3 class="text-center mb-4">Iniciar sesión</h3>
-            <form action="<?php echo getUrl("acceso","acceso", "login", false, "ajax"); ?>" method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Documento</label>
-                    <input type="text" class="form-control" id="" name="numero_documento" required placeholder="Ingrese su documento" oninvalid="this.setCustomValidity('Por favor ingresa tu número de documento')"oninput="this.setCustomValidity('')">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="contrasena" required placeholder="Ingrese su contraseña" oninvalid="this.setCustomValidity('Por favor ingresa tu contraseña')" oninput="this.setCustomValidity('')">
-                </div>
 
-                <?php
-                if(isset($_SESSION['error'])){
-                    echo "<div class='alert alert-danger' role='alert'>".$_SESSION['error']."</div>";
-                    unset($_SESSION['error']);
-                }
-                if(isset($_SESSION['exito_registro'])) {
-                    echo "<div class='alert alert-success' role='alert'>".$_SESSION['exito_registro']."</div>";
-                    unset($_SESSION['exito_registro']);
-                }
-                if(isset($_SESSION['exito_login'])) {
-                    echo "<div class='alert alert-success' role='alert'>".$_SESSION['exito_login']."</div>";
-                    unset($_SESSION['exito_login']);
-                }
-                ?>
-                <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-                <div class="text-center mt-3">
-                    <a href="../view/recuperarContraseña/SolicitarCodigo.php">¿Olvidaste tu contraseña?</a>
-                </div>
-                <div class="text-center mt-2">
-                    <a href="../view/registro/Registro.php">¿No tienes una cuenta? Regístrate</a>
-                </div>
-            </form>
+<div class="login-card">
+    <div class="login-header">
+        <img src="assets/img/logoGeo.png" alt="Logo SIAV">
+        <h1>SIAV</h1>
+        <p>Sistema de Información de Accidentalidad Vial</p>
+    </div>
+    <div class="login-body">
+        <h2>Iniciar sesión</h2>
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alerta alerta-error">
+                <i class="fas fa-circle-exclamation"></i>
+                <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['exito_registro'])): ?>
+            <div class="alerta alerta-success">
+                <i class="fas fa-circle-check"></i>
+                <?php echo htmlspecialchars($_SESSION['exito_registro']); unset($_SESSION['exito_registro']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['exito_login'])): ?>
+            <div class="alerta alerta-success">
+                <i class="fas fa-circle-check"></i>
+                <?php echo htmlspecialchars($_SESSION['exito_login']); unset($_SESSION['exito_login']); ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?php echo getUrl('acceso','acceso','login', false, 'ajax'); ?>" method="POST" novalidate>
+
+            <div class="input-group-icon">
+                <label for="numero_documento">Número de documento</label>
+                <i class="fas fa-id-card icon"></i>
+                <input type="text" id="numero_documento" name="numero_documento" placeholder="Ingrese su documento" required oninvalid="this.setCustomValidity('Por favor ingresa tu número de documento')" oninput="this.setCustomValidity('')">
+            </div>
+
+            <div class="input-group-icon">
+                <label for="password">Contraseña</label>
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="password" name="contrasena" placeholder="Ingrese su contraseña" required oninvalid="this.setCustomValidity('Por favor ingresa tu contraseña')" oninput="this.setCustomValidity('')">
+                <button type="button" class="toggle-pass" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">
+                    <i class="fas fa-eye" id="iconOjo"></i>
+                </button>
+            </div>
+
+            <button type="submit" class="btn-login">
+                <i class="fas fa-right-to-bracket me-2"></i>Ingresar
+            </button>
+        </form>
+
+        <hr class="divider">
+
+        <div class="login-links">
+            <a href="../view/recuperarContraseña/SolicitarCodigo.php"> <i class="fas fa-key me-1"></i>¿Olvidaste tu contraseña?</a>
+            <a href="../view/registro/Registro.php"><i class="fas fa-user-plus me-1"></i>¿No tienes cuenta? Regístrate
+            </a>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <div class="login-footer">
+        <p>Secretaría de Movilidad, Todos los derechos reservados</p>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function togglePassword() {
+    const input = document.getElementById('password');
+    const icon  = document.getElementById('iconOjo');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+
 </body>
 </html>

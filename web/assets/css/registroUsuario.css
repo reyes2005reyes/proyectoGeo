@@ -1,0 +1,207 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+        body {
+            min-height: 100vh;
+            background-color: #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+ 
+        .registro-card {
+            width: 100%;
+            max-width: 560px;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(26, 60, 94, 0.10);
+        }
+ 
+        .registro-header {
+            background-color: #1A3C5E;
+            padding: 28px 32px 24px;
+            text-align: center;
+        }
+ 
+        .registro-header img {
+            height: 64px;
+            margin-bottom: 12px;
+        }
+ 
+        .registro-header h1 {
+            color: #ffffff;
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+ 
+        .registro-header p {
+            color: rgba(255,255,255,0.6);
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+ 
+       
+        .registro-body {
+            padding: 28px 32px 24px;
+        }
+ 
+        .registro-body h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1A3C5E;
+            margin-bottom: 20px;
+        }
+ 
+    
+        .seccion-titulo {
+            font-size: 11px;
+            font-weight: 600;
+            color: #94a3b8;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin: 20px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+ 
+        .seccion-titulo:first-of-type { margin-top: 0; }
+ 
+        .field-wrap {
+            position: relative;
+            margin-bottom: 14px;
+        }
+ 
+        .field-wrap label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+ 
+        .field-wrap .fi {
+            position: absolute;
+            left: 12px;
+            bottom: 10px;
+            color: #94a3b8;
+            font-size: 14px;
+            pointer-events: none;
+        }
+ 
+        .field-wrap input,
+        .field-wrap select {
+            width: 100%;
+            padding: 9px 12px 9px 36px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #1e293b;
+            background: #f8fafc;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+ 
+        .field-wrap input:focus,
+        .field-wrap select:focus {
+            border-color: #1A3C5E;
+            background: #ffffff;
+        }
+ 
+
+        .field-wrap.no-icon input,
+        .field-wrap.no-icon select {
+            padding-left: 12px;
+        }
+ 
+      
+        .badge-opt {
+            font-size: 10px;
+            font-weight: 500;
+            color: #64748b;
+            background: #f1f5f9;
+            border-radius: 4px;
+            padding: 1px 6px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+ 
+      
+        .toggle-pass {
+            position: absolute;
+            right: 11px;
+            bottom: 10px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+            line-height: 1;
+        }
+        .toggle-pass:hover { color: #1A3C5E; }
+ 
+        .alerta-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            font-size: 13px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+ 
+        
+        .btn-registro {
+            width: 100%;
+            padding: 11px;
+            background-color: #1A3C5E;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+ 
+        .btn-registro:hover  { background-color: #15304e; }
+        .btn-registro:active { transform: scale(0.98); }
+ 
+
+        .link-login {
+            text-align: center;
+            margin-top: 16px;
+        }
+ 
+        .link-login a {
+            font-size: 13px;
+            color: #1A3C5E;
+            text-decoration: none;
+        }
+ 
+        .link-login a:hover { text-decoration: underline; }
+ 
+
+        .registro-footer {
+            background: #f8fafc;
+            border-top: 1px solid #f1f5f9;
+            padding: 12px 32px;
+            text-align: center;
+        }
+ 
+        .registro-footer p {
+            font-size: 11px;
+            color: #94a3b8;
+        }
