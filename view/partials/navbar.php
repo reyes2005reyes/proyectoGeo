@@ -40,6 +40,35 @@
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
 							</span>
+							<h4 class="text-section">Roles y Permisos</h4>
+						</li>
+						
+						<li class="nav-item">
+						    <a data-bs-toggle="collapse" href="#rolesmenu" aria-expanded="false">
+								<i class="fas fa-file-alt"></i>
+								<p>Roles</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="rolesmenu">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="<?php echo getUrl('roles','roles','getCreate',false); ?>">
+											<span class="sub-item">Registro Roles</span>
+										</a>
+									</li>
+									<li>
+										<a href="<?php echo getUrl('roles','roles','list',false); ?>">
+											<span class="sub-item">Lista de Roles</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+
+						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
 							<h4 class="text-section">Sistema</h4>
 						</li>
 
