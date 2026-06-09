@@ -1,167 +1,105 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Listado de Solicitudesss</title>
-    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+<div class="card shadow-sm">
 
-    <?php include_once __DIR__ . '/../partials/header.php'; ?>
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Listado de Solicitudes</h5>
+        </div>
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            display: flex;
-        }
+        <div class="card-body">
 
-        .content-wrapper {
-            display: flex;
-            width: 100%;
-            min-height: 100vh;
-        }
+            <div class="table-responsive">
 
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
+                <table class="table table-hover table-striped align-middle">
 
-        .solicitudes-container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre Usuario</th>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Atendida</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
+                        <?php if (!empty($solicitudes)) { ?>
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
-        }
+                            <?php foreach ($solicitudes as $s) { ?>
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
+                                <?php
+                                    $color = $s->getColorEstado();
 
-        th {
-            background: #2c3e50;
-            color: white;
-            font-weight: 600;
-        }
+                                    // ✔ NUEVA LÓGICA
+                                    $yaRespondida = $s->getTieneRespuesta();
+                                    //$yaRespondida = !empty($s->getIdUsuarioResponde());
+                                ?>
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+                                <tr>
 
-        tr:hover {
-            background-color: #f0f0f0;
-        }
+                                    <td>
+                                        <?= htmlspecialchars($s->getNombreUsuario()); ?>
+                                    </td>
 
-        .empty-message {
-            text-align: center;
-            color: #e74c3c;
-            padding: 40px;
-            font-size: 18px;
-        }
+                                    <td>
+                                        <?= htmlspecialchars($s->getFechaSolicitud()); ?>
+                                    </td>
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #95a5a6;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            <?= htmlspecialchars($s->getNombreTipoSolicitud()); ?>
+                                        </span>
+                                    </td>
 
-        .back-link:hover {
-            background-color: #7f8c8d;
-            text-decoration: none;
-        }
-    </style>
+                                    <td>
+                                        <span class="badge bg-<?= $color; ?>">
+                                            <?= htmlspecialchars($s->getNombreEstado()); ?>
+                                        </span>
+                                    </td>
 
-</head>
+                                    
+                                    <td>
+                                        <?php if ($yaRespondida) { ?>
+                                            <span class="badge bg-success">
+                                                ✔ Atendida
+                                            </span>
+                                        <?php } else { ?>
+                                            <span class="badge bg-warning text-dark">
+                                                Pendiente
+                                            </span>
+                                        <?php } ?>
+                                    </td>
 
-<body>
+                                    <td class="text-center">
 
-<div class="content-wrapper">
-    
-    <div class="main-content">
-        <div class="solicitudes-container">
-            <a href="javascript:history.back()" class="back-link">← Atrás</a>
-            
-            <h2>📋 Listado de Solicitudes</h2>
+                                        <a href="<?= getUrl('solicitudes', 'Solicitudes', 'ver', ['id' => $s->getIdSolicitud()]) ?>"
+                                           class="btn btn-outline-primary btn-sm">
 
-            <?php
-                // Si el controlador no pasa $solicitudes, obtenerlas aquí como fallback
-                if(!isset($solicitudes) || empty($solicitudes)) {
-                    require_once __DIR__ . '/../../model/solicitudes/SolicitudesModel.php';
-                    try {
-                        $model = new SolicitudesModel();
-                        $solicitudes = $model->listarSolicitudes();
-                    } catch (Exception $e) {
-                        $solicitudes = [];
-                        error_log("Error al cargar solicitudes: " . $e->getMessage());
-                    }
-                }
-            ?>
+                                            <i class="fas fa-eye"></i>
+                                            Ver Detalle
+                                        </a>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Descripción</th>
-                        <th>Fecha</th>
-                        <th>Tipo</th>
-                        <th>Dirección</th>
-                    </tr>
-                </thead>
+                                    </td>
 
-                <tbody>
-                    <?php if (!empty($solicitudes) && count($solicitudes) > 0) { ?>
+                                </tr>
 
-                        <?php foreach ($solicitudes as $s) { ?>
+                            <?php } ?>
+
+                        <?php } else { ?>
 
                             <tr>
-                                <td><?= htmlspecialchars($s->getIdSolicitud()); ?></td>
-                                <td><?= htmlspecialchars(substr($s->getDescripcion(), 0, 50)) . '...'; ?></td>
-                                <td><?= htmlspecialchars($s->getFechaCreacion()); ?></td>
-                                <td><?= htmlspecialchars($s->getTipoSolicitud()); ?></td>
-                                <td><?= htmlspecialchars($s->getDireccion()); ?></td>
+                                <td colspan="6" class="text-center text-muted">
+                                    No hay solicitudes disponibles.
+                                </td>
                             </tr>
 
                         <?php } ?>
 
-                    <?php } else { ?>
+                    </tbody>
 
-                        <tr>
-                            <td colspan="5">
-                                <div class="empty-message">
-                                    No hay solicitudes disponibles
-                                </div>
-                            </td>
-                        </tr>
+                </table>
 
-                    <?php } ?>
+            </div>
 
-                </tbody>
-            </table>
         </div>
-    </div>
-</div>
 
-</body>
-</html>
+    </div>

@@ -12,8 +12,8 @@
     </script>
 
  
-    <link rel="stylesheet" href="/proyectoGeo/web/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/proyectoGeo/web/assets/css/plugins.min.css">
-    <link rel="stylesheet" href="/proyectoGeo/web/assets/css/kaiadmin.min.css">
+    <link rel="stylesheet" href="/../web/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/../web/assets/css/plugins.min.css">
+    <link rel="stylesheet" href="/../web/assets/css/kaiadmin.min.css">
 
 <?php } ?>

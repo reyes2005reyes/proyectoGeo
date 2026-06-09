@@ -87,11 +87,15 @@
 							</a>
 							<div class="collapse" id="solicitudesMenu">
 								<ul class="nav nav-collapse">
+									<?php if(isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 2): ?>
 									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
-											<span class="sub-item">Mis Solicitudes</span>
+										<a href="<?php echo getUrl('solicitudes','Solicitudes','listar',false); ?>">
+											<span class="sub-item">Listar Solicitudes</span>
 										</a>
 									</li>
+								<?php endif; ?>
+								<!-- //Se muestran solo al ciudadano. -->
+								<?php if(isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 1): ?>
 									<li>
 										<a href="<?php echo getUrl('solicitudes','solicitudes','reportar_accidente',false); ?>">
 											<span class="sub-item">Reportar Accidente</span>
@@ -127,6 +131,7 @@
 											<span class="sub-item">PQRSF</span>
 										</a>
 									</li>
+									<?php endif; ?>
 								</ul>
 							</div>
 						</li>
