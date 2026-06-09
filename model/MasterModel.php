@@ -4,16 +4,16 @@
 
     class MasterModel extends Connection{
 
-    protected function query($sql, $params = []) {
-        $result = pg_query_params($this->getConnect(), $sql, $params);
 
-        if (!$result) {
-            throw new Exception(pg_last_error($this->getConnect()));
+        protected function query($sql, $params = []) {
+            $result = pg_query_params($this->getConnect(), $sql, $params);
+
+            if (!$result) {
+                throw new Exception(pg_last_error($this->getConnect()));
+            }
+
+            return $result;
         }
-
-        return $result;
-    }
-
         //SELECT Sirve para LISTAR por si acaso.
         public function select($sql){
             $result = pg_query($this -> getConnect(),$sql);
@@ -40,12 +40,13 @@
                 echo "No se encontro ningun registro";
             }
         }
-
-
         public function autoincrement($table, $field){
             $sql = "SELECT MAX($field) FROM $table";
+
             $result = pg_query($this -> getConnect(),$sql);
+
             $max_id = pg_fetch_array($result);
+            
             return $max_id[0] + 1;
         }
     }
