@@ -132,7 +132,7 @@
 						</li>
 
 						<li class="nav-item">
-                    		<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+                    		<a href="<?php echo getUrl('reportes','reportes','index',false); ?>">
                         		<i class="fas fa-file-invoice"></i>
 								<p>Reportes</p>
                     		</a>    
