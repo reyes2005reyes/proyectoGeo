@@ -95,7 +95,7 @@
 									</li>
 								<?php endif; ?>
 								<!-- //Se muestran solo al ciudadano. -->
-								<?php if(isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 1): ?>
+								<?php if(isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 3): ?>
 									<li>
 										<a href="<?php echo getUrl('solicitudes','solicitudes','reportar_accidente',false); ?>">
 											<span class="sub-item">Reportar Accidente</span>

@@ -1,0 +1,85 @@
+[Tue Jun  9 06:41:19 2026] PHP 8.5.7 Development Server (http://127.0.0.1:8000) started
+[Tue Jun  9 06:41:24 2026] 127.0.0.1:53754 Accepted
+[Tue Jun  9 06:41:24 2026] 127.0.0.1:53754 [404]: GET / - No such file or directory
+[Tue Jun  9 06:41:24 2026] 127.0.0.1:53754 Closing
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56690 Accepted
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56690 [200]: GET /web/login.php
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56690 Closing
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56702 Accepted
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56702 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56702 Closing
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56704 Accepted
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56704 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:41:36 2026] 127.0.0.1:56704 Closing
+[Tue Jun  9 06:42:26 2026] 127.0.0.1:54840 Accepted
+[Tue Jun  9 06:42:26 2026] 127.0.0.1:54840 [200]: GET /web/login.php
+[Tue Jun  9 06:42:26 2026] 127.0.0.1:54840 Closing
+[Tue Jun  9 06:42:26 2026] 127.0.0.1:54856 Accepted
+[Tue Jun  9 06:42:26 2026] 127.0.0.1:54856 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:42:26 2026] 127.0.0.1:54856 Closing
+[Tue Jun  9 06:42:27 2026] 127.0.0.1:54866 Accepted
+[Tue Jun  9 06:42:27 2026] 127.0.0.1:54866 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:42:27 2026] 127.0.0.1:54866 Closing
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54874 Accepted
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54874 [200]: GET /web/login.php
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54874 Closing
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54890 Accepted
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54890 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54890 Closing
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54896 Accepted
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54896 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:42:30 2026] 127.0.0.1:54896 Closing
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54910 Accepted
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54910 [200]: GET /web/login.php
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54910 Closing
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54926 Accepted
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54926 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54926 Closing
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54930 Accepted
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54930 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:42:33 2026] 127.0.0.1:54930 Closing
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54932 Accepted
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54932 [200]: GET /web/login.php
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54932 Closing
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54934 Accepted
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54934 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54934 Closing
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54942 Accepted
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54942 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:42:35 2026] 127.0.0.1:54942 Closing
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57336 Accepted
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57336 [200]: GET /web/login.php
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57336 Closing
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57348 Accepted
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57348 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57348 Closing
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57356 Accepted
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57356 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:42:36 2026] 127.0.0.1:57356 Closing
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39084 Accepted
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39084 [200]: GET /web/login.php
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39084 Closing
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39100 Accepted
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39100 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39100 Closing
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39108 Accepted
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39108 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39108 Closing
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39118 Accepted
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39118 [200]: GET /web/login.php
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39118 Closing
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39132 Accepted
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39132 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:42:52 2026] 127.0.0.1:39132 Closing
+[Tue Jun  9 06:42:53 2026] 127.0.0.1:39142 Accepted
+[Tue Jun  9 06:42:53 2026] 127.0.0.1:39142 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:42:53 2026] 127.0.0.1:39142 Closing
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53392 Accepted
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53392 [200]: GET /web/login.php
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53392 Closing
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53402 Accepted
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53402 [200]: GET /web/assets/css/login.css
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53402 Closing
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53410 Accepted
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53410 [200]: GET /web/assets/img/logoGeo.png
+[Tue Jun  9 06:43:03 2026] 127.0.0.1:53410 Closing
