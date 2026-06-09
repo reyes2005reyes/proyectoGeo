@@ -4,7 +4,6 @@
 
     class MasterModel extends Connection{
 
-
     protected function query($sql, $params = []) {
         $result = pg_query_params($this->getConnect(), $sql, $params);
 
