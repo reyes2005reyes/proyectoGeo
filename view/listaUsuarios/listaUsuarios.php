@@ -38,25 +38,19 @@ function formatEstado($estado)
         <h4 class="mb-0">Lista de Usuarios</h4>
     </div>
     <div class="card-body">
-        <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?modulo=usuarios&controlador=usuarios&funcion=lista" class="row gy-3 gx-2 align-items-end">
+        <div class="mb-3 row align-items-center">
             <div class="col-md-4">
-                <label for="numero_documento" class="form-label">Ingrese número de cédula</label>
                 <input
-                    type="text"
+                    type="search"
                     name="numero_documento"
-                    id="numero_documento"
+                    id="filtro"
                     class="form-control"
-                    placeholder="Ingrese número de cédula"
+                    placeholder="Buscar por número de documento"
                     value="<?php echo htmlspecialchars($numeroDocumento); ?>"
+                    data-url="<?php echo getUrl('usuarios','usuarios','filtro',false,'ajax'); ?>"
                 >
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-success w-100">Buscar</button>
-            </div>
-            <div class="col-md-6 text-md-end">
-                <span class="text-muted">Dejar vacío mostrará todos los usuarios.</span>
-            </div>
-        </form>
+        </div>
 
         <div class="table-responsive mt-4">
             <table class="table table-bordered table-hover align-middle">
@@ -73,7 +67,7 @@ function formatEstado($estado)
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="usuariosFiltro">
                     <?php if (!empty($usuarios) && count($usuarios) > 0): ?>
                         <?php foreach ($usuarios as $usuario): ?>
                             <tr>
@@ -109,15 +103,12 @@ function formatEstado($estado)
         </div>
     </div>
 </div>
-        </div>
 
-        <script>
-            // Asegura que el listado quede visible al cargar la vista
-            (function(){
-                var el = document.getElementById('listaUsuariosCard');
-                if(el){
-                    // desplazar suavemente hasta el inicio del listado
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            })();
-        </script>
+<script>
+    (function(){
+        var el = document.getElementById('listaUsuariosCard');
+        if(el){
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    })();
+</script>

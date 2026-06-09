@@ -286,6 +286,45 @@ class UsuariosController{
         require_once __DIR__ . '/../../view/listaUsuarios/listaUsuarios.php'; // Se corrigio la ruta del archivo de vista para que apunte a la carpeta correcta
     }
 
+    public function filtro(){
+        $obj = new UsuariosModel();
+        $buscar = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
+        $buscarEscapado = pg_escape_string($buscar);
+
+        $sql = "SELECT
+                    u.id_usuario,
+                    td.nombre_tipo_documento,
+                    u.numero_documento,
+                    u.primer_nombre,
+                    u.segundo_nombre,
+                    u.primer_apellido,
+                    u.segundo_apellido,
+                    u.telefono,
+                    r.nombre_rol,
+                    eu.nombre_estado_usuario
+                FROM usuarios u
+                LEFT JOIN tipos_documento td ON u.id_tipo_documento = td.id_tipo_documento
+                LEFT JOIN roles r ON u.id_rol = r.id_rol
+                LEFT JOIN estados_usuario eu ON u.id_estado_usuario = eu.id_estado_usuario";
+
+        if ($buscarEscapado !== '') {
+            $sql .= " WHERE u.numero_documento::text LIKE '%$buscarEscapado%'";
+        }
+
+        $sql .= " ORDER BY u.id_usuario DESC";
+
+        $usuarios = $obj->select($sql);
+
+        $usuariosArray = [];
+        if($usuarios && pg_num_rows($usuarios) > 0) {
+            while($row = pg_fetch_assoc($usuarios)) {
+                $usuariosArray[] = $row;
+            }
+        }
+
+        include_once __DIR__ . '/../../view/listaUsuarios/filtro.php';
+    }
+
 
 
     // falta terminarlo xd
