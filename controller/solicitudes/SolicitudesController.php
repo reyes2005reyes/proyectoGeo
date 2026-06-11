@@ -10,39 +10,37 @@ class SolicitudesController {
     // ======================
 public function listar() {
 
-    try {
+        try {
 
-        $model = new Solicitud();
+            $model = new Solicitud();
 
-        $idRol = $_SESSION['id_rol'] ?? null;
-        $idUsuario = $_SESSION['id_usuario'] ?? null;
+            $idRol = $_SESSION['id_rol'] ?? null;
+            $idUsuario = $_SESSION['id_usuario'] ?? null;
 
-        // 👤 Usuario normal → solo sus solicitudes
-        if ($idRol == 1) {
+            if ($idRol == 3) {
+                $solicitudes = $model->listarSolicitudes($idUsuario);
+            } else if ($idRol == 2) {
+                $solicitudes = $model->listarSolicitudes();
+            }
 
-            $solicitudes = $model->listarSolicitudes($idUsuario);
+            include_once __DIR__ . '/../../view/solicitudes/vistaSolicitudes.php';
 
-        } else {
-
-            //otros roles ven todo (o luego lo refinamos)
-            $solicitudes = $model->listarSolicitudes();
+        } catch (Exception $e) {
+            error_log("Error en listar(): " . $e->getMessage());
+            http_response_code(500);
+            echo "Error al cargar las solicitudes.";
         }
-
-        include_once __DIR__ . '/../../view/solicitudes/vistaSolicitudes.php';
-
-    } catch (Exception $e) {
-
-        error_log("Error en listar(): " . $e->getMessage());
-        http_response_code(500);
-        echo "Error al cargar las solicitudes.";
-    }
 }
+
+
 
     // ======================
     // VER DETALLE
     // ======================
     public function ver() {
 
+
+    
         $idSolicitud = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
         if (!$idSolicitud) {
@@ -55,52 +53,125 @@ public function listar() {
 
             $model = new Solicitud();
 
-            // 1. solicitud
             $solicitud = $model->obtenerSolicitudPorId($idSolicitud);
 
+            
             if (!$solicitud) {
                 http_response_code(404);
                 echo "Solicitud no encontrada.";
                 return;
             }
 
-            // 2. respuesta
             $respuesta = $model->obtenerRespuesta($idSolicitud);
             $tieneRespuesta = !empty($respuesta);
+            $auditorias = $model->obtenerAuditoriaPorSolicitud($idSolicitud);
 
-            // 3. permisos
+
+           
+
+
             $idRol = $_SESSION['id_rol'] ?? null;
-            $puedeResponder = false;
 
-            if ($idRol) {
-
-                $idModulo = 2; // solicitudes
-                $idAccion = 3; // editar (según tu tabla acciones)
-
-                $puedeResponder = $model->verificarPermiso(
-                    $idRol,
-                    $idModulo,
-                    $idAccion
-                );
-            }
-
-            // 4. vista
             include_once __DIR__ . '/../../view/solicitudes/vistaDetallesSolicitud.php';
 
         } catch (Exception $e) {
 
-            error_log("Error en ver(): " . $e->getMessage());
 
-            http_response_code(500);
-            echo "Error interno al cargar la solicitud.";
-        }
+}
     }
+
+
+
 
     // ======================
     // RESPONDER
     // ======================
+public function responder() {
 
-    public function responder() {
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        try {
+
+            $model = new Solicitud();
+
+            // ✔ FIX: primero capturar ID
+            $idSolicitud = filter_input(INPUT_POST, 'id_solicitud', FILTER_VALIDATE_INT);
+            $mensaje = trim($_POST['mensaje'] ?? '');
+
+            $idUsuario = $_SESSION['id_usuario'] ?? null;
+            $idRol = $_SESSION['id_rol'] ?? null;
+
+            if (!$idSolicitud || empty($mensaje)) {
+                $_SESSION['flash_error'] = "Datos inválidos.";
+                header("Location: index.php");
+                return;
+            }
+
+            $responsable = $model->obtenerFuncionarioResponsable($idSolicitud);
+
+            if ($responsable && $responsable != $idUsuario) {
+                $_SESSION['flash_error'] = "Esta solicitud ya está siendo gestionada por otro funcionario.";
+                header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
+                return;
+            }
+
+            if (!$idUsuario) {
+                $_SESSION['flash_error'] = "No autorizado.";
+                header("Location: index.php");
+                return;
+            }
+
+            if (!$model->verificarPermiso($idRol, 2, 3)) {
+                $_SESSION['flash_error'] = "No tienes permisos.";
+                header("Location: index.php");
+                return;
+            }
+
+            if ($model->yaTieneRespuesta($idSolicitud)) {
+                $_SESSION['flash_error'] = "Ya fue respondida.";
+                header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
+                return;
+            }
+
+            $idEstado = filter_input(INPUT_POST, 'id_estado', FILTER_VALIDATE_INT);
+            if (!$idEstado) {
+                $idEstado = 2;
+            }
+
+            $resultado = $model->registrarRespuesta(
+                $idSolicitud,
+                $idUsuario,
+                $mensaje,
+                $idEstado
+            );
+
+            if (!$resultado['ok']) {
+                $_SESSION['flash_error'] = $resultado['msg'];
+                header("Location: index.php");
+                return;
+            }
+
+            $_SESSION['flash_success'] = "Solicitud actualizada con éxito.";
+            header("Location: index.php?modulo=solicitudes&funcion=listar");
+            exit;
+
+        } catch (Exception $e) {
+            error_log("Error en responder(): " . $e->getMessage());
+            $_SESSION['flash_error'] = "Error interno.";
+            header("Location: index.php");
+        }
+}
+
+
+
+ // ======================
+    // CAMBIAR ESTADO
+    // ======================
+
+public function cambiarEstado() {
 
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -109,163 +180,275 @@ public function listar() {
         try {
 
             $idUsuario = $_SESSION['id_usuario'] ?? null;
+            $idRol = $_SESSION['id_rol'] ?? null;
 
-            if (!$idUsuario) {
-                http_response_code(401);
-                echo "No autorizado.";
+            $idSolicitud = filter_input(INPUT_POST, 'id_solicitud', FILTER_VALIDATE_INT);
+            $idEstado = filter_input(INPUT_POST, 'id_estado', FILTER_VALIDATE_INT);
+
+            if (!$idUsuario || $idRol != 2) {
+                $_SESSION['flash_error'] = "No autorizado.";
+                header("Location: index.php");
                 return;
             }
 
-            $idSolicitud = filter_input(INPUT_POST, 'id_solicitud', FILTER_VALIDATE_INT);
-            $mensaje = trim($_POST['mensaje'] ?? '');
-
-            if (!$idSolicitud || empty($mensaje)) {
-                http_response_code(400);
-                echo "Datos inválidos.";
+            if (!$idSolicitud || !$idEstado) {
+                $_SESSION['flash_error'] = "Datos inválidos.";
+                header("Location: index.php");
                 return;
             }
 
             $model = new Solicitud();
 
-            // validar existencia solicitud
             $solicitud = $model->obtenerSolicitudPorId($idSolicitud);
 
             if (!$solicitud) {
-                http_response_code(404);
-                echo "Solicitud no encontrada.";
+                $_SESSION['flash_error'] = "Solicitud no encontrada.";
+                header("Location: index.php");
                 return;
             }
 
-            // permisos
-            $idRol = $_SESSION['id_rol'] ?? null;
-
-            $puedeResponder = false;
-
-            if ($idRol) {
-                $puedeResponder = $model->verificarPermiso($idRol, 2, 3);
-            }
-
-            if (!$puedeResponder) {
-                http_response_code(403);
-                echo "No tienes permisos para responder.";
+            if (!$model->esFuncionarioResponsable($idSolicitud, $idUsuario)) {
+                $_SESSION['flash_error'] = "Solo el funcionario responsable puede modificarla.";
+                header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
                 return;
             }
 
-            // evitar doble respuesta
-            if ($model->yaTieneRespuesta($idSolicitud)) {
-                http_response_code(403);
-                echo "Esta solicitud ya fue respondida.";
+            if (!$model->verificarPermiso($idRol, 2, 3)) {
+                $_SESSION['flash_error'] = "Sin permisos.";
+                header("Location: index.php");
                 return;
             }
 
-            // registrar respuesta
-            $resultado = $model->registrarRespuesta(
-                $idSolicitud,
-                $idUsuario,
-                $mensaje,
-                1
-            );
+            $resultado = $model->actualizarEstadoSolicitud($idSolicitud, $idEstado);
 
             if (!$resultado['ok']) {
-                http_response_code(500);
-                echo $resultado['msg'];
+                $_SESSION['flash_error'] = $resultado['msg'];
+                header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
                 return;
             }
 
-            // ✔ MENSAJE FLASH
-            $_SESSION['success'] = "Respuesta registrada correctamente.";
-
-            // ✔ REDIRECCIÓN LIMPIA
+            $_SESSION['flash_success'] = "Estado actualizado correctamente.";
             header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
             exit;
 
         } catch (Exception $e) {
-
-            error_log("Error en responder(): " . $e->getMessage());
-
-            http_response_code(500);
-            echo "Error interno al responder solicitud.";
+            error_log("Error cambiarEstado: " . $e->getMessage());
+            $_SESSION['flash_error'] = "Error interno del sistema.";
+            header("Location: index.php");
         }
-    }
+}
 
 
-public function cambiarEstado() {
+
+// ======================
+    // ACTUALIZAR SOLICITUD + AUDITORÍA
+    // ======================
+public function actualizarSolicitud() {
+
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
+    $model = null;
+    $idSolicitud = null;
+
     try {
-
-        $idUsuario = $_SESSION['id_usuario'] ?? null;
-        $idRol = $_SESSION['id_rol'] ?? null;
-
-        // SOLO FUNCIONARIOS (ROL 2)
-        if (!$idUsuario || $idRol != 2) {
-            http_response_code(403);
-            $_SESSION['error'] = "No autorizado.";
-            header("Location: index.php");
-            return;
-        }
-
-        $idSolicitud = filter_input(INPUT_POST, 'id_solicitud', FILTER_VALIDATE_INT);
-        $idEstado = filter_input(INPUT_POST, 'id_estado', FILTER_VALIDATE_INT);
-
-        if (!$idSolicitud || !$idEstado) {
-            http_response_code(400);
-            $_SESSION['error'] = "Datos inválidos.";
-            header("Location: index.php?modulo=solicitudes&funcion=listar");
-            return;
-        }
 
         $model = new Solicitud();
 
-        // 🔎 validar existencia
+        $idUsuario = $_SESSION['id_usuario'] ?? null;
+        $idRol     = $_SESSION['id_rol'] ?? null;
+
+        // =========================
+        // VALIDAR AUTENTICACIÓN
+        // =========================
+        if (!$idUsuario || $idRol != 2) {
+            $_SESSION['flash_error'] = "No autorizado.";
+            header("Location: index.php");
+            exit;
+        }
+
+        // =========================
+        // OBTENER DATOS DEL FORMULARIO
+        // =========================
+        $idSolicitud = filter_input(
+            INPUT_POST,
+            'id_solicitud',
+            FILTER_VALIDATE_INT
+        );
+
+        $idEstado = filter_input(
+            INPUT_POST,
+            'id_estado',
+            FILTER_VALIDATE_INT
+        );
+
+        $mensaje = trim($_POST['mensaje'] ?? '');
+
+        if (!$idSolicitud || !$idEstado || empty($mensaje)) {
+            $_SESSION['flash_error'] =
+                "Todos los campos son obligatorios.";
+
+            header(
+                "Location: index.php?modulo=solicitudes&controlador=Solicitudes&funcion=ver&id={$idSolicitud}"
+            );
+            exit;
+        }
+
+        // =========================
+        // VALIDAR EXISTENCIA SOLICITUD
+        // =========================
         $solicitud = $model->obtenerSolicitudPorId($idSolicitud);
 
         if (!$solicitud) {
-            http_response_code(404);
-            $_SESSION['error'] = "Solicitud no encontrada.";
-            header("Location: index.php?modulo=solicitudes&funcion=listar");
-            return;
+            throw new Exception("La solicitud no existe.");
         }
 
-        // REGLA DE NEGOCIO: no cambiar estado si ya tiene respuesta
-        if ($model->yaTieneRespuesta($idSolicitud)) {
-            $_SESSION['error'] = "No puedes cambiar el estado porque la solicitud ya tiene una respuesta registrada.";
-            header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
-            return;
+        // =========================
+        // VALIDAR RESPONSABLE
+        // =========================
+        // este bloque lo activare cuando confirme si solo el unico funcionario puede actualizar 
+        //las solicitudes
+        /*
+        if (!$model->esFuncionarioResponsable(
+            $idSolicitud,
+            $idUsuario
+        )) {
+            $_SESSION['flash_error'] =
+                "Solo el funcionario responsable puede modificar esta solicitud.";
+
+            header(
+                "Location: index.php?modulo=solicitudes&controlador=Solicitudes&funcion=ver&id={$idSolicitud}"
+            );
+            exit;
+        }
+        */
+
+        // =========================
+        // VALIDAR TRANSICIÓN DE ESTADOS
+        // =========================
+        if (
+            !$model->esTransicionValida(
+                $solicitud->getIdEstadoSolicitud(),
+                $idEstado
+            )
+        ) {
+            $_SESSION['flash_error'] =
+                "La transición de estado no está permitida.";
+            
+
+            header(
+                "Location: index.php?modulo=solicitudes&controlador=Solicitudes&funcion=ver&id={$idSolicitud}"
+            );
+            exit;
         }
 
-        //PERMISOS
-        if (!$model->verificarPermiso($idRol, 2, 3)) {
-            http_response_code(403);
-            $_SESSION['error'] = "Sin permisos para realizar esta acción.";
-            header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
-            return;
+        // =========================
+        // MAPA DE ESTADOS
+        // =========================
+        $estados = [
+            1 => 'Pendiente',
+            2 => 'En revisión',
+            3 => 'En proceso',
+            4 => 'Rechazada',
+            5 => 'Completada'
+        ];
+
+        $estadoAnterior =
+            $estados[$solicitud->getIdEstadoSolicitud()]
+            ?? 'Desconocido';
+
+        $estadoNuevo =
+            $estados[$idEstado]
+            ?? 'Desconocido';
+
+        // =========================
+        // MENSAJE DE AUDITORÍA
+        // =========================
+        $mensajeAuditoria =
+            "Cambio de estado: {$estadoAnterior} → {$estadoNuevo}. " .
+            "Justificación: {$mensaje}";
+
+        // =========================
+        // INICIAR TRANSACCIÓN
+        // =========================
+        $model->beginTransaction();
+
+        // Actualizar estado de la solicitud
+        $resultadoEstado = $model->actualizarEstadoSolicitud(
+            $idSolicitud,
+            $idEstado
+        );
+
+        // Registrar auditoría
+        $resultadoAuditoria = $model->registrarAuditoria(
+            $idSolicitud,
+            $solicitud->getIdUsuario(),
+            $idUsuario,
+            $idEstado,
+            $mensajeAuditoria
+        );
+
+        // Validar operaciones
+        if (!$resultadoEstado || !$resultadoAuditoria) {
+            throw new Exception(
+                "No fue posible completar la actualización."
+            );
         }
 
-        //ACTUALIZAR ESTADO
-        $resultado = $model->actualizarEstadoSolicitud($idSolicitud, $idEstado);
+        // Confirmar cambios
+        $model->commit();
 
-        if (!$resultado['ok']) {
-            $_SESSION['error'] = $resultado['msg'];
-            header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
-            return;
-        }
+        // =========================
+        // MENSAJE DE ÉXITO
+        // =========================
+        $_SESSION['flash_success'] =
+            "Solicitud actualizada con éxito.";
 
-        // SUCCESS
-        $_SESSION['success'] = "Estado actualizado correctamente.";
+        // =========================
+        // REDIRECCIÓN (PATRÓN PRG)
+        // =========================
 
-        header("Location: index.php?modulo=solicitudes&funcion=ver&id=$idSolicitud");
+        header(
+            // "Location: index.php?modulo=solicitudes&controlador=solicitudes&funcion=ver&id={$idSolicitud}"
+            "Location: index.php?modulo=solicitudes&controlador=Solicitudes&funcion=listar"
+        );
         exit;
 
     } catch (Exception $e) {
 
-        error_log("Error cambiarEstado: " . $e->getMessage());
+        // Revertir cambios si la transacción ya había iniciado
+        if ($model) {
+            $model->rollback();
+        }
 
-        $_SESSION['error'] = "Error interno del sistema.";
-        header("Location: index.php?modulo=solicitudes&funcion=listar");
-        return;
+        error_log(
+            "Error actualizarSolicitud(): " .
+            $e->getMessage()
+        );
+
+        $_SESSION['flash_error'] =
+            "Error interno del sistema: " .
+            $e->getMessage();
+
+        // Si conocemos la solicitud, volvemos a la vista de detalle
+        if (!empty($idSolicitud)) {
+            header(
+                "Location: index.php?modulo=solicitudes&controlador=Solicitudes&funcion=ver&id={$idSolicitud}"
+            );
+            exit;
+        }
+
+        // Fallback
+        header("Location: index.php");
+        exit;
     }
 }
+
+
 }

@@ -1,4 +1,7 @@
-<?php $idRol = $_SESSION['id_rol'] ?? null; ?>
+<?php
+$idRol = $_SESSION['id_rol'] ?? null;
+$estado = $solicitud->getIdEstadoSolicitud();
+?>
 
 <div class="container mt-4">
 
@@ -6,7 +9,7 @@
 
         <div class="card-header bg-black text-white">
             <h5 class="mb-0">
-                Detalle de Solicitud #<?= htmlspecialchars($solicitud->getIdSolicitud() ?? 'N/A'); ?>
+                Detalle de Solicitud #<?= htmlspecialchars($solicitud->getIdSolicitud()); ?>
             </h5>
         </div>
 
@@ -14,15 +17,8 @@
 
             <?php
                 $color = $solicitud->getColorEstado();
-                $tipo = $solicitud->getNombreTipoSolicitud() ?? 'No existe dato';
-                $detalle = $detalle ?? null;
+                $tipo = $solicitud->getNombreTipoSolicitud();
             ?>
-
-            <?php if ($tieneRespuesta): ?>
-                <div class="alert alert-success">
-                    ✔ Esta solicitud ya fue atendida por un funcionario.
-                </div>
-            <?php endif; ?>
 
             <div class="row g-4">
 
@@ -44,8 +40,8 @@
 
                 <!-- TIPO -->
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">Tipo de Solicitud</label>
-                    <span class="badge bg-info text-dark fs-6">
+                    <label class="form-label fw-bold">Tipo</label>
+                    <span class="badge bg-info text-dark">
                         <?= htmlspecialchars($tipo); ?>
                     </span>
                 </div>
@@ -53,152 +49,158 @@
                 <!-- ESTADO -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Estado</label>
-                    <span class="badge bg-<?= $color ?> fs-6">
+                    <span class="badge bg-<?= $color ?>">
                         <?= htmlspecialchars($solicitud->getNombreEstado()); ?>
                     </span>
                 </div>
 
-                <!-- DIRECCIÓN -->
-                <div class="col-md-12">
-                    <label class="form-label fw-bold">Dirección</label>
-                    <div class="form-control">
-                        <?= htmlspecialchars($solicitud->getDireccion()); ?>
-                    </div>
-                </div>
-
                 <!-- DESCRIPCIÓN -->
                 <div class="col-md-12">
-                    <label class="form-label fw-bold">Descripción</label>
+                    <label class="form-label fw-bold">Descripción de la Solicitud</label>
                     <textarea class="form-control" rows="4" readonly><?= htmlspecialchars($solicitud->getDescripcion()); ?></textarea>
                 </div>
 
-                <!-- COORDENADAS -->
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Latitud</label>
-                    <div class="form-control"><?= htmlspecialchars($solicitud->getLatitud()); ?></div>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Longitud</label>
-                    <div class="form-control"><?= htmlspecialchars($solicitud->getLongitud()); ?></div>
-                </div>
-
-                <!-- IMAGEN -->
-                <div class="col-md-12 text-center">
-                    <label class="form-label fw-bold">Imagen</label><br>
-
-                    <?php if (!empty($solicitud->getImagen())): ?>
-                        <img src="<?= htmlspecialchars($solicitud->getImagen()); ?>"
-                             class="img-fluid rounded shadow-sm"
-                             style="max-height: 300px;">
-                    <?php else: ?>
-                        <div class="border rounded p-4 bg-light text-muted">
-                            No hay imagen disponible
+                <!-- ESTADOS BLOQUEADOS -->
+                <?php if ($estado == 4): ?>
+                    <div class="col-md-12 mt-3">
+                        <div class="alert alert-danger">
+                            ❌ Esta solicitud ya fue rechazada.
                         </div>
-                    <?php endif; ?>
-                </div>
-
-                <!-- DETALLES -->
-                <div class="col-md-12 mt-4">
-                    <hr>
-                    <h5 class="text-primary">Detalles específicos</h5>
-                </div>
-
-                <?php if (empty($detalle)): ?>
-                    <div class="col-md-12">
-                        <div class="alert alert-warning">
-                            No existen detalles específicos.
+                    </div>
+                <?php elseif ($estado == 5): ?>
+                    <div class="col-md-12 mt-3">
+                        <div class="alert alert-success">
+                            ✔ Esta solicitud ya fue completada.
                         </div>
                     </div>
                 <?php endif; ?>
 
-                <!-- ========================= -->
-                <!-- CAMBIO DE ESTADO (SOLO SI NO HAY RESPUESTA) -->
-                <!-- ========================= -->
+                <!-- GESTIÓN -->
+                <?php if ($idRol == 2 && !in_array($estado, [4,5])): ?>
 
-                <?php if ($idRol == 2 && !$tieneRespuesta): ?>
-                    <div class="col-md-12 mt-4">
-                        <hr>
-                        <h5 class="text-warning">Gestión de Estado</h5>
+                <div class="col-md-12 mt-4">
+                    <hr>
+                    <h5 class="text-warning">Gestión de solicitud</h5>
 
-                        <form method="POST"
-                              action="<?= getUrl('solicitudes','Solicitudes','cambiarEstado') ?>">
+                    <form method="POST"
+                          action="<?= getUrl('solicitudes','Solicitudes','actualizarSolicitud') ?>">
 
-                            <input type="hidden" name="id_solicitud"
-                                   value="<?= $solicitud->getIdSolicitud(); ?>">
+                        <input
+                            type="hidden"
+                            name="id_solicitud"
+                            value="<?= htmlspecialchars($solicitud->getIdSolicitud()); ?>"
+                        >
 
-                            <div class="mb-3">
-                                <label class="form-label">Nuevo estado</label>
+                        <div class="mb-3">
+                            <label class="form-label">Nuevo estado</label>
 
-                                <select name="id_estado" class="form-select" required>
-                                    <option value="1">Pendiente</option>
+                            <select name="id_estado" class="form-select" required>
+                                <option value="">Seleccione...</option>
+
+                                <?php if ($estado == 1): ?>
                                     <option value="2">En revisión</option>
+                                    <option value="4">Rechazada</option>
+
+                                <?php elseif ($estado == 2): ?>
                                     <option value="3">En proceso</option>
                                     <option value="4">Rechazada</option>
+
+                                <?php elseif ($estado == 3): ?>
                                     <option value="5">Completada</option>
-                                </select>
-                            </div>
-
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-warning">
-                                    Actualizar estado
-                                </button>
-                            </div>
-
-                        </form>
-                    </div>
-                <?php endif; ?>
-
-                <!-- RESPUESTA -->
-                <div class="col-md-12 mt-4">
-                    <hr>
-
-                    <label class="form-label fw-bold">Respuesta</label>
-
-                    <?php if ($tieneRespuesta): ?>
-
-                        <div class="form-control bg-light mb-2">
-                            <?= nl2br(htmlspecialchars($respuesta['mensaje'] ?? 'Sin respuesta')) ?>
+                                    <option value="4">Rechazada</option>
+                                <?php endif; ?>
+                            </select>
                         </div>
 
-                        <small class="text-muted d-block">
-                            Respondido por:
-                            <?= htmlspecialchars(
-                                ($respuesta['primer_nombre'] ?? '') . ' ' . ($respuesta['primer_apellido'] ?? '')
-                            ); ?>
-                        </small>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Mensaje (respuesta / justificación)
+                            </label>
 
-                    <?php else: ?>
-
-                        <form method="POST"
-                              action="<?= getUrl('solicitudes','Solicitudes','responder') ?>">
-
-                            <input type="hidden" name="id_solicitud"
-                                   value="<?= $solicitud->getIdSolicitud(); ?>">
-
-                            <textarea id="respuesta"
-                                      name="mensaje"
-                                      class="form-control"
-                                      rows="4"
-                                      maxlength="500"
-                                      placeholder="Escribe tu respuesta aquí..."></textarea>
+                            <textarea
+                                name="mensaje"
+                                id="mensaje"
+                                class="form-control"
+                                rows="4"
+                                maxlength="250"
+                                placeholder="Escribe la respuesta o justificación del cambio..."
+                                required></textarea>
 
                             <div class="d-flex justify-content-between mt-1">
-                                <small class="text-muted">Máximo 500 caracteres</small>
-                                <small id="contador" class="text-muted">0 / 500</small>
+                                <small class="text-muted">
+                                    Este campo es obligatorio.
+                                </small>
+
+                                <small id="contadorMensaje" class="text-secondary">
+                                    Quedan 250 caracteres
+                                </small>
                             </div>
+                        </div>
 
-                            <div class="mt-3 text-end">
-                                <button type="submit" class="btn btn-success">
-                                    Enviar respuesta
-                                </button>
-                            </div>
+                        <div class="alert alert-warning">
+                            Estado actual de la solicitud:
+                            <strong><?= htmlspecialchars($solicitud->getNombreEstado()); ?></strong>
+                        </div>
 
-                        </form>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-warning">
+                                Actualizar
+                            </button>
+                        </div>
 
-                    <?php endif; ?>
-
+                    </form>
                 </div>
+
+                <?php endif; ?>
+
+                <!-- AUDITORÍA -->
+                <?php if (!empty($auditorias)): ?>
+
+                    <div class="col-md-12 mt-4">
+                        <hr>
+
+                        <label class="form-label fw-bold">
+                            Auditoría de seguimiento
+                        </label>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Funcionario</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                        <th>Respuesta / Justificación</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php foreach ($auditorias as $item): ?>
+                                        <tr>
+                                            <td>
+                                                <?= htmlspecialchars($item['nombre_funcionario'] ?? 'Sistema'); ?>
+                                            </td>
+
+                                            <td>
+                                                <?= htmlspecialchars($item['estado'] ?? 'Sin estado'); ?>
+                                            </td>
+
+                                            <td>
+                                                <?= htmlspecialchars($item['fecha']); ?>
+                                            </td>
+
+                                            <td>
+                                                <?= nl2br(htmlspecialchars($item['mensaje'])); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+                <?php endif; ?>
 
             </div>
 
@@ -207,19 +209,3 @@
     </div>
 
 </div>
-
-<script>
-const textarea = document.getElementById('respuesta');
-const contador = document.getElementById('contador');
-
-if (textarea && contador) {
-    textarea.addEventListener('input', function () {
-        let length = this.value.length;
-        contador.textContent = length + " / 500";
-
-        if (length >= 500) {
-            this.value = this.value.substring(0, 500);
-        }
-    });
-}
-</script>

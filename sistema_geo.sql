@@ -411,7 +411,7 @@ INSERT INTO tipos_solicitud (codigo, nombre) VALUES
     ('reporte_accidente',      'Reporte de accidente'),
     ('senal_mal_estado',       'Señal en mal estado'),
     ('nueva_senalizacion',     'Nueva señalización'),
-    ('reductor_mal_estado',    'Reductor en mal estado'),
+    ('reductor_mal_estado',    'Reductor en Mal estado'),
     ('nuevo_reductor',         'Nuevo reductor'),
     ('via_publica_mal_estado', 'Vía pública en mal estado'),
     ('pqrsf',                  'PQRSF');
@@ -525,58 +525,296 @@ INSERT INTO permisos (id_rol, id_modulo, id_accion) VALUES
 (1,5,1),
 (1,5,2);
 
-INSERT INTO usuarios (id_tipo_documento, id_rol, id_estado_usuario, primer_nombre, primer_apellido, numero_documento, correo, telefono, direccion, contrasena) VALUES
-    (1,1,1,'Carlos','Ramírez', 1023456789,'admin@geo.gov.co',      3001234567,'Calle 10 #5-20 Cali',      '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
-    (1,2,1,'Andrés','Moreno',  1067890123,'funcionario@geo.gov.co', 3023456789,'Avenida 6N #12-40 Cali',   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
-    (1,3,1,'Juan',  'García',  1098765432,'ciudadano@gmail.com',    3045678901,'Calle 45 #10-22 Cali',     '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
 
-INSERT INTO solicitudes (id_usuario, id_estado_solicitud, id_tipo_solicitud, descripcion, direccion, latitud, longitud, imagen_url, fecha_solicitud) VALUES
-    (3,1,1,'Accidente entre motocicleta y automóvil','Calle 5 Carrera 1 Cali',        3.4516,-76.5320,'https://storage.geo.gov.co/img/acc001.jpg','2026-01-10 08:23:00'),
-    (3,2,2,'Señal deteriorada',                      'Carrera 8 #14-20 Cali',          3.4558,-76.5120,'https://storage.geo.gov.co/img/sen001.jpg','2026-01-15 10:45:00'),
-    (3,3,3,'Nueva señal frente colegio',             'Avenida 4N #22-10 Cali',         3.4720,-76.5250,'https://storage.geo.gov.co/img/sen002.jpg','2026-01-20 14:00:00'),
-    (2,1,4,'Reductor deteriorado',                   'Calle 25 #8-45 Cali',            3.5394,-76.3035,'https://storage.geo.gov.co/img/red001.jpg','2026-02-03 09:10:00'),
-    (2,2,5,'Instalar reductor',                      'Carrera 44 #5-80 Cali',          3.4310,-76.5410,'https://storage.geo.gov.co/img/red002.jpg','2026-02-10 11:30:00'),
-    (3,4,7,'Demora atención',                        'Calle 70 #2-34 Cali',            3.4980,-76.5180,NULL,                                       '2026-02-15 16:20:00'),
-    (3,2,1,'Volcamiento',                            'Carretera Cali Buenaventura km18',3.4100,-76.7200,'https://storage.geo.gov.co/img/acc002.jpg','2026-03-01 06:45:00'),
-    (2,1,6,'Hundimiento pavimento',                  'Av Simón Bolívar',               3.4650,-76.5300,'https://storage.geo.gov.co/img/via001.jpg','2026-03-08 12:00:00'),
-    (2,3,3,'Parqueo discapacidad',                   'Calle 10 #4-50 Cali',            3.8995,-76.2982,'https://storage.geo.gov.co/img/sen003.jpg','2026-03-15 09:30:00'),
-    (3,1,7,'Estado malla vial',                      'Barrio El Poblado',              3.4200,-76.5450,NULL,                                       '2026-04-01 08:00:00');
 
-INSERT INTO solicitudes_reporte_accidentes (id_solicitud, id_causa_accidente, observacion) VALUES
-    (1,1,'Colisión automóvil y motocicleta. No respetó señal.'),
-    (7,4,'Volcamiento asociado a pérdida de control.');
 
-INSERT INTO lesionados (nombre_completo, documento, observacion) VALUES
-    ('Carlos Eduardo Muñoz Ríos', '1099887766','Fractura leve'),
-    ('Sandra Milena Pinto Arango','1088776655','Contusiones'),
-    ('Pedro Antonio Leal Vásquez','1077665544','Lesiones menores');
+-- =====================================
+-- TIPOS DE SOLICITUD
+-- =====================================
 
-INSERT INTO reporte_lesionado (id_solicitud_reporte_accidente, id_lesionado) VALUES
-    (1,1),(1,2),(2,3);
+INSERT INTO tipos_solicitud (codigo, nombre) VALUES
+('reporte_accidente',      'Reporte de accidente'),
+('senal_mal_estado',       'Señal en mal estado'),
+('nueva_senalizacion',     'Nueva señalización'),
+('reductor_mal_estado',    'Reductor en mal estado'),
+('nuevo_reductor',         'Nuevo reductor'),
+('via_publica_mal_estado', 'Vía pública en mal estado'),
+('pqrsf',                  'PQRSF');
 
-INSERT INTO vehiculos (id_solicitud_reporte_accidente, id_tipo_vehiculo) VALUES
-    (1,2),(1,1),(2,4);
 
-INSERT INTO solicitudes_senal_mal_estado (id_solicitud, id_tipo_senal, id_categoria, id_tipo_danio, id_orientacion) VALUES
-    (2,1,1,1,1);
+-- =====================================
+-- USUARIOS
+-- id_rol:
+-- 1 = Administrador
+-- 2 = Funcionario
+-- 3 = Ciudadano
+-- =====================================
 
-INSERT INTO solicitudes_nueva_senalizacion (id_solicitud, id_tipo_senal, id_categoria, id_orientacion) VALUES
-    (3,1,5,1),(9,3,12,2);
+INSERT INTO usuarios (
+    id_tipo_documento,
+    id_rol,
+    id_estado_usuario,
+    primer_nombre,
+    primer_apellido,
+    numero_documento,
+    correo,
+    telefono,
+    direccion,
+    contrasena
+) VALUES
 
-INSERT INTO solicitudes_reductor_mal_estado (id_solicitud,id_categoria,id_tipo_reductor,id_tipo_danio) VALUES
-    (4,10,1,12);
+-- Administrador
+(1,1,1,'Carlos','Ramírez',1023456789,'admin@geo.gov.co',3001234567,
+'Calle 10 #5-20 Cali',
+'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
 
-INSERT INTO solicitudes_nuevo_reductor (id_solicitud,id_categoria,id_tipo_reductor) VALUES
-    (5,10,1);
+-- Funcionario
+(1,2,1,'Andrés','Moreno',1067890123,'funcionario@geo.gov.co',3023456789,
+'Avenida 6N #12-40 Cali',
+'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
 
-INSERT INTO solicitudes_via_publica_mal_estado (id_solicitud, id_tipo_danio) VALUES
-    (8,9);
+-- Ciudadanos
+(1,3,1,'Juan','García',1098765432,'juan.garcia@gmail.com',3045678901,
+'Calle 45 #10-22 Cali',
+'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
 
-INSERT INTO solicitudes_pqrsf (id_solicitud, id_tipo_pqrsf, mensaje) VALUES
-    (6,2,'Queja por demora en respuesta'),
-    (10,1,'Solicitud información malla vial');
+(1,3,1,'María','López',1087654321,'maria.lopez@gmail.com',3114567890,
+'Carrera 15 #30-45 Cali',
+'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
 
-INSERT INTO respuestas_solicitud (id_solicitud,id_usuario_respuesta,id_estado_solicitud,mensaje,fecha) VALUES
-(2,2,2,'La solicitud fue recibida y está siendo revisada.','2026-01-16 09:00:00'),
-(3,2,3,'Se programó visita técnica para validar la señalización.','2026-01-25 14:30:00'),
-(5,2,2,'La solicitud fue asignada al área correspondiente.','2026-02-11 08:45:00');
+(1,3,1,'Luis','Martínez',1076543210,'luis.martinez@gmail.com',3156789012,
+'Calle 80 #12-18 Cali',
+'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+
+(1,3,1,'Ana','Rodríguez',1065432109,'ana.rodriguez@gmail.com',3167890123,
+'Barrio El Ingenio, Cali',
+'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+
+(1,3,1,'Santiago','Castro',1054321098,'santiago.castro@gmail.com',3178901234,
+'Ciudad Jardín, Cali',
+'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+
+
+-- =====================================
+-- SOLICITUDES (INFORMACIÓN GENERAL)
+-- =====================================
+
+INSERT INTO solicitudes (
+    id_usuario,
+    id_estado_solicitud,
+    id_tipo_solicitud,
+    descripcion,
+    direccion,
+    latitud,
+    longitud,
+    imagen_url,
+    fecha_solicitud
+) VALUES
+
+-- Juan García
+(3,1,1,'Reporte de accidente de tránsito',
+'Carrera 1 con Calle 5, Cali',
+3.4516,-76.5320,
+'https://storage.geo.gov.co/img/acc001.jpg',
+'2026-01-10 08:23:00'),
+
+-- María López
+(4,2,2,'Señal de tránsito deteriorada',
+'Carrera 8 #14-20 Cali',
+3.4558,-76.5120,
+'https://storage.geo.gov.co/img/sen001.jpg',
+'2026-01-15 10:45:00'),
+
+-- Luis Martínez
+(5,3,3,'Solicitud de nueva señalización',
+'Avenida 4N #22-10 Cali',
+3.4720,-76.5250,
+'https://storage.geo.gov.co/img/sen002.jpg',
+'2026-01-20 14:00:00'),
+
+-- Ana Rodríguez
+(6,1,4,'Reductor de velocidad deteriorado',
+'Calle 25 #8-45 Cali',
+3.5394,-76.3035,
+'https://storage.geo.gov.co/img/red001.jpg',
+'2026-02-03 09:10:00'),
+
+-- Santiago Castro
+(7,2,5,'Solicitud de instalación de reductor',
+'Carrera 44 #5-80 Cali',
+3.4310,-76.5410,
+'https://storage.geo.gov.co/img/red002.jpg',
+'2026-02-10 11:30:00'),
+
+-- Juan García
+(3,1,7,'PQRSF por demora en atención',
+'Calle 70 #2-34 Cali',
+3.4980,-76.5180,
+NULL,
+'2026-02-15 16:20:00'),
+
+-- María López
+(4,2,1,'Segundo reporte de accidente',
+'Carretera Cali - Buenaventura km 18',
+3.4100,-76.7200,
+'https://storage.geo.gov.co/img/acc002.jpg',
+'2026-03-01 06:45:00'),
+
+-- Luis Martínez
+(5,1,6,'Daño en vía pública',
+'Av. Simón Bolívar',
+3.4650,-76.5300,
+'https://storage.geo.gov.co/img/via001.jpg',
+'2026-03-08 12:00:00'),
+
+-- Ana Rodríguez
+(6,3,3,'Solicitud de señal para parqueo de discapacidad',
+'Calle 10 #4-50 Cali',
+3.8995,-76.2982,
+'https://storage.geo.gov.co/img/sen003.jpg',
+'2026-03-15 09:30:00'),
+
+-- Santiago Castro
+(7,1,7,'Solicitud de información sobre malla vial',
+'Barrio El Poblado',
+3.4200,-76.5450,
+NULL,
+'2026-04-01 08:00:00');
+
+
+-- =====================================
+-- REPORTE DE ACCIDENTES
+-- =====================================
+
+INSERT INTO solicitudes_reporte_accidentes
+(id_solicitud, id_causa_accidente, observacion)
+VALUES
+(1,1,'Colisión entre automóvil y motocicleta. Posible irrespeto a señal de tránsito.'),
+(7,4,'Volcamiento asociado a pérdida de control del vehículo.');
+
+
+-- =====================================
+-- LESIONADOS
+-- =====================================
+
+INSERT INTO lesionados
+(nombre_completo, documento, observacion)
+VALUES
+('Carlos Eduardo Muñoz Ríos','1099887766','Fractura leve'),
+('Sandra Milena Pinto Arango','1088776655','Contusiones'),
+('Pedro Antonio Leal Vásquez','1077665544','Lesiones menores');
+
+
+INSERT INTO reporte_lesionado
+(id_solicitud_reporte_accidente, id_lesionado)
+VALUES
+(1,1),
+(1,2),
+(2,3);
+
+
+-- =====================================
+-- VEHÍCULOS INVOLUCRADOS
+-- =====================================
+
+INSERT INTO vehiculos
+(id_solicitud_reporte_accidente, id_tipo_vehiculo)
+VALUES
+(1,2),
+(1,1),
+(2,4);
+
+
+-- =====================================
+-- SEÑAL EN MAL ESTADO
+-- =====================================
+
+INSERT INTO solicitudes_senal_mal_estado
+(id_solicitud, id_tipo_senal, id_categoria, id_tipo_danio, id_orientacion)
+VALUES
+(2,1,1,1,1);
+
+
+-- =====================================
+-- NUEVA SEÑALIZACIÓN
+-- =====================================
+
+INSERT INTO solicitudes_nueva_senalizacion
+(id_solicitud, id_tipo_senal, id_categoria, id_orientacion)
+VALUES
+(3,1,5,1),
+(9,3,12,2);
+
+
+-- =====================================
+-- REDUCTOR EN MAL ESTADO
+-- =====================================
+
+INSERT INTO solicitudes_reductor_mal_estado
+(id_solicitud, id_categoria, id_tipo_reductor, id_tipo_danio)
+VALUES
+(4,10,1,12);
+
+
+-- =====================================
+-- NUEVO REDUCTOR
+-- =====================================
+
+INSERT INTO solicitudes_nuevo_reductor
+(id_solicitud, id_categoria, id_tipo_reductor)
+VALUES
+(5,10,1);
+
+
+-- =====================================
+-- VÍA PÚBLICA EN MAL ESTADO
+-- =====================================
+
+INSERT INTO solicitudes_via_publica_mal_estado
+(id_solicitud, id_tipo_danio)
+VALUES
+(8,9);
+
+
+-- =====================================
+-- PQRSF
+-- =====================================
+
+INSERT INTO solicitudes_pqrsf
+(id_solicitud, id_tipo_pqrsf, mensaje)
+VALUES
+(6,2,'Queja por demora en la atención de solicitudes ciudadanas.'),
+(10,1,'Solicitud de información sobre el estado de la malla vial del sector.');
+
+
+-- =====================================
+-- RESPUESTAS DEL FUNCIONARIO
+-- id_usuario_respuesta = 2 (Andrés Moreno)
+-- =====================================
+
+INSERT INTO respuestas_solicitud (
+    id_solicitud,
+    id_usuario_respuesta,
+    id_estado_solicitud,
+    mensaje,
+    fecha
+) VALUES
+(2,2,2,
+'La solicitud fue recibida y actualmente se encuentra en proceso de revisión técnica.',
+'2026-01-16 09:00:00'),
+
+(3,2,3,
+'Se programó una visita técnica para validar la necesidad de la nueva señalización.',
+'2026-01-25 14:30:00'),
+
+(5,2,2,
+'La solicitud fue asignada al área encargada para su evaluación.',
+'2026-02-11 08:45:00'),
+
+(6,2,3,
+'La PQRSF fue revisada y se emitirá una respuesta oficial dentro del plazo establecido.',
+'2026-02-18 10:15:00'),
+
+(8,2,2,
+'Se notificó a la dependencia encargada del mantenimiento vial para la inspección correspondiente.',
+'2026-03-10 15:40:00');

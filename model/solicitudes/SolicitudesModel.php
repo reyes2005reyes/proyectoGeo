@@ -79,6 +79,18 @@ class Solicitud extends MasterModel {
     public function getTieneRespuesta() {
         return $this->tiene_respuesta;
     }
+
+    public function beginTransaction() {
+            pg_query($this->getConnect(), "BEGIN");
+    }
+
+    public function commit() {
+            pg_query($this->getConnect(), "COMMIT");
+    }
+
+    public function rollback() {
+            pg_query($this->getConnect(), "ROLLBACK");
+    }
     
 
 
@@ -163,10 +175,10 @@ public function listarSolicitudes($idUsuario = null) {
 
     try {
 
-        // 🔥 Base query
+        // Base query
         $sql = $this->getBaseQuery();
 
-        // 🔥 Si viene usuario → filtrar
+        // Si viene usuario → filtrar
         if ($idUsuario !== null) {
 
             $sql .= " WHERE s.id_usuario = $1
@@ -176,7 +188,7 @@ public function listarSolicitudes($idUsuario = null) {
 
         } else {
 
-            // 🔥 Sin filtro → todos
+            // Sin filtro → todos
             $sql .= " ORDER BY s.id_solicitud DESC";
 
             $result = $this->query($sql);
@@ -443,19 +455,43 @@ public function verificarPermiso($idRol, $idModulo, $idAccion) {
 
 
 
-public function actualizarEstadoSolicitud($idSolicitud, $idEstado)
-{
+public function actualizarEstadoSolicitud($idSolicitud, $idEstado) {
+
     try {
 
-        // 🚫 VALIDACIÓN DE NEGOCIO: si ya tiene respuesta, no se puede cambiar estado
-        if ($this->yaTieneRespuesta($idSolicitud)) {
+        // =========================
+        // 1. OBTENER ESTADO ACTUAL
+        // =========================
+        $estadoActual = $this->queryOne("
+            SELECT id_estado_solicitud 
+            FROM solicitudes 
+            WHERE id_solicitud = $1
+        ", [$idSolicitud]);
 
+        if (!$estadoActual) {
             return [
                 'ok' => false,
-                'msg' => 'No se puede actualizar el estado porque la solicitud ya tiene una respuesta registrada'
+                'msg' => 'Solicitud no encontrada'
             ];
         }
 
+        $estadoActualId = $estadoActual['id_estado_solicitud'];
+
+        
+
+        // =========================
+        // 3. VALIDACIÓN: reglas de negocio
+        // =========================
+        if (!$this->esTransicionValida($estadoActualId, $idEstado)) {
+            return [
+                'ok' => false,
+                'msg' => 'Transición de estado no permitida'
+            ];
+        }
+
+        // =========================
+        // 4. ACTUALIZAR ESTADO
+        // =========================
         $sql = "
             UPDATE solicitudes
             SET id_estado_solicitud = $1
@@ -474,6 +510,15 @@ public function actualizarEstadoSolicitud($idSolicitud, $idEstado)
 
     } catch (Exception $e) {
 
+    echo "<pre>";
+    echo "ERROR DETECTADO:\n";
+    echo $e->getMessage();
+    echo "\n\nTRACE:\n";
+    echo $e->getTraceAsString();
+    echo "</pre>";
+
+    exit;
+
         error_log("Error actualizarEstadoSolicitud: " . $e->getMessage());
 
         return [
@@ -482,4 +527,153 @@ public function actualizarEstadoSolicitud($idSolicitud, $idEstado)
         ];
     }
 }
+
+
+public function esTransicionValida($estadoActual, $estadoNuevo) {
+    // No permitir cambios si ya está completada
+    if ($estadoActual == 5) {
+        return false;
+    }
+
+    // No permitir volver a pendiente
+    if ($estadoNuevo == 1) {
+        return false;
+    }
+
+    // ✔ Rechazo permitido desde cualquier estado excepto completado
+    if ($estadoNuevo == 4) {
+        return true;
+    }
+
+    // ✔ Progresión lineal
+    $permitidas = [
+        1 => [2, 4],
+        2 => [3, 4],
+        3 => [5, 4],
+    ];
+
+    return in_array($estadoNuevo, $permitidas[$estadoActual] ?? []);
+}
+
+
+public function obtenerSiguienteEstado($estadoActual) {
+
+    // si ya está finalizado, no hay siguiente estado
+    if ($estadoActual == 5) {
+        return null;
+    }
+
+    // rechazo siempre permitido (lo manejas aparte)
+    $rechazo = 4;
+
+    $flujo = [
+        1 => 2,
+        2 => 3,
+        3 => 5
+    ];
+
+    return [
+        'siguiente' => $flujo[$estadoActual] ?? null,
+        'rechazo'   => $rechazo
+    ];
+}
+
+
+public function obtenerFuncionarioResponsable($idSolicitud) {
+
+    $sql = "
+        SELECT id_usuario_respuesta
+        FROM respuestas_solicitud
+        WHERE id_solicitud = $1
+        ORDER BY id_respuesta ASC
+        LIMIT 1
+    ";
+
+    $result = $this->query($sql, [$idSolicitud]);
+
+    $row = pg_fetch_assoc($result);
+
+    return $row['id_usuario_respuesta'] ?? null;
+}
+
+public function esFuncionarioResponsable($idSolicitud, $idUsuario) {
+
+    $responsable = $this->obtenerFuncionarioResponsable($idSolicitud);
+
+    return $responsable == $idUsuario;
+}
+
+
+
+
+public function registrarAuditoria(
+    $idSolicitud,
+    $idUsuarioSolicitante,
+    $idUsuarioEjecutor,
+    $idEstado,
+    $mensaje
+) {
+
+    $sql = "
+        INSERT INTO auditoria_solicitudes (
+            id_solicitud,
+            id_usuario,
+            id_usuario_ejecutor,
+            id_estado_solicitud,
+            mensaje,
+            fecha
+        )
+        VALUES ($1,$2,$3,$4,$5,NOW())
+    ";
+
+    return $this->query($sql, [
+        $idSolicitud,
+        $idUsuarioSolicitante,
+        $idUsuarioEjecutor,
+        $idEstado,
+        $mensaje
+    ]);
+}
+
+public function obtenerAuditoriaPorSolicitud($idSolicitud) {
+
+    $sql = "
+        SELECT
+            a.fecha,
+            a.mensaje,
+            es.nombre_estado_solicitud AS estado,
+
+            CONCAT(
+                u.primer_nombre,
+                COALESCE(' ' || u.segundo_nombre, ''),
+                ' ',
+                u.primer_apellido,
+                COALESCE(' ' || u.segundo_apellido, '')
+            ) AS nombre_funcionario
+
+        FROM auditoria_solicitudes a
+
+        LEFT JOIN usuarios u
+            ON u.id_usuario = a.id_usuario_ejecutor
+
+        LEFT JOIN estados_solicitud es
+            ON es.id_estado_solicitud = a.id_estado_solicitud
+
+        WHERE a.id_solicitud = $1
+          AND a.id_usuario_ejecutor IS NOT NULL
+
+        ORDER BY a.fecha DESC
+    ";
+
+    $resultado = $this->query($sql, [$idSolicitud]);
+
+    $auditorias = [];
+
+    while ($fila = pg_fetch_assoc($resultado)) {
+        $auditorias[] = $fila;
+    }
+
+    return $auditorias;
+}
+
 }

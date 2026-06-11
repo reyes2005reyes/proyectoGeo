@@ -16,7 +16,7 @@
                             <th>Fecha</th>
                             <th>Tipo</th>
                             <th>Estado</th>
-                            <th>Atendida</th>
+                            
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -57,17 +57,7 @@
                                     </td>
 
                                     
-                                    <td>
-                                        <?php if ($yaRespondida) { ?>
-                                            <span class="badge bg-success">
-                                                ✔ Atendida
-                                            </span>
-                                        <?php } else { ?>
-                                            <span class="badge bg-warning text-dark">
-                                                Pendiente
-                                            </span>
-                                        <?php } ?>
-                                    </td>
+                                   
 
                                     <td class="text-center">
 
@@ -103,3 +93,85 @@
         </div>
 
     </div>
+
+
+    <!-- TOAST -->
+<?php if (isset($_SESSION['flash_success']) || isset($_SESSION['flash_error'])): ?>
+
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+    <div
+        id="toastMensaje"
+        class="toast align-items-center text-white border-0 shadow <?= isset($_SESSION['flash_success']) ? 'bg-success' : 'bg-danger'; ?>"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="5000"
+    >
+        <div class="d-flex">
+            <div class="toast-body">
+                <?= htmlspecialchars($_SESSION['flash_success'] ?? $_SESSION['flash_error']); ?>
+            </div>
+
+            <button
+                type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast"
+                aria-label="Cerrar">
+            </button>
+        </div>
+    </div>
+</div>
+
+<?php
+unset($_SESSION['flash_success']);
+unset($_SESSION['flash_error']);
+?>
+
+<?php endif; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ===== Contador de caracteres =====
+    const textarea = document.getElementById('mensaje');
+    const contador = document.getElementById('contadorMensaje');
+
+    if (textarea && contador) {
+
+        const limite = 250;
+
+        function actualizarContador() {
+            const restantes = limite - textarea.value.length;
+
+            contador.textContent =
+                "Quedan " + restantes + " caracteres";
+
+            if (restantes <= 20) {
+                contador.classList.remove('text-secondary');
+                contador.classList.add('text-danger');
+            } else {
+                contador.classList.remove('text-danger');
+                contador.classList.add('text-secondary');
+            }
+        }
+
+        textarea.addEventListener('input', actualizarContador);
+        actualizarContador();
+    }
+
+});
+
+// Esperar a que Bootstrap ya esté cargado
+window.addEventListener('load', function () {
+
+    const toastEl = document.getElementById('toastMensaje');
+
+    if (toastEl && typeof bootstrap !== 'undefined') {
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    } else {
+        console.log('Bootstrap aún no disponible o no existe toast.');
+    }
+
+});
+</script>
