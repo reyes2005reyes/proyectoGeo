@@ -329,10 +329,190 @@ class UsuariosController{
 
     // falta terminarlo xd
 
+    // Método para obtener tipos de documento y roles (AJAX)
+    public function obtenerTiposYRoles() {
+        header('Content-Type: application/json; charset=utf-8');
+        $obj = new UsuariosModel();
+        
+        $tiposDoc = [];
+        $sqlTipos = "SELECT id_tipo_documento, nombre_tipo_documento FROM tipos_documento ORDER BY nombre_tipo_documento";
+        $resultTipos = $obj->select($sqlTipos);
+        if ($resultTipos && pg_num_rows($resultTipos) > 0) {
+            while ($row = pg_fetch_assoc($resultTipos)) {
+                $tiposDoc[] = $row;
+            }
+        }
+        
+        $rolesArr = [];
+        $sqlRoles = "SELECT id_rol, nombre_rol FROM roles ORDER BY nombre_rol";
+        $resultRoles = $obj->select($sqlRoles);
+        if ($resultRoles && pg_num_rows($resultRoles) > 0) {
+            while ($row = pg_fetch_assoc($resultRoles)) {
+                $rolesArr[] = $row;
+            }
+        }
+        
+        echo json_encode([
+            'tiposDocumento' => $tiposDoc,
+            'roles' => $rolesArr
+        ]);
+        exit;
+    }
+
+    // Método para obtener datos de un usuario en JSON (AJAX)
+    public function obtenerUsuarioJson() {
+        header('Content-Type: application/json; charset=utf-8');
+        $idUsuario = isset($_GET['id_usuario']) ? (int)$_GET['id_usuario'] : 0;
+        
+        if (!$idUsuario) {
+            http_response_code(400);
+            echo json_encode(['error' => 'ID usuario requerido']);
+            exit;
+        }
+        
+        $obj = new UsuariosModel();
+        $usuario = $obj->obtenerPerfil($idUsuario);
+        
+        if ($usuario) {
+            // Obtener nombre del rol y estado
+            $sqlRol = "SELECT nombre_rol FROM roles WHERE id_rol = " . (int)$usuario['id_rol'];
+            $resultRol = $obj->select($sqlRol);
+            $usuario['nombre_rol'] = pg_num_rows($resultRol) > 0 ? pg_fetch_assoc($resultRol)['nombre_rol'] : '';
+            
+            $sqlEstado = "SELECT nombre_estado_usuario FROM estados_usuario WHERE id_estado_usuario = " . (int)$usuario['id_estado_usuario'];
+            $resultEstado = $obj->select($sqlEstado);
+            $usuario['nombre_estado_usuario'] = pg_num_rows($resultEstado) > 0 ? pg_fetch_assoc($resultEstado)['nombre_estado_usuario'] : '';
+            
+            echo json_encode($usuario);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Usuario no encontrado']);
+        }
+        exit;
+    }
+
+    // Método para actualizar datos del usuario (AJAX)
+    public function actualizarUsuario() {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $idUsuario = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
+        
+        if (!$idUsuario) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'ID usuario requerido']);
+            exit;
+        }
+        
+        $obj = new UsuariosModel();
+        
+        // Validar que no exista otro usuario con el mismo documento o correo
+        $numeroDoc = $_POST['numero_documento'] ?? '';
+        $correo = $_POST['correo'] ?? '';
+        
+        if ($obj->documentoExisteEnOtroUsuario($numeroDoc, $idUsuario)) {
+            echo json_encode(['success' => false, 'message' => 'El número de documento ya existe en otro usuario']);
+            exit;
+        }
+        
+        if ($obj->correoExisteEnOtroUsuario($correo, $idUsuario)) {
+            echo json_encode(['success' => false, 'message' => 'El correo ya existe en otro usuario']);
+            exit;
+        }
+        
+        $datos = [
+            'id_tipo_documento' => isset($_POST['id_tipo_documento']) ? (int)$_POST['id_tipo_documento'] : 0,
+            'primer_nombre' => $_POST['primer_nombre'] ?? '',
+            'segundo_nombre' => $_POST['segundo_nombre'] ?? '',
+            'primer_apellido' => $_POST['primer_apellido'] ?? '',
+            'segundo_apellido' => $_POST['segundo_apellido'] ?? '',
+            'numero_documento' => $numeroDoc,
+            'correo' => $correo,
+            'telefono' => $_POST['telefono'] ?? '',
+            'direccion' => $_POST['direccion'] ?? ''
+        ];
+        
+        // Obtener rol si se proporcionó
+        $idRol = isset($_POST['id_rol']) ? (int)$_POST['id_rol'] : null;
+        
+        // Si se proporciona contraseña, actualizarla
+        if (!empty($_POST['contrasena'])) {
+            $hash = password_hash($_POST['contrasena'], PASSWORD_BCRYPT);
+            $sqlContrasena = "UPDATE usuarios SET contrasena = '" . pg_escape_string($hash) . "' WHERE id_usuario = $idUsuario";
+            $obj->update($sqlContrasena);
+        }
+        
+        // Si se proporciona rol, actualizarlo
+        if ($idRol) {
+            $sqlRol = "UPDATE usuarios SET id_rol = $idRol WHERE id_usuario = $idUsuario";
+            $obj->update($sqlRol);
+        }
+        
+        $resultado = $obj->actualizarPerfil($idUsuario, $datos);
+        
+        if ($resultado) {
+            echo json_encode(['success' => true, 'message' => 'Usuario actualizado correctamente']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Error al actualizar el usuario']);
+        }
+        exit;
+    }
+
+    // Método para cambiar estado del usuario (AJAX)
+    public function cambiarEstadoUsuario() {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $idUsuario = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
+        
+        if (!$idUsuario) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'ID usuario requerido']);
+            exit;
+        }
+        
+        $obj = new UsuariosModel();
+        
+        // Obtener estado actual
+        $sqlEstado = "SELECT id_estado_usuario FROM usuarios WHERE id_usuario = $idUsuario";
+        $resultEstado = $obj->select($sqlEstado);
+        
+        if (pg_num_rows($resultEstado) === 0) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado']);
+            exit;
+        }
+        
+        $estadoActual = pg_fetch_assoc($resultEstado)['id_estado_usuario'];
+        
+        // Obtener IDs de estados
+        $sqlEstados = "SELECT id_estado_usuario, nombre_estado_usuario FROM estados_usuario";
+        $resultEstados = $obj->select($sqlEstados);
+        
+        $idEstadoHabilitado = 1;
+        $idEstadoInhabilitado = 2;
+        
+        while ($row = pg_fetch_assoc($resultEstados)) {
+            if (stripos($row['nombre_estado_usuario'], 'habilitado') !== false && stripos($row['nombre_estado_usuario'], 'inhabilitado') === false) {
+                $idEstadoHabilitado = $row['id_estado_usuario'];
+            } elseif (stripos($row['nombre_estado_usuario'], 'inhabilitado') !== false) {
+                $idEstadoInhabilitado = $row['id_estado_usuario'];
+            }
+        }
+        
+        // Cambiar estado
+        $nuevoEstado = ($estadoActual == $idEstadoHabilitado) ? $idEstadoInhabilitado : $idEstadoHabilitado;
+        $sqlUpdate = "UPDATE usuarios SET id_estado_usuario = $nuevoEstado WHERE id_usuario = $idUsuario";
+        
+        if ($obj->update($sqlUpdate)) {
+            echo json_encode(['success' => true, 'message' => 'Estado del usuario actualizado correctamente']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Error al cambiar el estado']);
+        }
+        exit;
+    }
 
 
 
-
+    // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
 
 
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo

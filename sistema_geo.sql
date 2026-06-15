@@ -199,8 +199,7 @@ CREATE TABLE solicitudes (
     id_tipo_solicitud   INTEGER NOT NULL REFERENCES tipos_solicitud(id_tipo_solicitud),
     descripcion         TEXT         NOT NULL,
     direccion           VARCHAR(255) NOT NULL,
-    latitud             NUMERIC(10,7),
-    longitud            NUMERIC(10,7),
+    coordenadas         GEOMETRY(POINT,4326),
     imagen_url          VARCHAR(255),
     fecha_solicitud     TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -525,23 +524,6 @@ INSERT INTO permisos (id_rol, id_modulo, id_accion) VALUES
 (1,5,1),
 (1,5,2);
 
-
-
-
--- =====================================
--- TIPOS DE SOLICITUD
--- =====================================
-
-INSERT INTO tipos_solicitud (codigo, nombre) VALUES
-('reporte_accidente',      'Reporte de accidente'),
-('senal_mal_estado',       'Señal en mal estado'),
-('nueva_senalizacion',     'Nueva señalización'),
-('reductor_mal_estado',    'Reductor en mal estado'),
-('nuevo_reductor',         'Nuevo reductor'),
-('via_publica_mal_estado', 'Vía pública en mal estado'),
-('pqrsf',                  'PQRSF');
-
-
 -- =====================================
 -- USUARIOS
 -- id_rol:
@@ -605,79 +587,79 @@ INSERT INTO solicitudes (
     id_tipo_solicitud,
     descripcion,
     direccion,
-    latitud,
-    longitud,
+    coordenadas,
     imagen_url,
     fecha_solicitud
-) VALUES
+)
+VALUES
 
 -- Juan García
 (3,1,1,'Reporte de accidente de tránsito',
 'Carrera 1 con Calle 5, Cali',
-3.4516,-76.5320,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.5320 3.4516)'),4326),
 'https://storage.geo.gov.co/img/acc001.jpg',
 '2026-01-10 08:23:00'),
 
 -- María López
 (4,2,2,'Señal de tránsito deteriorada',
 'Carrera 8 #14-20 Cali',
-3.4558,-76.5120,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.5120 3.4558)'),4326),
 'https://storage.geo.gov.co/img/sen001.jpg',
 '2026-01-15 10:45:00'),
 
 -- Luis Martínez
 (5,3,3,'Solicitud de nueva señalización',
 'Avenida 4N #22-10 Cali',
-3.4720,-76.5250,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.5250 3.4720)'),4326),
 'https://storage.geo.gov.co/img/sen002.jpg',
 '2026-01-20 14:00:00'),
 
 -- Ana Rodríguez
 (6,1,4,'Reductor de velocidad deteriorado',
 'Calle 25 #8-45 Cali',
-3.5394,-76.3035,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.3035 3.5394)'),4326),
 'https://storage.geo.gov.co/img/red001.jpg',
 '2026-02-03 09:10:00'),
 
 -- Santiago Castro
 (7,2,5,'Solicitud de instalación de reductor',
 'Carrera 44 #5-80 Cali',
-3.4310,-76.5410,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.5410 3.4310)'),4326),
 'https://storage.geo.gov.co/img/red002.jpg',
 '2026-02-10 11:30:00'),
 
 -- Juan García
 (3,1,7,'PQRSF por demora en atención',
 'Calle 70 #2-34 Cali',
-3.4980,-76.5180,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.5180 3.4980)'),4326),
 NULL,
 '2026-02-15 16:20:00'),
 
 -- María López
 (4,2,1,'Segundo reporte de accidente',
 'Carretera Cali - Buenaventura km 18',
-3.4100,-76.7200,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.7200 3.4100)'),4326),
 'https://storage.geo.gov.co/img/acc002.jpg',
 '2026-03-01 06:45:00'),
 
 -- Luis Martínez
 (5,1,6,'Daño en vía pública',
 'Av. Simón Bolívar',
-3.4650,-76.5300,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.5300 3.4650)'),4326),
 'https://storage.geo.gov.co/img/via001.jpg',
 '2026-03-08 12:00:00'),
 
 -- Ana Rodríguez
 (6,3,3,'Solicitud de señal para parqueo de discapacidad',
 'Calle 10 #4-50 Cali',
-3.8995,-76.2982,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.2982 3.8995)'),4326),
 'https://storage.geo.gov.co/img/sen003.jpg',
 '2026-03-15 09:30:00'),
 
 -- Santiago Castro
 (7,1,7,'Solicitud de información sobre malla vial',
 'Barrio El Poblado',
-3.4200,-76.5450,
+ST_SetSRID(ST_GeometryFromText('POINT(-76.5450 3.4200)'),4326),
 NULL,
 '2026-04-01 08:00:00');
 

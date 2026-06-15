@@ -208,32 +208,35 @@ class UsuariosModel extends MasterModel {
     }
 
     public function actualizarPerfil($idUsuario, $datos)
-    {
-        $sql = "UPDATE usuarios SET
-                    id_tipo_documento = $1,
-                    primer_nombre = $2,
-                    segundo_nombre = $3,
-                    primer_apellido = $4,
-                    segundo_apellido = $5,
-                    numero_documento = $6,
-                    correo = $7,
-                    telefono = $8,
-                    direccion = $9
-                WHERE id_usuario = $10";
+{
+    $sql = "UPDATE usuarios SET
+                id_tipo_documento = $1,
+                primer_nombre = $2,
+                segundo_nombre = $3,
+                primer_apellido = $4,
+                segundo_apellido = $5,
+                numero_documento = $6,
+                correo = $7,
+                telefono = $8,
+                direccion = $9
+            WHERE id_usuario = $10";
 
-        return $this->query($sql, [
-            $datos['id_tipo_documento'],
-            $datos['primer_nombre'],
-            $datos['segundo_nombre'],
-            $datos['primer_apellido'],
-            $datos['segundo_apellido'],
-            $datos['numero_documento'],
-            $datos['correo'],
-            $datos['telefono'],
-            $datos['direccion'],
-            $idUsuario
-        ]);
-    }
+    $resultado = $this->query($sql, [
+        $datos['id_tipo_documento'],
+        $datos['primer_nombre'],
+        $datos['segundo_nombre'],
+        $datos['primer_apellido'],
+        $datos['segundo_apellido'],
+        $datos['numero_documento'],
+        $datos['correo'],
+        $datos['telefono'],
+        $datos['direccion'],
+        $idUsuario
+    ]);
+
+    // Asegurarse de retornar true/false correctamente
+    return $resultado !== false;
+}
 
 }
 

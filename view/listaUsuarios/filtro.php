@@ -17,8 +17,8 @@ if (!empty($usuariosArray)) {
         echo '<td>' . htmlspecialchars($usuario['nombre_estado_usuario'] ?? '') . '</td>';
         echo '<td class="text-end">';
         echo '<div class="btn-group" role="group" aria-label="Acciones usuario">';
-        echo '<a href="' . htmlspecialchars($_SERVER['PHP_SELF']) . '?modulo=listaUsuarios&controlador=listaUsuarios&funcion=editar&id_usuario=' . urlencode($usuario['id_usuario']) . '" class="btn btn-sm btn-primary">Actualizar datos</a>';
-        echo '<a href="' . htmlspecialchars($_SERVER['PHP_SELF']) . '?modulo=listaUsuarios&controlador=listaUsuarios&funcion=cambiarEstado&id_usuario=' . urlencode($usuario['id_usuario']) . '" class="btn btn-sm btn-warning">Cambiar estado</a>';
+        echo '<button type="button" class="btn btn-sm btn-primary" onclick="abrirModalEditar(' . (int)$usuario['id_usuario'] . ')">Actualizar datos</button>';
+        echo '<button type="button" class="btn btn-sm btn-warning" onclick="abrirModalCambiarEstado(' . (int)$usuario['id_usuario'] . ')">Cambiar estado</button>';
         echo '</div>';
         echo '</td>';
         echo '</tr>';
@@ -28,11 +28,4 @@ if (!empty($usuariosArray)) {
     echo '<td colspan="9" class="text-center py-4">No se encontraron usuarios con los criterios seleccionados.</td>';
     echo '</tr>';
 }
-
-
-
-    
-
-
-
 ?>
