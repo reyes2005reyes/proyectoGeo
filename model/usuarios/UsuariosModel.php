@@ -173,8 +173,7 @@ class UsuariosModel extends MasterModel {
 
 
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
-    public function obtenerPerfil($idUsuario)
-    {
+    public function obtenerPerfil($idUsuario){
         $sql = "SELECT
                     id_usuario,
                     id_tipo_documento,
@@ -189,54 +188,58 @@ class UsuariosModel extends MasterModel {
                     telefono,
                     direccion
                 FROM usuarios
-                WHERE id_usuario = $1";
+                WHERE id_usuario = $idUsuario";
 
-        $resultado = $this->query($sql, [$idUsuario]);
-        return pg_num_rows($resultado) > 0 ? pg_fetch_assoc($resultado) : null;
+        $resultado = $this->select($sql);
+
+        if (pg_num_rows($resultado) > 0) {
+            return pg_fetch_assoc($resultado);
+        }
+
+        return null;
+    }
+    public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario){
+        $sql = "SELECT id_usuario
+                FROM usuarios
+                WHERE numero_documento = $numeroDocumento
+                AND id_usuario <> $idUsuario";
+
+        return pg_num_rows($this->select($sql)) > 0;
     }
 
-    public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario)
-    {
-        $sql = "SELECT id_usuario FROM usuarios WHERE numero_documento = $1 AND id_usuario <> $2";
-        return pg_num_rows($this->query($sql, [$numeroDocumento, $idUsuario])) > 0;
+    public function correoExisteEnOtroUsuario($correo, $idUsuario){
+        $correo = pg_escape_string($correo);
+
+        $sql = "SELECT id_usuario
+                FROM usuarios
+                WHERE correo = '$correo'
+                AND id_usuario <> $idUsuario";
+
+        return pg_num_rows($this->select($sql)) > 0;
     }
 
-    public function correoExisteEnOtroUsuario($correo, $idUsuario)
-    {
-        $sql = "SELECT id_usuario FROM usuarios WHERE correo = $1 AND id_usuario <> $2";
-        return pg_num_rows($this->query($sql, [$correo, $idUsuario])) > 0;
+    public function actualizarPerfil($idUsuario, $datos){
+        $primer_nombre = pg_escape_string($datos['primer_nombre']);
+        $segundo_nombre = pg_escape_string($datos['segundo_nombre'] ?? '');
+        $primer_apellido = pg_escape_string($datos['primer_apellido']);
+        $segundo_apellido = pg_escape_string($datos['segundo_apellido'] ?? '');
+        $correo = pg_escape_string($datos['correo']);
+        $direccion = pg_escape_string($datos['direccion']);
+
+        $sql = "UPDATE usuarios SET
+                id_tipo_documento = {$datos['id_tipo_documento']},
+                primer_nombre = '$primer_nombre',
+                segundo_nombre = '$segundo_nombre',
+                primer_apellido = '$primer_apellido',
+                segundo_apellido = '$segundo_apellido',
+                numero_documento = {$datos['numero_documento']},
+                correo = '$correo',
+                telefono = {$datos['telefono']},
+                direccion = '$direccion'
+                WHERE id_usuario = $idUsuario";
+
+        return $this->update($sql);
     }
-
-    public function actualizarPerfil($idUsuario, $datos)
-{
-    $sql = "UPDATE usuarios SET
-                id_tipo_documento = $1,
-                primer_nombre = $2,
-                segundo_nombre = $3,
-                primer_apellido = $4,
-                segundo_apellido = $5,
-                numero_documento = $6,
-                correo = $7,
-                telefono = $8,
-                direccion = $9
-            WHERE id_usuario = $10";
-
-    $resultado = $this->query($sql, [
-        $datos['id_tipo_documento'],
-        $datos['primer_nombre'],
-        $datos['segundo_nombre'],
-        $datos['primer_apellido'],
-        $datos['segundo_apellido'],
-        $datos['numero_documento'],
-        $datos['correo'],
-        $datos['telefono'],
-        $datos['direccion'],
-        $idUsuario
-    ]);
-
-    // Asegurarse de retornar true/false correctamente
-    return $resultado !== false;
-}
 
 }
 

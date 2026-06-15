@@ -1,0 +1,13 @@
+   .perfil-card {
+        max-width: 860px;
+        margin: 0 auto;
+    }
+
+    .perfil-card .form-control[readonly],
+    .perfil-card .form-select:disabled {
+        background-color: #f8f9fa;
+        color: #495057;
+        opacity: 1;
+        cursor: default;
+    }
+    
