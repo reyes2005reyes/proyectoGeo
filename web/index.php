@@ -22,10 +22,7 @@
         resolve();
     } else {
         
-    }
     ?>
-
-<?php include_once '../view/partials/footer.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -135,3 +132,7 @@
     </script>
 </body>
 </html>
+<?php
+}
+?>
+<?php include_once '../view/partials/footer.php'; ?>
