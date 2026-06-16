@@ -3,6 +3,6 @@
         "phpunit/phpunit": "^11.5"
     },
     "require": {
-        "phpmailer/phpmailer": "^7.1"
+        "phpmailer/phpmailer": "5.2.28"
     }
 }

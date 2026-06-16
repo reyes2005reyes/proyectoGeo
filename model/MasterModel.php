@@ -1,11 +1,11 @@
 <?php
 
-    include_once __DIR__ . '/../lib/conf/connection.php';
+    include_once '../lib/conf/connection.php';
 
     class MasterModel extends Connection{
 
 
-        protected function query($sql, $params = []) {
+        protected function query($sql, $params = array()) {
             $result = pg_query_params($this->getConnect(), $sql, $params);
 
             if (!$result) {

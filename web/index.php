@@ -12,9 +12,9 @@
 
     <?php
     if(isset($_GET["modulo"])){
-        $modulosProtegidos = [
+        $modulosProtegidos = array(
             'usuarios',
-        ];
+        );
         $modulo = strtolower($_GET['modulo']);
         if(in_array($modulo, $modulosProtegidos)){
             include_once '../lib/helpersLogin.php';

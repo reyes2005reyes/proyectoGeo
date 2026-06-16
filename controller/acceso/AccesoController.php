@@ -13,11 +13,10 @@
             return;
         }
 
-        $numero_documento = $_POST['numero_documento'];
-        $contrasena = $_POST['contrasena'];
         
 
-        $resultado = @$obj->select("SELECT * FROM usuarios WHERE numero_documento = '$numero_documento'");
+        $numero_documento = $_POST['numero_documento'];
+        $contrasena = $_POST['contrasena'];
         
         // solo acepta numeros en el campo de documento, si ingresa String, le mostrara que solo acepta numeros, y no se ejecutara la consulta
         if (!is_numeric($numero_documento)) {
@@ -25,6 +24,10 @@
             redirect('login.php');
             return;
         }
+
+        $resultado = @$obj->select("SELECT * FROM usuarios WHERE numero_documento = '$numero_documento'");
+        
+        
 
         if ($resultado === false) {
             $_SESSION['error'] = 'Tiempo de espera agotado. Verifique su conexión o intente nuevamente más tarde.';
@@ -43,7 +46,7 @@
             }
 
 
-            $verificacion = @password_verify($contrasena, $usuario['contrasena']);
+            $verificacion = (md5($contrasena) === $usuario['contrasena']);
             if ($verificacion) {
                 $_SESSION['primer_nombre'] = $usuario['primer_nombre'];
                 $_SESSION['primer_apellido'] = $usuario['primer_apellido'];

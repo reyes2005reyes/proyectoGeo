@@ -1,29 +1,28 @@
 <?php
-require_once __DIR__ . '/../MasterModel.php'; 
+require_once dirname(__FILE__) . '/../MasterModel.php';
     
 class UsuariosModel extends MasterModel {
         // estas funciones son para las consulastas para el registro de un usuario y para verificar si el numero de documento o el correo ya existen en la base de datos
         public function registrar($datos) {
-        $tipo_doc  = $datos['id_tipo_documento'];
-        $primer_nombre = pg_escape_string($datos['primer_nombre']);
-        $segundo_nombre = pg_escape_string($datos['segundo_nombre'] ?? '');
-        $primer_apellido  = pg_escape_string($datos['primer_apellido']);
-        $segundo_apellido = pg_escape_string($datos['segundo_apellido'] ?? '');
-        $numero_documento = $datos['numero_documento'];
-        $correo = pg_escape_string($datos['correo']);
-        $telefono = $datos['telefono'];
-        $direccion = pg_escape_string($datos['direccion']);
-        $contrasena = password_hash($datos['contrasena'], PASSWORD_BCRYPT);
+            $tipo_doc  = $datos['id_tipo_documento'];
+            $primer_nombre = pg_escape_string($datos['primer_nombre']);
+            $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
+            $primer_apellido  = pg_escape_string($datos['primer_apellido']);
+            $segundo_apellido = pg_escape_string(isset($datos['segundo_apellido']) ? $datos['segundo_apellido'] : '');
+            $numero_documento = $datos['numero_documento'];
+            $correo = pg_escape_string($datos['correo']);
+            $telefono = $datos['telefono'];
+            $direccion = pg_escape_string($datos['direccion']);
+            $contrasena = md5($datos['contrasena']);
 
-        $sql = "INSERT INTO usuarios (id_tipo_documento, id_rol, id_estado_usuario,
-                primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
-                numero_documento, correo, telefono, direccion, contrasena)VALUES 
-                ($tipo_doc, 3, 1,
-                '$primer_nombre', '$segundo_nombre', '$primer_apellido', '$segundo_apellido',
+            $sql = "INSERT INTO usuarios (id_tipo_documento, id_rol, id_estado_usuario,
+                    primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
+                    numero_documento, correo, telefono, direccion, contrasena) VALUES 
+                    ($tipo_doc, 3, 1,
+                    '$primer_nombre', '$segundo_nombre', '$primer_apellido', '$segundo_apellido',
                 $numero_documento, '$correo', $telefono, '$direccion', '$contrasena')";
-
-        return $this->insert($sql);
-    }
+    return $this->insert($sql);
+}
     public function existeDocumento($numero_documento) {
         $sql = "SELECT id_usuario FROM usuarios WHERE numero_documento = $numero_documento";
         return pg_num_rows($this->select($sql)) > 0;
@@ -158,7 +157,7 @@ class UsuariosModel extends MasterModel {
                 ORDER BY u.id_usuario DESC";
 
         $result = $this->select($sql);
-        $usuarios = [];
+        $usuarios = array();
 
         if ($result && pg_num_rows($result) > 0) {
             while ($row = pg_fetch_assoc($result)) {
@@ -220,23 +219,23 @@ class UsuariosModel extends MasterModel {
 
     public function actualizarPerfil($idUsuario, $datos){
         $primer_nombre = pg_escape_string($datos['primer_nombre']);
-        $segundo_nombre = pg_escape_string($datos['segundo_nombre'] ?? '');
+        $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
         $primer_apellido = pg_escape_string($datos['primer_apellido']);
-        $segundo_apellido = pg_escape_string($datos['segundo_apellido'] ?? '');
+        $segundo_apellido = pg_escape_string(isset($datos['segundo_apellido']) ? $datos['segundo_apellido'] : '');
         $correo = pg_escape_string($datos['correo']);
         $direccion = pg_escape_string($datos['direccion']);
 
         $sql = "UPDATE usuarios SET
-                id_tipo_documento = {$datos['id_tipo_documento']},
-                primer_nombre = '$primer_nombre',
-                segundo_nombre = '$segundo_nombre',
-                primer_apellido = '$primer_apellido',
-                segundo_apellido = '$segundo_apellido',
-                numero_documento = {$datos['numero_documento']},
-                correo = '$correo',
-                telefono = {$datos['telefono']},
-                direccion = '$direccion'
-                WHERE id_usuario = $idUsuario";
+            id_tipo_documento = {$datos['id_tipo_documento']},
+            primer_nombre = '$primer_nombre',
+            segundo_nombre = '$segundo_nombre',
+            primer_apellido = '$primer_apellido',
+            segundo_apellido = '$segundo_apellido',
+            numero_documento = {$datos['numero_documento']},
+            correo = '$correo',
+            telefono = {$datos['telefono']},
+            direccion = '$direccion'
+            WHERE id_usuario = $idUsuario";
 
         return $this->update($sql);
     }

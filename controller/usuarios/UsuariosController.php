@@ -1,8 +1,7 @@
 <?php   
     include_once '../model/usuarios/UsuariosModel.php';
-    require_once '../vendor/autoload.php';
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
+    require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.phpmailer.php';
+    require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.smtp.php';
     
 class UsuariosController{
         // esta funcion es para el registro del usuario
@@ -41,7 +40,7 @@ class UsuariosController{
             }
 
             // Error 4:  Fallo en el proceso de almacenamiento o cifrado de la contraseña.
-            $hash = password_hash($_POST['contrasena'], PASSWORD_BCRYPT);
+            $hash = md5($_POST['contrasena']);
             if (!$hash) {
                 $_SESSION['error_registro'] = 'Ocurrió un error técnico durante la creación de la cuenta. Intente nuevamente.';
                 redirect('/proyectoGeo/view/registro/Registro.php');
@@ -81,8 +80,8 @@ class UsuariosController{
         try {
             $obj = new UsuariosModel();
 
-            $numero_documento = $_POST['numero_documento'] ?? '';
-            $correo = $_POST['correo'] ?? '';
+            $numero_documento = isset($_POST['numero_documento']) ? $_POST['numero_documento'] : '';
+            $correo = isset($_POST['correo']) ? $_POST['correo'] : '';
 
             if (empty($numero_documento) || empty($correo)) {
                 $_SESSION['error_recuperacion'] = 'Todos los campos son obligatorios.';
@@ -99,7 +98,7 @@ class UsuariosController{
 
 
                 // Generar código de 6 dígitos
-                $codigo = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+                $codigo = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
                 // Error 1: guardar código en BD
                 $guardado = $obj->guardarCodigo($id_usuario, $codigo);
@@ -153,14 +152,13 @@ class UsuariosController{
     public function validarCodigo() {
     try {
         $obj = new UsuariosModel();
-        $id_usuario = $_SESSION['id_usuario_recuperacion'] ?? null;
-
+        $id_usuario = isset($_SESSION['id_usuario_recuperacion'])  ? $_POST['id_usuario_recuperacion'] : null ;
         if (!$id_usuario) {
             redirect('../view/recuperarContraseña/SolicitarCodigo.php');
             return;
         }
 
-        $codigo = $_POST['codigo'] ?? '';
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : '';
 
         $resultado = $obj->verificarCodigo($id_usuario, $codigo);
         $intentos = $obj->getIntentos($id_usuario);
@@ -231,8 +229,8 @@ class UsuariosController{
             }
 
             $id_usuario = $_SESSION['id_usuario_recuperacion'];
-            $nueva = $_POST['nueva_contrasena'] ?? '';
-            $confirmar = $_POST['confirmar_contrasena'] ?? '';
+            $nueva = isset($_POST['nueva_contrasena']) ? $_POST['nueva_contrasena'] : '';
+            $confirmar = isset( $_POST['confirmar_contrasena']) ? $_POST['confirmar_contrasena'] : '';
 
             if (empty($nueva) || empty($confirmar)) {
                 $_SESSION['error_nueva'] = 'Todos los campos son obligatorios.';
@@ -315,7 +313,7 @@ class UsuariosController{
 
         $usuarios = $obj->select($sql);
 
-        $usuariosArray = [];
+        $usuariosArray = array();
         if($usuarios && pg_num_rows($usuarios) > 0) {
             while($row = pg_fetch_assoc($usuarios)) {
                 $usuariosArray[] = $row;
@@ -334,7 +332,7 @@ class UsuariosController{
         header('Content-Type: application/json; charset=utf-8');
         $obj = new UsuariosModel();
         
-        $tiposDoc = [];
+        $tiposDoc = array();
         $sqlTipos = "SELECT id_tipo_documento, nombre_tipo_documento FROM tipos_documento ORDER BY nombre_tipo_documento";
         $resultTipos = $obj->select($sqlTipos);
         if ($resultTipos && pg_num_rows($resultTipos) > 0) {
@@ -343,7 +341,7 @@ class UsuariosController{
             }
         }
         
-        $rolesArr = [];
+        $rolesArr = array();
         $sqlRoles = "SELECT id_rol, nombre_rol FROM roles ORDER BY nombre_rol";
         $resultRoles = $obj->select($sqlRoles);
         if ($resultRoles && pg_num_rows($resultRoles) > 0) {
@@ -352,10 +350,10 @@ class UsuariosController{
             }
         }
         
-        echo json_encode([
+        echo json_encode(array(
             'tiposDocumento' => $tiposDoc,
             'roles' => $rolesArr
-        ]);
+        ));
         exit;
     }
 
@@ -366,7 +364,7 @@ class UsuariosController{
         
         if (!$idUsuario) {
             http_response_code(400);
-            echo json_encode(['error' => 'ID usuario requerido']);
+            echo json_encode(array('error' => 'ID usuario requerido'));
             exit;
         }
         
@@ -377,16 +375,26 @@ class UsuariosController{
             // Obtener nombre del rol y estado
             $sqlRol = "SELECT nombre_rol FROM roles WHERE id_rol = " . (int)$usuario['id_rol'];
             $resultRol = $obj->select($sqlRol);
-            $usuario['nombre_rol'] = pg_num_rows($resultRol) > 0 ? pg_fetch_assoc($resultRol)['nombre_rol'] : '';
+            if (pg_num_rows($resultRol) > 0) {
+                $rowRol = pg_fetch_assoc($resultRol);
+                $usuario['nombre_rol'] = $rowRol['nombre_rol'];
+            } else {
+                $usuario['nombre_rol'] = '';
+            }
             
             $sqlEstado = "SELECT nombre_estado_usuario FROM estados_usuario WHERE id_estado_usuario = " . (int)$usuario['id_estado_usuario'];
             $resultEstado = $obj->select($sqlEstado);
-            $usuario['nombre_estado_usuario'] = pg_num_rows($resultEstado) > 0 ? pg_fetch_assoc($resultEstado)['nombre_estado_usuario'] : '';
+            if (pg_num_rows($resultEstado) > 0) {
+                $rowEstado = pg_fetch_assoc($resultEstado);
+                $usuario['nombre_estado_usuario'] = $rowEstado['nombre_estado_usuario'];
+            } else {
+                $usuario['nombre_estado_usuario'] = '';
+            }
             
             echo json_encode($usuario);
         } else {
             http_response_code(404);
-            echo json_encode(['error' => 'Usuario no encontrado']);
+            echo json_encode(array('error' => 'Usuario no encontrado'));
         }
         exit;
     }
@@ -399,44 +407,44 @@ class UsuariosController{
         
         if (!$idUsuario) {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'ID usuario requerido']);
+            echo json_encode(array('success' => false, 'message' => 'ID usuario requerido'));
             exit;
         }
         
         $obj = new UsuariosModel();
         
         // Validar que no exista otro usuario con el mismo documento o correo
-        $numeroDoc = $_POST['numero_documento'] ?? '';
-        $correo = $_POST['correo'] ?? '';
+        $numeroDoc =isset( $_POST['numero_documento']) ? $_POST['numero_documento'] : '';
+        $correo = isset($_POST['correo']) ? $_POST['correo'] :'';
         
         if ($obj->documentoExisteEnOtroUsuario($numeroDoc, $idUsuario)) {
-            echo json_encode(['success' => false, 'message' => 'El número de documento ya existe en otro usuario']);
+            echo json_encode(array('success' => false, 'message' => 'El número de documento ya existe en otro usuario'));
             exit;
         }
         
         if ($obj->correoExisteEnOtroUsuario($correo, $idUsuario)) {
-            echo json_encode(['success' => false, 'message' => 'El correo ya existe en otro usuario']);
+            echo json_encode(array('success' => false, 'message' => 'El correo ya existe en otro usuario'));
             exit;
         }
         
-        $datos = [
+        $datos = array(
             'id_tipo_documento' => isset($_POST['id_tipo_documento']) ? (int)$_POST['id_tipo_documento'] : 0,
-            'primer_nombre' => $_POST['primer_nombre'] ?? '',
-            'segundo_nombre' => $_POST['segundo_nombre'] ?? '',
-            'primer_apellido' => $_POST['primer_apellido'] ?? '',
-            'segundo_apellido' => $_POST['segundo_apellido'] ?? '',
+            'primer_nombre' => isset($_POST['primer_nombre']) ? $_POST['primer_nombre'] : '',
+            'segundo_nombre' => isset($_POST['segundo_nombre']) ? $_POST['segundo_nombre'] : '',
+            'primer_apellido' => isset($_POST['primer_apellido']) ? $_POST['primer_apellido'] : '',
+            'segundo_apellido' => isset($_POST['segundo_apellido']) ? $_POST['segundo_apellido'] : '',
             'numero_documento' => $numeroDoc,
             'correo' => $correo,
-            'telefono' => $_POST['telefono'] ?? '',
-            'direccion' => $_POST['direccion'] ?? ''
-        ];
+            'telefono' => isset($_POST['telefono']) ? $_POST['telefono'] : '',
+            'direccion' => isset($_POST['direccion']) ? $_POST['direccion'] : ''
+);
         
         // Obtener rol si se proporcionó
         $idRol = isset($_POST['id_rol']) ? (int)$_POST['id_rol'] : null;
         
         // Si se proporciona contraseña, actualizarla
         if (!empty($_POST['contrasena'])) {
-            $hash = password_hash($_POST['contrasena'], PASSWORD_BCRYPT);
+            $hash = md5($_POST['contrasena']);
             $sqlContrasena = "UPDATE usuarios SET contrasena = '" . pg_escape_string($hash) . "' WHERE id_usuario = $idUsuario";
             $obj->update($sqlContrasena);
         }
@@ -450,9 +458,9 @@ class UsuariosController{
         $resultado = $obj->actualizarPerfil($idUsuario, $datos);
         
         if ($resultado) {
-            echo json_encode(['success' => true, 'message' => 'Usuario actualizado correctamente']);
+            echo json_encode(array('success' => true, 'message' => 'Usuario actualizado correctamente'));
         } else {
-            echo json_encode(['success' => false, 'message' => 'Error al actualizar el usuario']);
+            echo json_encode(array('success' => false, 'message' => 'Error al actualizar el usuario'));
         }
         exit;
     }
@@ -465,7 +473,7 @@ class UsuariosController{
         
         if (!$idUsuario) {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'ID usuario requerido']);
+            echo json_encode(array('success' => false, 'message' => 'ID usuario requerido'));
             exit;
         }
         
@@ -477,11 +485,12 @@ class UsuariosController{
         
         if (pg_num_rows($resultEstado) === 0) {
             http_response_code(404);
-            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado']);
+            echo json_encode(array('success' => false, 'message' => 'Usuario no encontrado'));
             exit;
         }
         
-        $estadoActual = pg_fetch_assoc($resultEstado)['id_estado_usuario'];
+        $rowEstado = pg_fetch_assoc($resultEstado);
+        $estadoActual = $rowEstado['id_estado_usuario'];
         
         // Obtener IDs de estados
         $sqlEstados = "SELECT id_estado_usuario, nombre_estado_usuario FROM estados_usuario";
@@ -503,9 +512,9 @@ class UsuariosController{
         $sqlUpdate = "UPDATE usuarios SET id_estado_usuario = $nuevoEstado WHERE id_usuario = $idUsuario";
         
         if ($obj->update($sqlUpdate)) {
-            echo json_encode(['success' => true, 'message' => 'Estado del usuario actualizado correctamente']);
+            echo json_encode(array('success' => true, 'message' => 'Estado del usuario actualizado correctamente'));
         } else {
-            echo json_encode(['success' => false, 'message' => 'Error al cambiar el estado']);
+            echo json_encode(array('success' => false, 'message' => 'Error al cambiar el estado'));
         }
         exit;
     }
@@ -553,17 +562,17 @@ class UsuariosController{
             return;
         }
 
-        $datos = [
+        $datos = array(
             'id_tipo_documento' => $_POST['id_tipo_documento'],
             'numero_documento' => $_POST['numero_documento'],
             'primer_nombre' => trim($_POST['primer_nombre']),
-            'segundo_nombre' => trim($_POST['segundo_nombre'] ?? ''),
+            'segundo_nombre' => trim(isset($_POST['segundo_nombre']) ? $_POST['segundo_nombre'] : ''),
             'primer_apellido' => trim($_POST['primer_apellido']),
-            'segundo_apellido' => trim($_POST['segundo_apellido'] ?? ''),
+            'segundo_apellido' => trim(isset($_POST['segundo_apellido']) ? $_POST['segundo_apellido'] : ''),
             'correo' => trim($_POST['correo']),
             'telefono' => $_POST['telefono'],
             'direccion' => trim($_POST['direccion'])
-        ];
+        );
 
         $resultado = $model->actualizarPerfil($idUsuario, $datos);
 
