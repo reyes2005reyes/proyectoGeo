@@ -116,7 +116,8 @@ class UsuariosController{
                     $mail->SMTPAuth = true;
                     $mail->Username = '812ca204a23bca';
                     $mail->Password = '2bc5e19bc4cef0';
-                    $mail->Port = 25;
+                    $mail->Port = 587;
+                    $mail->Timeout = 10;
                     $mail->CharSet = 'UTF-8';
                     $mail->SetFrom('reyesmontoyamonor@gmail.com', 'SIAV');
                     $mail->AddAddress($correo);

@@ -35,7 +35,7 @@
     <script type="text/javascript" src="/misc/lib/mscross-1.1.9.js"></script>
 </head>
 <body>
-	<nav class="navbar shadow-sm mb-3" style="background-color:#148D55;">
+	<nav class="navbar shadow-sm mb-3" style="background-color:#1A3C5E;">
 	<div class="container-fluid">
 			<span class="navbar-brand text-white">Visor Dinamico Cali</span>
 		</div>
@@ -46,7 +46,7 @@
 
 			<!-- Este es el Mapa Completo -->
 			<div class="col-12 col-md-9" >
-				<div class="card-header text-white fw-semibold d-flex align-items-center justify-content-center" style="background-color:#1A7C43; height:50px;">
+				<div class="card-header text-white fw-semibold d-flex align-items-center justify-content-center" style="background-color:#1A3C5E; height:50px;">
 				Mapa de Cali
 			</div>
 					<div class="mscross border rounded shadow-sm"
@@ -59,11 +59,11 @@
 
 				<!-- Este es el Minimapa -->
 				<div class="card shadow-sm">
-					<div class="card-header text-white fw-semibold" style="background-color:#138241;">
+					<div class="card-header text-white fw-semibold" style="background-color:#1A3C5E;">
 						Referencia
 					</div>
 					<div class="card-body p-2">
-						<div style="overflow:auto; width:140px; height:140px; -moz-user-select:none; position:relative;"
+						<div style="overflow:auto; width:141px; height:140px; -moz-user-select:none; position:relative;"
 							id="dc_main2">
 						</div>
 					</div>
@@ -71,7 +71,7 @@
 
 				<!-- Estas son las Capas del Mapa -->
 				<div class="card shadow-sm">
-					<div class="card-header text-white fw-semibold" style="background-color:#177B40;">
+					<div class="card-header text-white fw-semibold" style="background-color:#1A3C5E;">
 						Capas
 					</div>
 					<div class="card-body">
