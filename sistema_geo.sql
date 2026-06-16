@@ -596,70 +596,70 @@ VALUES
 -- Juan García
 (3,1,1,'Reporte de accidente de tránsito',
 'Carrera 1 con Calle 5, Cali',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.5320 3.4516)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.5320 3.4516)'),4326),
 'https://storage.geo.gov.co/img/acc001.jpg',
 '2026-01-10 08:23:00'),
 
 -- María López
 (4,2,2,'Señal de tránsito deteriorada',
 'Carrera 8 #14-20 Cali',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.5120 3.4558)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.5120 3.4558)'),4326),
 'https://storage.geo.gov.co/img/sen001.jpg',
 '2026-01-15 10:45:00'),
 
 -- Luis Martínez
 (5,3,3,'Solicitud de nueva señalización',
 'Avenida 4N #22-10 Cali',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.5250 3.4720)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.5250 3.4720)'),4326),
 'https://storage.geo.gov.co/img/sen002.jpg',
 '2026-01-20 14:00:00'),
 
 -- Ana Rodríguez
 (6,1,4,'Reductor de velocidad deteriorado',
 'Calle 25 #8-45 Cali',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.3035 3.5394)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.3035 3.5394)'),4326),
 'https://storage.geo.gov.co/img/red001.jpg',
 '2026-02-03 09:10:00'),
 
 -- Santiago Castro
 (7,2,5,'Solicitud de instalación de reductor',
 'Carrera 44 #5-80 Cali',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.5410 3.4310)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.5410 3.4310)'),4326),
 'https://storage.geo.gov.co/img/red002.jpg',
 '2026-02-10 11:30:00'),
 
 -- Juan García
 (3,1,7,'PQRSF por demora en atención',
 'Calle 70 #2-34 Cali',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.5180 3.4980)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.5180 3.4980)'),4326),
 NULL,
 '2026-02-15 16:20:00'),
 
 -- María López
 (4,2,1,'Segundo reporte de accidente',
 'Carretera Cali - Buenaventura km 18',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.7200 3.4100)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.7200 3.4100)'),4326),
 'https://storage.geo.gov.co/img/acc002.jpg',
 '2026-03-01 06:45:00'),
 
 -- Luis Martínez
 (5,1,6,'Daño en vía pública',
 'Av. Simón Bolívar',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.5300 3.4650)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.5300 3.4650)'),4326),
 'https://storage.geo.gov.co/img/via001.jpg',
 '2026-03-08 12:00:00'),
 
 -- Ana Rodríguez
 (6,3,3,'Solicitud de señal para parqueo de discapacidad',
 'Calle 10 #4-50 Cali',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.2982 3.8995)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.2982 3.8995)'),4326),
 'https://storage.geo.gov.co/img/sen003.jpg',
 '2026-03-15 09:30:00'),
 
 -- Santiago Castro
 (7,1,7,'Solicitud de información sobre malla vial',
 'Barrio El Poblado',
-ST_SetSRID(ST_GeometryFromText('POINT(-76.5450 3.4200)'),4326),
+ST_SetSRID(GeometryFromText('POINT(-76.5450 3.4200)'),4326),
 NULL,
 '2026-04-01 08:00:00');
 
