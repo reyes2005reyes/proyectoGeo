@@ -37,7 +37,7 @@
 <body>
 	<nav class="navbar shadow-sm mb-3" style="background-color:#148D55;">
 	<div class="container-fluid">
-			<span class="navbar-brand text-white">Visor Dinámico Cali</span>
+			<span class="navbar-brand text-white">Visor Dinamico Cali</span>
 		</div>
 	</nav>
 
@@ -50,7 +50,7 @@
 				Mapa de Cali
 			</div>
 					<div class="mscross border rounded shadow-sm"
-					style="overflow:hidden; width:1130px; height:650px; -moz-user-select:none; position:relative;"
+					style="overflow:hidden; width:1012px; height:600px; -moz-user-select:none; position:relative;"
 					id="dc_main">
 				</div>
 			</div>
