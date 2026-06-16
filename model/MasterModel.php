@@ -17,6 +17,7 @@
         //SELECT Sirve para LISTAR por si acaso.
         public function select($sql){
             $result = pg_query($this -> getConnect(),$sql);
+            
             return $result;
         }
         public function insert($sql){

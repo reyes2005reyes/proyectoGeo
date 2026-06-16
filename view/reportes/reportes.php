@@ -1,7 +1,9 @@
 <?php
 
+$id_rol = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
+
 if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok' ||
-    !in_array((int)($_SESSION['id_rol'] ?? 0), [1, 2])) {
+    !in_array($id_rol, array(1, 2))) {
     redirect('/proyectoGeo/web/login.php');
     exit;
 }
@@ -72,7 +74,7 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok' ||
                                 <i class="fas fa-calendar-check me-1 text-primary"></i>
                                 Fecha de fin <span class="text-danger">*</span>
                             </label>
-                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
+                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="<?php echo date('Y-m-d'); ?>" readonly>
                         </div>
 
                         <!-- 3. Filtro estado -->

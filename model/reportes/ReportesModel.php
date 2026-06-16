@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../MasterModel.php';
+require_once  dirname(__FILE__) . '/../MasterModel.php';
  
 class ReportesModel extends MasterModel {
     // 1 Accidentes de tránsito
@@ -17,7 +17,7 @@ class ReportesModel extends MasterModel {
                     ts.nombre AS tipo_solicitud,
                     TO_CHAR(s.fecha_solicitud, 'DD/MM/YYYY') AS fecha_registro,
                     s.direccion  AS ubicacion,
-                    CONCAT(s.latitud, ', ', s.longitud) AS coordenadas,
+                    ST_AsText(s.coordenadas) AS coordenadas,
                     s.descripcion AS descripcion,
                     es.nombre_estado_solicitud AS estado
                 FROM solicitudes s
@@ -48,7 +48,7 @@ class ReportesModel extends MasterModel {
                     ts.nombre AS tipo_solicitud,
                     TO_CHAR(s.fecha_solicitud, 'DD/MM/YYYY') AS fecha_registro,
                     s.direccion AS ubicacion,
-                    CONCAT(s.latitud, ', ', s.longitud) AS coordenadas,
+                    ST_AsText(s.coordenadas) AS coordenadas,
                     s.descripcion AS descripcion,
                     es.nombre_estado_solicitud AS estado
                 FROM solicitudes s
@@ -77,7 +77,7 @@ class ReportesModel extends MasterModel {
                     ts.nombre AS tipo_solicitud,
                     TO_CHAR(s.fecha_solicitud, 'DD/MM/YYYY') AS fecha_registro,
                     s.direccion AS ubicacion,
-                    CONCAT(s.latitud, ', ', s.longitud) AS coordenadas,
+                    ST_AsText(s.coordenadas) AS coordenadas,
                     s.descripcion AS descripcion,
                     es.nombre_estado_solicitud AS estado
                 FROM solicitudes s

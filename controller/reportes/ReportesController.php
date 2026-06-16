@@ -1,14 +1,16 @@
 <?php
-ini_set('display_errors', 0);
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+ini_set('display_errors', 1);
+error_reporting(E_ALL );
 include_once '../model/reportes/ReportesModel.php';
-require_once '../lib/PHPExcel\Classes\PHPExcel.php';
+require_once '../lib/PHPExcel/Classes/PHPExcel.php';
+require_once '../lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
 
 class ReportesController {
 
     public function index() {
         $model   = new ReportesModel();
-        $estados = [];
+        $estados = array();
 
         $result = $model->obtenerEstados();
         if ($result && pg_num_rows($result) > 0) {
@@ -16,7 +18,7 @@ class ReportesController {
                 $estados[] = $row;
             }
         }
-        require_once __DIR__ . '/../../view/reportes/reportes.php';
+        require_once dirname(__FILE__) . '/../../view/reportes/reportes.php';
     }
 
     // genera y descarga el archivo XLSX
@@ -30,10 +32,10 @@ class ReportesController {
             }
 
             // 2 Recoger y validar parametros del formulario
-            $tipo_reporte = $_POST['tipo_reporte'] ?? '';
-            $fecha_inicio = $_POST['fecha_inicio'] ?? '';
-            $fecha_fin = $_POST['fecha_fin'] ?? '';
-            $estado = $_POST['estado'] ?? '';
+            $tipo_reporte = isset($_POST['tipo_reporte']) ? $_POST['tipo_reporte'] : '';
+            $fecha_inicio = isset($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : '';
+            $fecha_fin = isset($_POST['fecha_fin']) ? $_POST['fecha_fin'] : '';
+            $estado = isset($_POST['estado']) ? $_POST['estado'] : '';
 
             if (empty($tipo_reporte) || empty($fecha_inicio) || empty($fecha_fin)) {
                 $_SESSION['error_reportes'] = 'Debe completar todos los campos obligatorios antes de generar el reporte.';
@@ -50,11 +52,11 @@ class ReportesController {
 
             // 3 segun tipo de reporte
             $model = new ReportesModel();
-            $nombres_reporte = [
-                'accidentes' => 'Reporte de Accidentes de Tránsito',
-                'senales'  => 'Reporte de Señalización Vial en Mal Estado',
+            $nombres_reporte = array(
+                'accidentes' => 'Reporte de Accidentes de Transito',
+                'senales'  => 'Reporte de Señalizacion Vial en Mal Estado',
                 'reductores' => 'Reporte de Reductores de Velocidad en Mal Estado',
-            ];
+            );
 
             switch ($tipo_reporte) {
                 case 'accidentes':
@@ -71,6 +73,7 @@ class ReportesController {
                     redirect('index.php?modulo=reportes&controlador=reportes&funcion=index');
                     return;
             }
+            
 
             // Excepcion 1 Consulta sin registros
             if (!$result || pg_num_rows($result) === 0) {
@@ -80,7 +83,7 @@ class ReportesController {
             }
 
             // Convertir a array
-            $datos = [];
+            $datos = array();
             while ($row = pg_fetch_assoc($result)) {
                 $datos[] = $row;
             }
@@ -97,19 +100,50 @@ class ReportesController {
             // Encabezado institucional
             $hoja->mergeCells('A1:G1');
             $hoja->setCellValue('A1', 'Secretaría de Movilidad - Sistema de Información de Accidentes Viales (SIAV)');
-            $hoja->getStyle('A1')->applyFromArray(['font'=> ['bold' => true, 'size' => 11, 'color' => ['rgb' => 'FFFFFF']],
-                'fill' => ['type' => PHPExcel_Style_Fill::FILL_SOLID, 'startcolor' => ['rgb' => '1A3C5E']],
-                'alignment' => ['horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, 'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER],
-            ]);
+            $hoja->getStyle('A1')->applyFromArray(array(
+                'font' => array(
+                'bold' => true,
+                'size' => 11,
+                'color' => array(
+                'rgb' => 'FFFFFF'
+            )
+            ),
+                'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                'rgb' => '1A3C5E'
+            )
+            ),
+            'alignment' => array(
+            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+            ));
             $hoja->getRowDimension(1)->setRowHeight(28);
 
             // Fila 2: Nombre del reporte y fecha de generacion
             $hoja->mergeCells('A2:G2');
             $hoja->setCellValue('A2', $nombreReporte . ' | Generado: ' . $fechaGeneracion);
-            $hoja->getStyle('A2')->applyFromArray(['font' => ['bold' => true, 'size' => 11, 'color' => ['rgb' => 'FFFFFF']],
-                'fill' => ['type' => PHPExcel_Style_Fill::FILL_SOLID, 'startcolor' => ['rgb' => '2E6DA4']],
-                'alignment' => ['horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, 'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER],
-            ]);
+            $hoja->getStyle('A2')->applyFromArray(array(
+                'font' => array(
+                'bold' => true,
+                'size' => 11,
+                'color' => array(
+                'rgb' => 'FFFFFF'
+            )
+            ),
+                'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                'rgb' => '2E6DA4'
+            )
+            ),
+            'alignment' => array(
+            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+            )
+            );  
             $hoja->getRowDimension(2)->setRowHeight(22);
 
             // Fila 3: Periodo consultado 
@@ -117,13 +151,28 @@ class ReportesController {
             $fi = date('d/m/Y', strtotime($fecha_inicio));
             $ff = date('d/m/Y', strtotime($fecha_fin));
             $hoja->setCellValue('A3', "Período: $fi  –  $ff");
-            $hoja->getStyle('A3')->applyFromArray(['font' => ['italic' => true, 'size' => 10, 'color' => ['rgb' => '333333']],
-                'fill' => ['type' => PHPExcel_Style_Fill::FILL_SOLID, 'startcolor' => ['rgb' => 'D9E8F5']],
-                'alignment' => ['horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER],
-            ]);
+            $hoja->getStyle('A3')->applyFromArray(array(
+                'font' => array(
+                'italic' => true,
+                'size' => 10,
+                'color' => array(
+                'rgb' => '333333'
+            )
+            ),
+            'fill' => array(
+            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+            'startcolor' => array(
+            'rgb' => 'D9E8F5'
+            )
+            ),
+            'alignment' => array(
+            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+            )
+            )
+            );
 
             // Fila 4: Encabezados de columna
-            $columnas = [
+            $columnas = array(
                 'A' => 'N° Radicado',
                 'B' => 'Tipo de Solicitud',
                 'C' => 'Fecha de Registro',
@@ -131,22 +180,40 @@ class ReportesController {
                 'E' => 'Coordenadas',
                 'F' => 'Descripción de la Problemática',
                 'G' => 'Estado Actual',
-            ];
+            );
 
             foreach ($columnas as $col => $titulo) {
                 $hoja->setCellValue("{$col}4", $titulo);
             }
 
-            $hoja->getStyle('A4:G4')->applyFromArray(['font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-                'fill' => ['type' => PHPExcel_Style_Fill::FILL_SOLID, 'startcolor' => ['rgb' => '1A3C5E']],
-                'alignment' => ['horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                    'wrap' => true,
-                ],
-                'borders' => [
-                    'allborders' => ['style' => PHPExcel_Style_Border::BORDER_THIN, 'color' => ['rgb' => 'FFFFFF']],
-                ],
-            ]);
+            $hoja->getStyle('A4:G4')->applyFromArray(array(
+                'font' => array(
+                'bold' => true,
+                'color' => array(
+                'rgb' => 'FFFFFF'
+            )
+            ),
+                'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                'rgb' => '1A3C5E'
+                )
+            ),
+                'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap' => true
+            ),
+                'borders' => array(
+                'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                'color' => array(
+                'rgb' => 'FFFFFF'
+                )
+                )
+            )
+            )
+        );
             $hoja->getRowDimension(4)->setRowHeight(20);
 
             // Filas de datos
@@ -162,15 +229,28 @@ class ReportesController {
 
                 // Filas alternas
                 $colorFondo = ($i % 2 === 0) ? 'FFFFFF' : 'EAF2FB';
-                $hoja->getStyle("A{$fila}:G{$fila}")->applyFromArray([
-                    'fill'      => ['type' => PHPExcel_Style_Fill::FILL_SOLID,
-                                    'startcolor' => ['rgb' => $colorFondo]],
-                    'alignment' => ['vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                                    'wrap'     => true],
-                    'borders'   => [
-                        'allborders' => ['style' => PHPExcel_Style_Border::BORDER_THIN, 'color' => ['rgb' => 'CCCCCC']],
-                    ],
-                ]);
+                $hoja->getStyle("A{$fila}:G{$fila}")->applyFromArray(
+                array(
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'startcolor' => array(
+                            'rgb' => $colorFondo
+                        )
+                    ),
+                    'alignment' => array(
+                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                        'wrap' => true
+                    ),
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array(
+                                'rgb' => 'CCCCCC'
+                            )
+                        )
+                    )
+                )
+            );
 
                 // Centrar columnas concretas (radicado, fecha, estado)
                 $hoja->getStyle("A{$fila}")->getAlignment() ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -180,7 +260,7 @@ class ReportesController {
             }
 
             // Ancho automatico de columnas 
-            $anchos = ['A' => 12, 'B' => 30, 'C' => 16, 'D' => 35, 'E' => 24, 'F' => 50, 'G' => 18];
+            $anchos = array('A' => 12, 'B' => 30, 'C' => 16, 'D' => 35, 'E' => 24, 'F' => 50, 'G' => 18);
             foreach ($anchos as $col => $ancho) {
                 $hoja->getColumnDimension($col)->setWidth($ancho);
             }
@@ -188,18 +268,18 @@ class ReportesController {
             //5 Enviar el archivo al navegador
             // Nomenclatura: Reporte_[TipoReporte]_[FechaGeneracion].xlsx  (RF025)
             $tipoNombreArchivo = str_replace(' ', '_', $nombreReporte);
-            $nombreArchivo = "Reporte_{$tipoNombreArchivo}_{$fechaArchivo}.xlsx";
+            $nombreArchivo = "Reporte_{$tipoNombreArchivo}_{$fechaArchivo}.xls";
 
             // Limpiar cualquier salida anterior para que el binario no se corrompa
             if (ob_get_length()) {
                 ob_end_clean();
             }
 
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
             header('Cache-Control: max-age=0');
 
-            $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+            $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $writer->save('php://output');
             exit;
 
