@@ -1,0 +1,79 @@
+MAP
+ 
+    NAME cali
+    SIZE 1000 1000
+    STATUS ON
+    EXTENT 1053867 860190 1068491 879441
+
+    FONTSET "C:/ms4w/Apache/htdocs/proyectoGeo/web/misc/fonts/fonts.txt"
+    SYMBOLSET "C:/ms4w/Apache/htdocs/proyectoGeo/web/misc/symbols/symbols.sym"
+
+    IMAGECOLOR 218 235 247
+
+    WEB
+
+        IMAGEPATH "c:/ms4w/tmp/ms_tmp/" 
+        IMAGEURL "/ms_tmp/"
+    END
+
+    LAYER
+        NAME "Cali"
+        STATUS ON
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\CaliArea.shp"  
+        TYPE POLYGON
+        CLASS
+            STYLE
+                COLOR 232 224 196
+                OUTLINECOLOR 95 95 95 
+            END
+        END
+    END
+
+    LAYER
+        TRANSPARENCY 50
+        NAME "Comunas"
+        STATUS ON
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\ComunasC.shp" 
+        TYPE POLYGON
+        CLASS
+            STYLE
+                COLOR 207 222 184
+                OUTLINECOLOR 105 125 95
+            END
+        END
+    END
+
+    LAYER
+        TRANSPARENCY 45
+        NAME "Barrio"
+        STATUS ON
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\Barrios.shp" 
+        TYPE POLYGON
+        LABELITEM "BARRIO"
+        CLASS
+            NAME "LABEL"
+            STYLE
+                COLOR 190 55 45
+                OUTLINECOLOR 90 40 35
+            END
+            LABEL   
+                SIZE SMALL
+                COLOR 0 0 0
+            END
+        END
+    END
+
+    LAYER
+        TRANSPARENCY 25
+        NAME "MallaVial"
+        STATUS ON
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\MallaVialC.shp" 
+        TYPE LINE
+        CLASS
+            STYLE
+                COLOR 0 0 0
+                WIDTH 2
+            END
+        END
+    END
+END

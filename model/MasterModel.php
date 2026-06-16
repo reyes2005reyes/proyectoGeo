@@ -1,23 +1,30 @@
 <?php
 
-    include_once '../lib/conf/connection.php';
+include_once '../lib/conf/connection.php';
 
-    class MasterModel extends Connection{
+class MasterModel extends Connection{
 
+    protected function query($sql, $params = array()) {
 
-        protected function query($sql, $params = array()) {
-            $result = pg_query_params($this->getConnect(), $sql, $params);
+        if (count($params) > 0) {
+            return pg_query_params($this->getConnect(), $sql, $params);
+        }
 
-            if (!$result) {
-                throw new Exception(pg_last_error($this->getConnect()));
-            }
+        return pg_query($this->getConnect(), $sql);
+    }
+
+    public function select($sql){
+        $result = pg_query($this->getConnect(), $sql);
+
+        if(!$result){
+            die(pg_last_error($this->getConnect()));
+        }
 
             return $result;
         }
         //SELECT Sirve para LISTAR por si acaso.
         public function select($sql){
             $result = pg_query($this -> getConnect(),$sql);
-            
             return $result;
         }
         public function insert($sql){
@@ -41,14 +48,22 @@
                 echo "No se encontro ningun registro";
             }
         }
-        public function autoincrement($table, $field){
-            $sql = "SELECT MAX($field) FROM $table";
 
-            $result = pg_query($this -> getConnect(),$sql);
-
-            $max_id = pg_fetch_array($result);
-            
-            return $max_id[0] + 1;
-        }
+        return false;
     }
-    
+
+    public function autoincrement($table, $field){
+
+        $sql = "SELECT MAX($field) AS maximo FROM $table";
+
+        $result = pg_query($this->getConnect(), $sql);
+
+        $row = pg_fetch_assoc($result);
+
+        if(!$row['maximo']){
+            return 1;
+        }
+
+        return $row['maximo'] + 1;
+    }
+}
