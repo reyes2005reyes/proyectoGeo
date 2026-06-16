@@ -119,10 +119,10 @@ class UsuariosModel extends MasterModel {
     }
 
     public function actualizarContrasena($id_usuario, $nueva_contrasena) {
-        $hash = password_hash($nueva_contrasena, PASSWORD_BCRYPT);
+        $hash = md5($nueva_contrasena);
         $hash = pg_escape_string($hash);
         $sql = "UPDATE usuarios SET contrasena = '$hash' 
-                WHERE id_usuario = $id_usuario";
+            WHERE id_usuario = $id_usuario";
         return $this->update($sql);
     }
     // aqui termina la funcion para enviar el correo de recuperacion de contraseña

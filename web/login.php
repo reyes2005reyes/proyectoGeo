@@ -82,7 +82,7 @@ if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.
         <hr class="divider">
 
         <div class="login-links">
-            <a href="../view/recuperarContraseña/SolicitarCodigo.php"> <i class="fas fa-key me-1"></i>¿Olvidaste tu contraseña?</a>
+            <a href="../view/recuperarContrasena/SolicitarCodigo.php"> <i class="fas fa-key me-1"></i>¿Olvidaste tu contraseña?</a>
             <a href="../view/registro/Registro.php"><i class="fas fa-user-plus me-1"></i>¿No tienes cuenta? Regístrate
             </a>
         </div>

@@ -56,7 +56,7 @@
         </button>
 
         <div class="text-center mt-3">
-            <a href="../../view/recuperarContraseña/SolicitarCodigo.php">Solicitar nuevo código</a>
+            <a href="../../view/recuperarContrasena/SolicitarCodigo.php">Solicitar nuevo código</a>
         </div>
     </form>
 </div>
