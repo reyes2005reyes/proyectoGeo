@@ -499,15 +499,20 @@
             return $sol;
         }
 
-    private function queryOne($sql, $params = array()) {
+        private function queryOne($sql, $params = array()) {
+
             $res = $this->query($sql, $params);
-            $_row = pg_fetch_assoc($res); return $_row !== false ? $_row : null;
+            return pg_fetch_assoc($res) ?: null;
         }
 
-        
+            $fila = pg_fetch_assoc($res);
 
+            if ($fila) {
+                return $fila;
+            }
 
-
+            return null;
+        }
 
 
     public function listarSolicitudes($idUsuario = null) {
