@@ -138,7 +138,7 @@ if (!isset($perfil) || !is_array($perfil)) {
                                 </label>
 
                                 <input type="email"
-                                    class="form-control perfil-campo"
+                                    class="form-control perfil-campo  campo-editable"
                                     id="correo"
                                     name="correo"
                                     value="<?php echo htmlspecialchars($perfil['correo']); ?>"
@@ -151,7 +151,7 @@ if (!isset($perfil) || !is_array($perfil)) {
                                 </label>
 
                                 <input type="number"
-                                    class="form-control perfil-campo"
+                                    class="form-control perfil-campo  campo-editable"
                                     id="telefono"
                                     name="telefono"
                                     value="<?php echo htmlspecialchars($perfil['telefono']); ?>"
@@ -166,7 +166,7 @@ if (!isset($perfil) || !is_array($perfil)) {
                             </label>
 
                             <input type="text"
-                                class="form-control perfil-campo"
+                                class="form-control perfil-campo  campo-editable"
                                 id="direccion"
                                 name="direccion"
                                 value="<?php echo htmlspecialchars($perfil['direccion']); ?>"
@@ -237,4 +237,4 @@ if (!isset($perfil) || !is_array($perfil)) {
         </div>
     </div>
 </div>
-<script src="/../../web/js/verPerfil.js"></script>
+<script src="/proyectoGeo/web/js/verPerfil.js"></script>

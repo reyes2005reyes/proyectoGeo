@@ -216,7 +216,7 @@ class UsuariosController{
             redirect('../../view/recuperarContrasena/SolicitarCodigo.php');
             return;
         }
-        include_once '../../view/recuperarContrasena/NuevaContraseña.php';
+        include_once '../../view/recuperarContrasena/NuevaContrasena.php';
     }
 
     // guardar nueva contraseña
@@ -233,19 +233,19 @@ class UsuariosController{
 
             if (empty($nueva) || empty($confirmar)) {
                 $_SESSION['error_nueva'] = 'Todos los campos son obligatorios.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
 
             if ($nueva !== $confirmar) {
                 $_SESSION['error_nueva'] = 'Las contraseñas no coinciden.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
 
             if (strlen($nueva) < 8) {
                 $_SESSION['error_nueva'] = 'La contraseña debe tener mínimo 8 caracteres.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
 
@@ -261,12 +261,12 @@ class UsuariosController{
                 redirect('/proyectoGeo/web/login.php');
             } else {
                 $_SESSION['error_nueva'] = 'No fue posible actualizar la contraseña. Intente nuevamente.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
             }
 
         } catch (Exception $e) {
             $_SESSION['error_nueva'] = 'Error inesperado. Intente más tarde.';
-            redirect('../view/recuperarContrasena/NuevaContraseña.php');
+            redirect('../view/recuperarContrasena/NuevaContrasena.php');
         }
     }
     // aqui finaliza la funcion para enviar el correo de recuperacion de contraseña
@@ -399,149 +399,70 @@ class UsuariosController{
     }
 
     // Método para actualizar datos del usuario (AJAX)
-public function actualizarUsuario() {
-    header('Content-Type: application/json; charset=utf-8');
-
-    $idRolSesion = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
-    $idUsuario   = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
-
-    // Solo administrador (1) y funcionario (2) pueden usar esto
-    if (!in_array($idRolSesion, array(1, 2))) {
-        echo json_encode(array('success' => false, 'message' => 'No tiene permisos para realizar esta acción'));
-        exit;
-    }
-
-    if (!$idUsuario) {
-        http_response_code(400);
-        echo json_encode(array('success' => false, 'message' => 'ID de usuario requerido'));
-        exit;
-    }
-
-    // Recoger y limpiar campos editables por todos
-    $primerNombre    = trim(isset($_POST['primer_nombre'])    ? $_POST['primer_nombre']    : '');
-    $segundoNombre   = trim(isset($_POST['segundo_nombre'])   ? $_POST['segundo_nombre']   : '');
-    $primerApellido  = trim(isset($_POST['primer_apellido'])  ? $_POST['primer_apellido']  : '');
-    $segundoApellido = trim(isset($_POST['segundo_apellido']) ? $_POST['segundo_apellido'] : '');
-    $correo          = trim(isset($_POST['correo'])           ? $_POST['correo']           : '');
-    $telefono        = trim(isset($_POST['telefono'])         ? $_POST['telefono']         : '');
-    $direccion       = trim(isset($_POST['direccion'])        ? $_POST['direccion']        : '');
-
-    // Validar campos obligatorios
-    if (empty($primerNombre) || empty($primerApellido) || empty($correo) || empty($telefono) || empty($direccion)) {
-        echo json_encode(array('success' => false, 'message' => 'Los campos Primer nombre, Primer apellido, Correo, Teléfono y Dirección son obligatorios'));
-        exit;
-    }
-
-    // Solo letras y espacios en nombres y apellidos
-    if (!preg_match('/^[a-zA-Z\xc0-\xff\s]+$/', $primerNombre)) {
-        echo json_encode(array('success' => false, 'message' => 'El primer nombre solo puede contener letras'));
-        exit;
-    }
-    if ($segundoNombre !== '' && !preg_match('/^[a-zA-Z\xc0-\xff\s]+$/', $segundoNombre)) {
-        echo json_encode(array('success' => false, 'message' => 'El segundo nombre solo puede contener letras'));
-        exit;
-    }
-    if (!preg_match('/^[a-zA-Z\xc0-\xff\s]+$/', $primerApellido)) {
-        echo json_encode(array('success' => false, 'message' => 'El primer apellido solo puede contener letras'));
-        exit;
-    }
-    if ($segundoApellido !== '' && !preg_match('/^[a-zA-Z\xc0-\xff\s]+$/', $segundoApellido)) {
-        echo json_encode(array('success' => false, 'message' => 'El segundo apellido solo puede contener letras'));
-        exit;
-    }
-
-    // Correo válido
-    if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-        echo json_encode(array('success' => false, 'message' => 'El correo electrónico no tiene un formato válido'));
-        exit;
-    }
-
-    // Teléfono: solo números, entre 7 y 15 dígitos
-    if (!preg_match('/^\d{7,15}$/', $telefono)) {
-        echo json_encode(array('success' => false, 'message' => 'El teléfono debe contener entre 7 y 15 dígitos numéricos'));
-        exit;
-    }
-
-    // Dirección: mínimo 5 caracteres
-    if (strlen($direccion) < 5) {
-        echo json_encode(array('success' => false, 'message' => 'La dirección debe tener al menos 5 caracteres'));
-        exit;
-    }
-
-    $obj = new UsuariosModel();
-
-    if ($idRolSesion === 1) {
-        // ── ADMINISTRADOR: puede editar todos los campos ──
-        $numeroDoc       = trim(isset($_POST['numero_documento'])  ? $_POST['numero_documento']  : '');
-        $idTipoDocumento = isset($_POST['id_tipo_documento']) ? (int)$_POST['id_tipo_documento'] : 0;
-        $idRol           = isset($_POST['id_rol']) ? (int)$_POST['id_rol'] : 0;
-
-        if (empty($numeroDoc) || !is_numeric($numeroDoc)) {
-            echo json_encode(array('success' => false, 'message' => 'El número de documento es obligatorio y debe ser numérico'));
+    public function actualizarUsuario() {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $idUsuario = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
+        
+        if (!$idUsuario) {
+            http_response_code(400);
+            echo json_encode(array('success' => false, 'message' => 'ID usuario requerido'));
             exit;
         }
-        if (!$idTipoDocumento) {
-            echo json_encode(array('success' => false, 'message' => 'Debe seleccionar un tipo de documento'));
-            exit;
-        }
+        
+        $obj = new UsuariosModel();
+        
+        // Validar que no exista otro usuario con el mismo documento o correo
+        $numeroDoc =isset( $_POST['numero_documento']) ? $_POST['numero_documento'] : '';
+        $correo = isset($_POST['correo']) ? $_POST['correo'] :'';
+        
         if ($obj->documentoExisteEnOtroUsuario($numeroDoc, $idUsuario)) {
-            echo json_encode(array('success' => false, 'message' => 'El número de documento ya pertenece a otro usuario'));
+            echo json_encode(array('success' => false, 'message' => 'El número de documento ya existe en otro usuario'));
             exit;
         }
+        
         if ($obj->correoExisteEnOtroUsuario($correo, $idUsuario)) {
-            echo json_encode(array('success' => false, 'message' => 'El correo ya pertenece a otro usuario'));
+            echo json_encode(array('success' => false, 'message' => 'El correo ya existe en otro usuario'));
             exit;
         }
-
-        // Actualizar contraseña si se proporcionó
+        
+        $datos = array(
+            'id_tipo_documento' => isset($_POST['id_tipo_documento']) ? (int)$_POST['id_tipo_documento'] : 0,
+            'primer_nombre' => isset($_POST['primer_nombre']) ? $_POST['primer_nombre'] : '',
+            'segundo_nombre' => isset($_POST['segundo_nombre']) ? $_POST['segundo_nombre'] : '',
+            'primer_apellido' => isset($_POST['primer_apellido']) ? $_POST['primer_apellido'] : '',
+            'segundo_apellido' => isset($_POST['segundo_apellido']) ? $_POST['segundo_apellido'] : '',
+            'numero_documento' => $numeroDoc,
+            'correo' => $correo,
+            'telefono' => isset($_POST['telefono']) ? $_POST['telefono'] : '',
+            'direccion' => isset($_POST['direccion']) ? $_POST['direccion'] : ''
+);
+        
+        // Obtener rol si se proporcionó
+        $idRol = isset($_POST['id_rol']) ? (int)$_POST['id_rol'] : null;
+        
+        // Si se proporciona contraseña, actualizarla
         if (!empty($_POST['contrasena'])) {
-            if (strlen($_POST['contrasena']) < 8) {
-                echo json_encode(array('success' => false, 'message' => 'La contraseña debe tener al menos 8 caracteres'));
-                exit;
-            }
             $hash = md5($_POST['contrasena']);
-            $obj->update("UPDATE usuarios SET contrasena = '" . pg_escape_string($hash) . "' WHERE id_usuario = $idUsuario");
+            $sqlContrasena = "UPDATE usuarios SET contrasena = '" . pg_escape_string($hash) . "' WHERE id_usuario = $idUsuario";
+            $obj->update($sqlContrasena);
         }
-
-        // Actualizar rol si se proporcionó
+        
+        // Si se proporciona rol, actualizarlo
         if ($idRol) {
-            $obj->update("UPDATE usuarios SET id_rol = $idRol WHERE id_usuario = $idUsuario");
+            $sqlRol = "UPDATE usuarios SET id_rol = $idRol WHERE id_usuario = $idUsuario";
+            $obj->update($sqlRol);
         }
-
-    } else {
-        // ── FUNCIONARIO: no puede editar documento, tipo doc, rol ni contraseña ──
-        // Tomamos esos valores directamente de la BD para no perderlos
-        $usuarioActual   = $obj->obtenerPerfil($idUsuario);
-        $numeroDoc       = $usuarioActual['numero_documento'];
-        $idTipoDocumento = $usuarioActual['id_tipo_documento'];
-
-        if ($obj->correoExisteEnOtroUsuario($correo, $idUsuario)) {
-            echo json_encode(array('success' => false, 'message' => 'El correo ya pertenece a otro usuario'));
-            exit;
+        
+        $resultado = $obj->actualizarPerfil($idUsuario, $datos);
+        
+        if ($resultado) {
+            echo json_encode(array('success' => true, 'message' => 'Usuario actualizado correctamente'));
+        } else {
+            echo json_encode(array('success' => false, 'message' => 'Error al actualizar el usuario'));
         }
+        exit;
     }
-
-    $datos = array(
-        'id_tipo_documento' => $idTipoDocumento,
-        'primer_nombre'     => $primerNombre,
-        'segundo_nombre'    => $segundoNombre,
-        'primer_apellido'   => $primerApellido,
-        'segundo_apellido'  => $segundoApellido,
-        'numero_documento'  => $numeroDoc,
-        'correo'            => $correo,
-        'telefono'          => $telefono,
-        'direccion'         => $direccion,
-    );
-
-    $resultado = $obj->actualizarPerfil($idUsuario, $datos);
-
-    if ($resultado) {
-        echo json_encode(array('success' => true, 'message' => 'Usuario actualizado correctamente'));
-    } else {
-        echo json_encode(array('success' => false, 'message' => 'Error al actualizar el usuario'));
-    }
-    exit;
-}
 
     // Método para cambiar estado del usuario (AJAX)
     public function cambiarEstadoUsuario() {
@@ -603,8 +524,6 @@ public function actualizarUsuario() {
 
 
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
- // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
-
     public function ver(){
         if (!isset($_SESSION['id_usuario'])) {
             redirect('login.php');
@@ -628,11 +547,41 @@ public function actualizarUsuario() {
 
         $model = new UsuariosModel();
 
-        if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
-            $_SESSION['error_perfil'] = 'El número de identificación ya pertenece a otro usuario.';
+        if (empty($_POST['correo'])) {
+            $_SESSION['error_perfil'] = 'Debe ingresar un correo electrónico.';
             redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
             return;
         }
+
+        if (!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error_perfil'] = 'El correo electrónico no es válido.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        if (empty($_POST['telefono'])) {
+            $_SESSION['error_perfil'] = 'Debe ingresar un teléfono.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        if (!preg_match('/^[0-9]{10}$/', $_POST['telefono'])) {
+            $_SESSION['error_perfil'] = 'El teléfono debe tener 10 dígitos.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+       if (trim($_POST['direccion']) == '') {
+            $_SESSION['error_perfil'] = 'Debe ingresar una dirección.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        // if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
+        //     $_SESSION['error_perfil'] = 'El número de identificación ya pertenece a otro usuario.';
+        //     redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+        //     return;
+        // }
 
         if ($model->correoExisteEnOtroUsuario($_POST['correo'], $idUsuario)) {
             $_SESSION['error_perfil'] = 'El correo electrónico ya pertenece a otro usuario.';

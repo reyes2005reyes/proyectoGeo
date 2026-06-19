@@ -28,7 +28,7 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
 
 <div class="registro-card">
     <div class="registro-header">
-        <img src="../../web/assets/img/logoGeo.png" alt="Logo SIAV">
+        <img src="../../web/assets/img/logo.png" alt="Logo SIAV">
         <h1>SIAV</h1>
         <p>Sistema de Información de Accidentalidad Vial</p>
     </div>
@@ -45,9 +45,9 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
             <p class="seccion-titulo"><i class="fas fa-id-card me-1"></i>Identificación</p>
 
             <div class="field-wrap no-icon">
-                <label for="id_tipo_documento">Tipo de documento</label>
+                <label for="id_tipo_documento">Tipo de documento <i class="text-danger">*</i></label>
                 <select id="id_tipo_documento" name="id_tipo_documento" required oninvalid="this.setCustomValidity('Selecciona un tipo de documento')" oninput="this.setCustomValidity('')">
-                    <option value="">Seleccione</option>
+                    <option value="">Seleccione el tipo de documento</option>
                     <option value="1">Cédula de Ciudadanía</option>
                     <option value="2">Cédula de Extranjería</option>
                     <option value="3">Pasaporte</option>
@@ -55,9 +55,9 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
             </div>
 
             <div class="field-wrap">
-                <label for="numero_documento">Número de identificación</label>
+                <label for="numero_documento">Número de identificación <i class="text-danger">*</i></label>
                 <i class="fas fa-hashtag fi"></i>
-                <input type="number" id="numero_documento" name="numero_documento" placeholder="10234567..." required min="1" max="9999999999" oninvalid="this.setCustomValidity('Ingresa un número de identificación válido')"
+                <input type="number" id="numero_documento" name="numero_documento" placeholder="10234567..." required min="100000" max="999999999999" oninvalid="this.setCustomValidity('Ingresa un número de identificación válido')"
                     oninput="this.setCustomValidity('')">
             </div>
 
@@ -65,7 +65,7 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
             <div class="row g-3">
                 <div class="col-6">
                     <div class="field-wrap">
-                        <label for="primer_nombre">Primer nombre</label>
+                        <label for="primer_nombre">Primer nombre <i class="text-danger">*</i></label>
                         <i class="fas fa-user fi"></i>
                         <input type="text" id="primer_nombre" name="primer_nombre" required placeholder="Tu nombre" minlength="2" maxlength="30" oninvalid="this.setCustomValidity('Ingresa tu primer nombre')" oninput="this.setCustomValidity('')">
                     </div>
@@ -79,7 +79,7 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
                 </div>
                 <div class="col-6">
                     <div class="field-wrap">
-                        <label for="primer_apellido">Primer apellido</label>
+                        <label for="primer_apellido">Primer apellido <i class="text-danger">*</i></label>
                         <i class="fas fa-user fi"></i>
                         <input type="text" id="primer_apellido" name="primer_apellido" required placeholder="Tu primer apellido" minlength="2" maxlength="30" oninvalid="this.setCustomValidity('Ingresa tu primer apellido')" oninput="this.setCustomValidity('')">
                     </div>
@@ -96,20 +96,20 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
             <p class="seccion-titulo"><i class="fas fa-address-book me-1"></i>Información de contacto</p>
 
             <div class="field-wrap">
-                <label for="correo">Correo electrónico</label>
+                <label for="correo">Correo electrónico <i class="text-danger">*</i></label>
                 <i class="fas fa-envelope fi"></i>
                 <input type="email" id="correo" name="correo" required placeholder="tuCorreo@correo.com" oninvalid="this.setCustomValidity('Ingresa un correo electrónico válido')" oninput="this.setCustomValidity('')">
             </div>
 
             <div class="field-wrap">
-                <label for="telefono">Teléfono</label>
+                <label for="telefono">Teléfono <i class="text-danger">*</i></label>
                 <i class="fas fa-phone fi"></i>
                 <input type="number" id="telefono" name="telefono" required min="1000000000" max="9999999999" placeholder="311789...." oninvalid="this.setCustomValidity('Ingresa un número de teléfono válido')"
                     oninput="this.setCustomValidity('')">
             </div>
 
             <div class="field-wrap">
-                <label for="direccion">Dirección de residencia</label>
+                <label for="direccion">Dirección de residencia <i class="text-danger">*</i></label>
                 <i class="fas fa-map-marker-alt fi"></i>
                 <input type="text" id="direccion" name="direccion" required placeholder="Carrera 46 #20-20" minlength="5" maxlength="50" oninvalid="this.setCustomValidity('Ingresa una dirección válida')"
                     oninput="this.setCustomValidity('')">
@@ -117,7 +117,7 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
 
             <p class="seccion-titulo"><i class="fas fa-lock me-1"></i>Seguridad</p>
             <div class="field-wrap">
-                <label for="contrasena">Contraseña</label>
+                <label for="contrasena">Contraseña <i class="text-danger">*</i></label>
                 <i class="fas fa-lock fi"></i>
                 <input type="password" id="contrasena" name="contrasena" required minlength="8" maxlength="20" placeholder="Mínimo 8 caracteres" oninvalid="this.setCustomValidity('La contraseña debe tener mínimo 8 caracteres')" oninput="this.setCustomValidity('')">
                 <button type="button" class="toggle-pass" onclick="togglePass()" aria-label="Mostrar u ocultar contraseña">
