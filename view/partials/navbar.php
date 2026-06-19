@@ -79,27 +79,27 @@
                     		</a>    
                 		</li>
 
-				<li class="nav-item">
-					<a data-bs-toggle="collapse" href="#solicitudesMenu" aria-expanded="false">
-						<i class="fas fa-file-alt"></i>
-						<p>Solicitudes</p>
-						<span class="caret"></span>
-					</a>
-					<div class="collapse" id="solicitudesMenu">
-						<ul class="nav nav-collapse">
-							<li>
-								<a href="<?php echo getUrl('solicitudes','Solicitudes','listar',false); ?>">
-									<span class="sub-item">Listar Solicitudes</span>
-								</a>
-							</li>
-							<li>
-								<a href="<?php echo getUrl('solicitudes','solicitudes','enviarSolicitud',false); ?>">
-									<span class="sub-item">Enviar Solicitud / Reporte</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#solicitudesMenu" aria-expanded="false">
+        <i class="fas fa-file-alt"></i>
+        <p>Solicitudes</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="solicitudesMenu">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="<?php echo getUrl('solicitudes','Solicitudes','listar',false); ?>">
+                    <span class="sub-item">Listar Solicitudes</span>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo getUrl('solicitudes','solicitudes','enviarSolicitud',false); ?>">
+                    <span class="sub-item">Enviar Solicitud / Reporte</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
 
 						<li class="nav-item">
                     		<a href="<?php echo getUrl('reportes','reportes','index',false); ?>">

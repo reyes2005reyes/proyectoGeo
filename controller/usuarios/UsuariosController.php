@@ -216,7 +216,7 @@ class UsuariosController{
             redirect('../../view/recuperarContrasena/SolicitarCodigo.php');
             return;
         }
-        include_once '../../view/recuperarContrasena/NuevaContrasena.php';
+        include_once '../../view/recuperarContrasena/NuevaContraseña.php';
     }
 
     // guardar nueva contraseña
@@ -233,19 +233,19 @@ class UsuariosController{
 
             if (empty($nueva) || empty($confirmar)) {
                 $_SESSION['error_nueva'] = 'Todos los campos son obligatorios.';
-                redirect('../view/recuperarContrasena/NuevaContrasena.php');
+                redirect('../view/recuperarContrasena/NuevaContraseña.php');
                 return;
             }
 
             if ($nueva !== $confirmar) {
                 $_SESSION['error_nueva'] = 'Las contraseñas no coinciden.';
-                redirect('../view/recuperarContrasena/NuevaContrasena.php');
+                redirect('../view/recuperarContrasena/NuevaContraseña.php');
                 return;
             }
 
             if (strlen($nueva) < 8) {
                 $_SESSION['error_nueva'] = 'La contraseña debe tener mínimo 8 caracteres.';
-                redirect('../view/recuperarContrasena/NuevaContrasena.php');
+                redirect('../view/recuperarContrasena/NuevaContraseña.php');
                 return;
             }
 
@@ -261,12 +261,12 @@ class UsuariosController{
                 redirect('/proyectoGeo/web/login.php');
             } else {
                 $_SESSION['error_nueva'] = 'No fue posible actualizar la contraseña. Intente nuevamente.';
-                redirect('../view/recuperarContrasena/NuevaContrasena.php');
+                redirect('../view/recuperarContrasena/NuevaContraseña.php');
             }
 
         } catch (Exception $e) {
             $_SESSION['error_nueva'] = 'Error inesperado. Intente más tarde.';
-            redirect('../view/recuperarContrasena/NuevaContrasena.php');
+            redirect('../view/recuperarContrasena/NuevaContraseña.php');
         }
     }
     // aqui finaliza la funcion para enviar el correo de recuperacion de contraseña
@@ -603,6 +603,8 @@ public function actualizarUsuario() {
 
 
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
+ // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
+
     public function ver(){
         if (!isset($_SESSION['id_usuario'])) {
             redirect('login.php');
@@ -626,41 +628,11 @@ public function actualizarUsuario() {
 
         $model = new UsuariosModel();
 
-        if (empty($_POST['correo'])) {
-            $_SESSION['error_perfil'] = 'Debe ingresar un correo electrónico.';
+        if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
+            $_SESSION['error_perfil'] = 'El número de identificación ya pertenece a otro usuario.';
             redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
             return;
         }
-
-        if (!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['error_perfil'] = 'El correo electrónico no es válido.';
-            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
-            return;
-        }
-
-        if (empty($_POST['telefono'])) {
-            $_SESSION['error_perfil'] = 'Debe ingresar un teléfono.';
-            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
-            return;
-        }
-
-        if (!preg_match('/^[0-9]{10}$/', $_POST['telefono'])) {
-            $_SESSION['error_perfil'] = 'El teléfono debe tener 10 dígitos.';
-            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
-            return;
-        }
-
-       if (trim($_POST['direccion']) == '') {
-            $_SESSION['error_perfil'] = 'Debe ingresar una dirección.';
-            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
-            return;
-        }
-
-        // if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
-        //     $_SESSION['error_perfil'] = 'El número de identificación ya pertenece a otro usuario.';
-        //     redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
-        //     return;
-        // }
 
         if ($model->correoExisteEnOtroUsuario($_POST['correo'], $idUsuario)) {
             $_SESSION['error_perfil'] = 'El correo electrónico ya pertenece a otro usuario.';
