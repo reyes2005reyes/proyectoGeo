@@ -1,3 +1,10 @@
+.contenedor-perfil{
+    width: 100%;
+    max-width: 950px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
 .perfil-card{
     border:none;
     border-radius:18px;
@@ -7,16 +14,20 @@
     border-radius:18px 18px 0 0 !important;
 }
 
+.encabezado-perfil{
+    background-color: #1A3C5E !important
+}
+
 .perfil-header{
     padding-bottom:25px;
-    border-bottom:1px solid #dee2e6;
+    border-bottom:1px solid #1A3C5E ;
 }
 
 .avatar-perfil{
     width:90px;
     height:90px;
     border-radius:50%;
-    background:linear-gradient(135deg,#0d6efd,#0b5ed7);
+    background:linear-gradient(#1A3C5E);
     color:#fff;
     font-size:34px;
     font-weight:bold;
@@ -37,7 +48,7 @@
 }
 
 .cabecera-seccion{
-    background:linear-gradient(135deg,#0d6efd,#0b5ed7);
+    background:linear-gradient(#1A3C5E);
     color:white;
     font-weight:600;
     padding:14px 20px;
