@@ -74,7 +74,7 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok' ||
                                 <i class="fas fa-calendar-check me-1 text-primary"></i>
                                 Fecha de fin <span class="text-danger">*</span>
                             </label>
-                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="<?php echo date('Y-m-d'); ?>" readonly>
+                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="<?php echo date('Y-m-d'); ?>" required max="<?php echo date('Y-m-d'); ?>">
                         </div>
 
                         <!-- 3. Filtro estado -->

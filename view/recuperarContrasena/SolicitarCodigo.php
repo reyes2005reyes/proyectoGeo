@@ -11,61 +11,61 @@ include_once '../../lib/helpers.php';
 <link rel="stylesheet" href="../../web/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="../../web/assets/css/recuperarContrasena.css">
-
 </head>
 
 <body>
 
-<div class="login-card">
-    <div class="login-header">
-        <img src="../../web/assets/img/logo.png" alt="logo">
+<div class="auth-card">
+
+    <div class="auth-header">
+        <img src="../../web/assets/img/logo.png" alt="Logo SIAV">
         <p>Recuperación de contraseña</p>
     </div>
-    <div class="login-body">
+
+    <div class="auth-body">
 
         <h2>Recuperar acceso</h2>
 
         <?php if(isset($_SESSION['error_recuperacion'])): ?>
-            <div class="alerta alerta-error">
-                <?php echo htmlspecialchars($_SESSION['error_recuperacion']); unset($_SESSION['error_recuperacion']); ?>
+            <div class="auth-alert auth-alert-error">
+                <?php
+                echo htmlspecialchars($_SESSION['error_recuperacion']);
+                unset($_SESSION['error_recuperacion']);
+                ?>
             </div>
         <?php endif; ?>
 
         <form action="<?php echo getUrl('usuarios','usuarios','enviarCodigo',false,'ajax'); ?>" method="POST">
 
-            <!-- DOCUMENTO -->
             <div class="input-group-icon">
-                <label>Número de documento</label>
-                <i class="fa fa-id-card icon"></i>
-                <input type="text" name="numero_documento" required minlength="6" maxlength="12" pattern="[0-9]+" inputmode="numeric" placeholder="Ej: 1023456789">
+                <label for="numero_documento">Número de documento</label>
+                <div class="input-wrapper">
+                    <i class="fa fa-id-card icon"></i>
+                    <input type="text" id="numero_documento" name="numero_documento" required minlength="6"maxlength="12" pattern="[0-9]+" inputmode="numeric" placeholder="Ej: 1023456789">
+                </div>
             </div>
 
-            <!-- CORREO -->
             <div class="input-group-icon">
-                <label>Correo electrónico</label>
-                <i class="fa fa-envelope icon"></i>
-                <input type="email" name="correo" required placeholder="correo@ejemplo.com">
+                <label for="correo">Correo electrónico</label>
+                <div class="input-wrapper">
+                    <i class="fa fa-envelope icon"></i>
+                    <input type="email" id="correo" name="correo" required placeholder="correo@ejemplo.com">
+                </div>
             </div>
-
-            <button type="submit" class="btn-login">
+            <button type="submit" class="auth-btn">
                 Enviar código
             </button>
 
         </form>
-
-        <div class="login-links">
+        <div class="auth-link">
             <a href="../../web/login.php">
                 ← Volver al inicio de sesión
             </a>
         </div>
-
     </div>
-
-    <!-- FOOTER -->
-    <div class="login-footer">
+    <div class="auth-footer">
         <p>Secretaría de Movilidad - Todos los derechos reservados</p>
     </div>
-
 </div>
 
 </body>

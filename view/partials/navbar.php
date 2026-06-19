@@ -1,4 +1,3 @@
-
 <body>
 	<div class="wrapper">
 		<!-- Sidebar -->
@@ -26,6 +25,7 @@
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
+
 						<!-- ===================== -->
 						<!-- MENÚ - Modifica aquí  -->
 						<!-- ===================== -->
@@ -35,6 +35,7 @@
 								<p>Mapa</p>
 							</a>
 						</li>
+
 						<li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -209,6 +210,6 @@
 					</div>
 				</nav>
 				<!-- End Navbar -->
-</div>
-	<div class="container">
-    	<div class="page-inner">
+			</div>
+			<div class="container">
+    			<div class="page-inner">
