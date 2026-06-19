@@ -739,7 +739,7 @@ public function guardarSolicitud()
         }
 
         $_SESSION['flash_success'] = "Solicitud enviada con éxito.";
-        header("Location: index.php?modulo=solicitudes&controlador=Solicitudes&funcion=listar");
+        redirect('http://localhost:8080/proyectoGeo/web/index.php?modulo=solicitudes&controlador=Solicitudes&funcion=listar');
         exit;
 
     } catch (Exception $e) {
@@ -752,7 +752,7 @@ public function guardarSolicitud()
         }
 
         $_SESSION['flash_error'] = $e->getMessage();
-        header("Location: index.php?modulo=solicitudes&controlador=Solicitudes&funcion=enviarSolicitud");
+        redirect("http://localhost:8080/proyectoGeo/web/index.php?modulo=solicitudes&controlador=solicitudes&funcion=enviarSolicitud");
         exit;
     }
 }
