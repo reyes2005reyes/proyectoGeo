@@ -201,13 +201,19 @@ class UsuariosModel extends MasterModel {
         return null;
     }
     public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario){
-        $sql = "SELECT id_usuario
-                FROM usuarios
-                WHERE numero_documento = $numeroDocumento
-                AND id_usuario <> $idUsuario";
+    $numeroDocumento = (int) $numeroDocumento;
 
-        return pg_num_rows($this->select($sql)) > 0;
+    if ($numeroDocumento <= 0) {
+        return false;
     }
+
+    $sql = "SELECT id_usuario
+            FROM usuarios
+            WHERE numero_documento = $numeroDocumento
+            AND id_usuario <> $idUsuario";
+
+    return pg_num_rows($this->select($sql)) > 0;
+}
 
     public function correoExisteEnOtroUsuario($correo, $idUsuario){
         $correo = pg_escape_string($correo);

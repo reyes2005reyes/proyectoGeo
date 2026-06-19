@@ -623,6 +623,7 @@ public function actualizarUsuario() {
             redirect('login.php');
             return;
         }
+        
 
         $idUsuario = $_SESSION['id_usuario'];
 

@@ -51,17 +51,19 @@ if (!isset($perfil) || !is_array($perfil)) {
                     <div class="contenido-seccion">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Tipo de documento</label>
-                                <input type="text"
-                                    class="form-control"
-                                    value="<?php echo htmlspecialchars($perfil['nombre_tipo_documento']); ?>"
-                                    readonly>
-                            </div>
+                            <label class="form-label">Tipo de documento</label>
+                            <input type="text"
+                                class="form-control"
+                                value="<?php echo htmlspecialchars($perfil['nombre_tipo_documento']); ?>"
+                                readonly>
+                            <input type="hidden" name="id_tipo_documento" value="<?php echo htmlspecialchars($perfil['id_tipo_documento']); ?>">
+                        </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Número de identificación</label>
                                 <input type="text"
                                     class="form-control"
+                                    name="numero_documento"
                                     value="<?php echo htmlspecialchars($perfil['numero_documento']); ?>"
                                     readonly>
                             </div>
