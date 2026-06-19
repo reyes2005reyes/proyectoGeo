@@ -216,7 +216,7 @@ class UsuariosController{
             redirect('../../view/recuperarContrasena/SolicitarCodigo.php');
             return;
         }
-        include_once '../../view/recuperarContrasena/NuevaContraseña.php';
+        include_once '../../view/recuperarContrasena/NuevaContrasena.php';
     }
 
     // guardar nueva contraseña
@@ -233,19 +233,19 @@ class UsuariosController{
 
             if (empty($nueva) || empty($confirmar)) {
                 $_SESSION['error_nueva'] = 'Todos los campos son obligatorios.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
 
             if ($nueva !== $confirmar) {
                 $_SESSION['error_nueva'] = 'Las contraseñas no coinciden.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
 
             if (strlen($nueva) < 8) {
                 $_SESSION['error_nueva'] = 'La contraseña debe tener mínimo 8 caracteres.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
 
@@ -261,12 +261,12 @@ class UsuariosController{
                 redirect('/proyectoGeo/web/login.php');
             } else {
                 $_SESSION['error_nueva'] = 'No fue posible actualizar la contraseña. Intente nuevamente.';
-                redirect('../view/recuperarContrasena/NuevaContraseña.php');
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
             }
 
         } catch (Exception $e) {
             $_SESSION['error_nueva'] = 'Error inesperado. Intente más tarde.';
-            redirect('../view/recuperarContrasena/NuevaContraseña.php');
+            redirect('../view/recuperarContrasena/NuevaContrasena.php');
         }
     }
     // aqui finaliza la funcion para enviar el correo de recuperacion de contraseña

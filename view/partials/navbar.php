@@ -151,11 +151,14 @@
                 		</li>
 
 						<li class="nav-item">
-							<a href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
-								<i class="fas fa-sign-out-alt"></i>
-								<p>Cerrar Sesión</p>
-							</a>
-						</li>
+       							<?php if (isset($_SESSION['auth']) && $_SESSION['auth'] === 'ok'): ?>
+										<a class="dropdown-item text-danger" href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
+                						<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
+        						<?php else: ?>
+										<a class="dropdown-item text-primary" href="login.php">
+										<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</a>
+        						<?php endif; ?>
+    					</li>
 
 					</ul>
 				</div>

@@ -13,10 +13,16 @@
             return;
         }
 
-        
 
         $numero_documento = $_POST['numero_documento'];
         $contrasena = $_POST['contrasena'];
+        
+
+        if (empty($numero_documento) || empty($contrasena)) {
+            $_SESSION['error'] = 'Debe ingresar el número de documento y la contraseña.';
+            redirect('login.php');
+            exit;
+        }
         
         // solo acepta numeros en el campo de documento, si ingresa String, le mostrara que solo acepta numeros, y no se ejecutara la consulta
         if (!is_numeric($numero_documento)) {
