@@ -71,4 +71,19 @@ class MasterModel extends Connection{
 
         return $row['maximo'] + 1;
     }
+    public function validarPermiso($idRol, $idModulo){
+
+        $sql = "SELECT *
+            FROM permisos
+            WHERE id_rol = $idRol
+            AND id_modulo = $idModulo";
+
+        $result = pg_query($this->getConnect(), $sql);
+
+        if(!$result){
+            die(pg_last_error($this->getConnect()));
+        }
+
+        return (pg_num_rows($result) > 0);
+    }
 }

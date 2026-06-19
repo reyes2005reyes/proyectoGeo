@@ -144,9 +144,9 @@
                 		</li>
 
 						<li class="nav-item">
-                    		<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
+                    		<a href="<?php echo getUrl('educativo','educativo','catalogo',false); ?>">
                         		<i class="fas fa-info-circle"></i>
-								<p>¡Informate!</p>
+								<p>Educación Vial</p>
                     		</a>    
                 		</li>
 
