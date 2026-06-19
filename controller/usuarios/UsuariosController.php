@@ -524,8 +524,6 @@ class UsuariosController{
 
 
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
- // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
-
     public function ver(){
         if (!isset($_SESSION['id_usuario'])) {
             redirect('login.php');
@@ -549,11 +547,41 @@ class UsuariosController{
 
         $model = new UsuariosModel();
 
-        if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
-            $_SESSION['error_perfil'] = 'El número de identificación ya pertenece a otro usuario.';
+        if (empty($_POST['correo'])) {
+            $_SESSION['error_perfil'] = 'Debe ingresar un correo electrónico.';
             redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
             return;
         }
+
+        if (!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error_perfil'] = 'El correo electrónico no es válido.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        if (empty($_POST['telefono'])) {
+            $_SESSION['error_perfil'] = 'Debe ingresar un teléfono.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        if (!preg_match('/^[0-9]{10}$/', $_POST['telefono'])) {
+            $_SESSION['error_perfil'] = 'El teléfono debe tener 10 dígitos.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+       if (trim($_POST['direccion']) == '') {
+            $_SESSION['error_perfil'] = 'Debe ingresar una dirección.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        // if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
+        //     $_SESSION['error_perfil'] = 'El número de identificación ya pertenece a otro usuario.';
+        //     redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+        //     return;
+        // }
 
         if ($model->correoExisteEnOtroUsuario($_POST['correo'], $idUsuario)) {
             $_SESSION['error_perfil'] = 'El correo electrónico ya pertenece a otro usuario.';
