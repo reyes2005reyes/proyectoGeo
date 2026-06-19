@@ -1,13 +1,64 @@
-   .perfil-card {
-        max-width: 860px;
-        margin: 0 auto;
-    }
+.perfil-card{
+    border:none;
+    border-radius:18px;
+}
 
-    .perfil-card .form-control[readonly],
-    .perfil-card .form-select:disabled {
-        background-color: #f8f9fa;
-        color: #495057;
-        opacity: 1;
-        cursor: default;
-    }
-    
+.card-header{
+    border-radius:18px 18px 0 0 !important;
+}
+
+.perfil-header{
+    padding-bottom:25px;
+    border-bottom:1px solid #dee2e6;
+}
+
+.avatar-perfil{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#0d6efd,#0b5ed7);
+    color:#fff;
+    font-size:34px;
+    font-weight:bold;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:auto;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+.seccion-perfil{
+    border:1px solid #dee2e6;
+    border-radius:14px;
+    overflow:hidden;
+    margin-bottom:25px;
+    background:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.cabecera-seccion{
+    background:linear-gradient(135deg,#0d6efd,#0b5ed7);
+    color:white;
+    font-weight:600;
+    padding:14px 20px;
+}
+
+.contenido-seccion{
+    padding:20px;
+}
+
+.form-label{
+    font-weight:600;
+    color:#495057;
+}
+
+.form-control:read-only,
+.form-select:disabled{
+    background:#f8f9fa;
+}
+
+#btnEditar,
+#btnGuardar,
+#btnCancelar{
+    min-width:150px;
+}

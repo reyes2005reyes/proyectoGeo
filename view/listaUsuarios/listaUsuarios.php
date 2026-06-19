@@ -2,7 +2,7 @@
 // La consulta se realiza en el modelo y el controlador pasa las variables
 // Variables esperadas: $usuarios (array) y $numeroDocumento (string)
 if (!isset($usuarios) || !is_array($usuarios)) {
-    $usuarios = [];
+    $usuarios = array();
 }
 
 if (!isset($numeroDocumento)) {

@@ -174,24 +174,27 @@ class UsuariosModel extends MasterModel {
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
     public function obtenerPerfil($idUsuario){
         $sql = "SELECT
-                    id_usuario,
-                    id_tipo_documento,
-                    id_rol,
-                    id_estado_usuario,
-                    primer_nombre,
-                    segundo_nombre,
-                    primer_apellido,
-                    segundo_apellido,
-                    numero_documento,
-                    correo,
-                    telefono,
-                    direccion
-                FROM usuarios
-                WHERE id_usuario = $idUsuario";
+                    u.id_usuario,
+                    u.id_tipo_documento,
+                    td.nombre_tipo_documento,
+                    u.id_rol,
+                    u.id_estado_usuario,
+                    u.primer_nombre,
+                    u.segundo_nombre,
+                    u.primer_apellido,
+                    u.segundo_apellido,
+                    u.numero_documento,
+                    u.correo,
+                    u.telefono,
+                    u.direccion
+                FROM usuarios u
+                INNER JOIN tipos_documento td
+                    ON u.id_tipo_documento = td.id_tipo_documento
+                WHERE u.id_usuario = $idUsuario";
 
         $resultado = $this->select($sql);
 
-        if (pg_num_rows($resultado) > 0) {
+        if(pg_num_rows($resultado) > 0){
             return pg_fetch_assoc($resultado);
         }
 
