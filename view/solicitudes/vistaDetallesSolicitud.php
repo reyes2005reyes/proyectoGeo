@@ -131,7 +131,7 @@ $estado = $solicitud->getIdEstadoSolicitud();
                     <label class="form-label fw-bold">Imagen</label>
 
                     <?php
-                        $imagenRaw = trim(isset($solicitud->getImagen()) ? $solicitud->getImagen() : '');
+                        $imagenRaw = trim($solicitud->getImagen() !== null ? $solicitud->getImagen() : '');
 
                         if (
                             !empty($imagenRaw) &&
@@ -329,7 +329,7 @@ $estado = $solicitud->getIdEstadoSolicitud();
                 <?php endif; ?>
 
                 <!-- GESTIÓN -->
-                <?php if ($idRol == 2 && !in_array($estado, [4,5])): ?>
+                <?php if ($idRol == 2 && !in_array($estado, array(4,5))): ?>
 
                 <div class="col-md-12 mt-4">
                     <hr>

@@ -359,13 +359,13 @@ public function actualizarSolicitud() {
         // =========================
         // MAPA DE ESTADOS
         // =========================
-        $estados = [
+        $estados = array(
             1 => 'Pendiente',
             2 => 'En revisión',
             3 => 'En proceso',
             4 => 'Rechazada',
             5 => 'Completada'
-        ];
+        );
 
         $estadoAnterior =
             isset($estados[$solicitud->getIdEstadoSolicitud()]) ? $estados[$solicitud->getIdEstadoSolicitud()]
@@ -480,11 +480,7 @@ public function enviarSolicitud() {
 
         $model = new Solicitud();
 
-        if (!$model->verificarPermiso($idRol, 2, 2)) {
-            $_SESSION['flash_error'] = "No tienes permiso para enviar solicitudes.";
-            header("Location: index.php");
-            exit;
-        }
+        
 
         $causasAccidente = $model->consultarCausasAccidente();
         $tiposSenal      = $model->consultarTiposSenal();
@@ -525,12 +521,7 @@ public function guardarSolicitud()
 
         $model = new Solicitud();
 
-        if (!$model->verificarPermiso($idRol, 2, 2)) {
-            $_SESSION['flash_error'] = "No tienes permiso para enviar solicitudes.";
-            header("Location: index.php");
-            exit;
-        }
-
+        
         $tipoSolicitudTexto = trim(isset($_POST['tipo_solicitud']) ? $_POST['tipo_solicitud'] : '');
         $descripcion = trim(isset($_POST['descripcion']) ? $_POST['descripcion'] : '');
         $direccion = trim(isset($_POST['direccion']) ? $_POST['direccion'] : '');
@@ -615,12 +606,12 @@ public function guardarSolicitud()
             );
 
             // Extensiones permitidas
-            $permitidas = [
+            $permitidas = array(
                 'jpg',
                 'jpeg',
                 'png',
                 'gif'
-            ];
+            );
 
             if (!in_array($extension, $permitidas)) {
                 throw new Exception(
@@ -744,7 +735,7 @@ public function guardarSolicitud()
 
         if (!$resultado) {
             $error = $model->getLastError();
-            throw new Exception($error ?: "No se pudo guardar la solicitud. Revisa el log del servidor.");
+            throw new Exception($error ? $error : "No se pudo guardar la solicitud. Revisa el log del servidor.");
         }
 
         $_SESSION['flash_success'] = "Solicitud enviada con éxito.";

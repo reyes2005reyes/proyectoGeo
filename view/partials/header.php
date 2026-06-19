@@ -1,5 +1,3 @@
-
-
 <?php if(!defined('HEADER_LOADED')) { define('HEADER_LOADED', true); ?>
 
  

@@ -418,13 +418,13 @@ public function actualizarUsuario() {
     }
 
     // Recoger y limpiar campos editables por todos
-    $primerNombre    = trim(isset($_POST['primer_nombre'])    ? $_POST['primer_nombre']    : '');
-    $segundoNombre   = trim(isset($_POST['segundo_nombre'])   ? $_POST['segundo_nombre']   : '');
+    $primerNombre = trim(isset($_POST['primer_nombre']) ? $_POST['primer_nombre']    : '');
+    $segundoNombre  = trim(isset($_POST['segundo_nombre'])   ? $_POST['segundo_nombre']   : '');
     $primerApellido  = trim(isset($_POST['primer_apellido'])  ? $_POST['primer_apellido']  : '');
     $segundoApellido = trim(isset($_POST['segundo_apellido']) ? $_POST['segundo_apellido'] : '');
-    $correo          = trim(isset($_POST['correo'])           ? $_POST['correo']           : '');
-    $telefono        = trim(isset($_POST['telefono'])         ? $_POST['telefono']         : '');
-    $direccion       = trim(isset($_POST['direccion'])        ? $_POST['direccion']        : '');
+    $correo  = trim(isset($_POST['correo']) ? $_POST['correo']   : '');
+    $telefono  = trim(isset($_POST['telefono']) ? $_POST['telefono']  : '');
+    $direccion = trim(isset($_POST['direccion']) ? $_POST['direccion'] : '');
 
     // Validar campos obligatorios
     if (empty($primerNombre) || empty($primerApellido) || empty($correo) || empty($telefono) || empty($direccion)) {

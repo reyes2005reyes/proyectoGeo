@@ -499,19 +499,11 @@
             return $sol;
         }
 
-        private function queryOne($sql, $params = array()) {
+        public function queryOne($sql, $params = array()) {
 
             $res = $this->query($sql, $params);
-            return pg_fetch_assoc($res) ?: null;
-        }
-
             $fila = pg_fetch_assoc($res);
-
-            if ($fila) {
-                return $fila;
-            }
-
-            return null;
+            return $fila ? $fila : null;
         }
 
 
@@ -651,12 +643,12 @@
 
             $this->query(
                 $sql,
-                [
+                array(
                     $idSolicitud,
                     $idFuncionario,
                     $idEstado,
                     $mensaje
-                ]
+                )
             );
 
             $sqlUpdate = "
@@ -667,10 +659,10 @@
 
             $this->query(
                 $sqlUpdate,
-                [
+                array(
                     $idEstado,
                     $idSolicitud
-                ]
+                )
             );
 
             return array(
@@ -1079,7 +1071,7 @@
                         (id_solicitud, id_causa_accidente, observacion)
                         VALUES ($1, $2, $3)
                         RETURNING id_solicitud_reporte_accidente",
-                        [$id_solicitud, $id_causa_accidente, $descripcion]
+                        array($id_solicitud, $id_causa_accidente, $descripcion)
                     );
 
                     $rowReporte = pg_fetch_assoc($resReporte);
@@ -1096,7 +1088,7 @@
                                     "INSERT INTO vehiculos
                                     (id_solicitud_reporte_accidente, id_tipo_vehiculo)
                                     VALUES ($1, $2)",
-                                    [$idReporte, (int)$idVehiculo]
+                                    array($idReporte, (int)$idVehiculo)
                                 );
                             }
                         }
@@ -1114,11 +1106,11 @@
                                 (nombre_completo, documento, observacion)
                                 VALUES ($1, $2, $3)
                                 RETURNING id_lesionado",
-                                [
+                                array(
                                     $nombre,
                                     trim(isset($lesionado['documento']) ? $lesionado['documento'] : ''),
                                     trim(isset($lesionado['observacion']) ? $lesionado['observacion'] : '')
-                                ]
+                                )
                             );
 
                             $rowLes = pg_fetch_assoc($resLes);
@@ -1129,7 +1121,7 @@
                                     "INSERT INTO reporte_lesionado
                                     (id_solicitud_reporte_accidente, id_lesionado)
                                     VALUES ($1, $2)",
-                                    [$idReporte, $idLes]
+                                    array($idReporte, $idLes)
                                 );
                             }
                         }
@@ -1145,7 +1137,7 @@
                         "INSERT INTO solicitudes_senal_mal_estado
                         (id_solicitud, id_tipo_senal, id_categoria, id_tipo_danio, id_orientacion)
                         VALUES ($1, $2, $3, $4, $5)",
-                        [$id_solicitud, $id_tipo_senal, $id_categoria, $id_tipo_danio, $id_orientacion]
+                        array($id_solicitud, $id_tipo_senal, $id_categoria, $id_tipo_danio, $id_orientacion)
                     );
                     break;
 
@@ -1158,7 +1150,7 @@
                         "INSERT INTO solicitudes_nueva_senalizacion
                         (id_solicitud, id_tipo_senal, id_categoria, id_orientacion)
                         VALUES ($1, $2, $3, $4)",
-                        [$id_solicitud, $id_tipo_senal, $id_categoria, $id_orientacion]
+                        array($id_solicitud, $id_tipo_senal, $id_categoria, $id_orientacion)
                     );
                     break;
 
@@ -1171,7 +1163,7 @@
                         "INSERT INTO solicitudes_reductor_mal_estado
                         (id_solicitud, id_tipo_reductor, id_categoria, id_tipo_danio)
                         VALUES ($1, $2, $3, $4)",
-                        [$id_solicitud, $id_tipo_reductor, $id_categoria, $id_tipo_danio]
+                        array($id_solicitud, $id_tipo_reductor, $id_categoria, $id_tipo_danio)
                     );
                     break;
 
@@ -1184,7 +1176,7 @@
                         "INSERT INTO solicitudes_nuevo_reductor
                         (id_solicitud, id_categoria, id_tipo_reductor)
                         VALUES ($1, $2, $3)",
-                        [$id_solicitud, $id_categoria, $id_tipo_reductor]
+                        array($id_solicitud, $id_categoria, $id_tipo_reductor)
                     );
                     break;
 
@@ -1197,7 +1189,7 @@
                         "INSERT INTO solicitudes_via_publica_mal_estado
                         (id_solicitud, id_tipo_danio)
                         VALUES ($1, $2)",
-                        [$id_solicitud, $id_tipo_danio]
+                        array($id_solicitud, $id_tipo_danio)
                     );
                     break;
 
@@ -1210,7 +1202,7 @@
                         "INSERT INTO solicitudes_pqrsf
                         (id_solicitud, id_tipo_pqrsf, mensaje)
                         VALUES ($1, $2, $3)",
-                        [$id_solicitud, $id_tipo_pqrsf, $descripcion]
+                        array($id_solicitud, $id_tipo_pqrsf, $descripcion)
                     );
                     break;
 
