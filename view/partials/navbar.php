@@ -78,45 +78,27 @@
                     		</a>    
                 		</li>
 
-						<?php
-                            $permListarSolicitud = false;
-                            $permEnviarSolicitud = false;
-
-                            if (isset($_SESSION['id_rol'])) {
-                                require_once dirname(__FILE__) . '/../../model/solicitudes/SolicitudesModel.php';
-                                $model = new Solicitud();
-                                $idRol = (int) $_SESSION['id_rol'];
-                                $permListarSolicitud = $model->verificarPermiso($idRol, 2, 1);
-                                $permEnviarSolicitud = $model->verificarPermiso($idRol, 2, 2);
-                            }
-                        ?>
-                        <?php if ($permListarSolicitud || $permEnviarSolicitud): ?>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#solicitudesMenu" aria-expanded="false">
-                                <i class="fas fa-file-alt"></i>
-                                <p>Solicitudes</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="solicitudesMenu">
-                                <ul class="nav nav-collapse">
-                                    <?php if ($permListarSolicitud): ?>
-                                    <li>
-                                        <a href="<?php echo getUrl('solicitudes','Solicitudes','listar',false); ?>">
-                                            <span class="sub-item">Listar Solicitudes</span>
-                                        </a>
-                                    </li>
-                                    <?php endif; ?>
-                                    <?php if ($permEnviarSolicitud): ?>
-                                    <li>
-                                        <a href="<?php echo getUrl('solicitudes','solicitudes','enviarSolicitud',false); ?>">
-                                            <span class="sub-item">Enviar Solicitud / Reporte </span>
-                                        </a>
-                                    </li>
-                                    <?php endif; ?>
-                                </ul>
-                            </div>
-                        </li>
-                        <?php endif; ?>
+				<li class="nav-item">
+					<a data-bs-toggle="collapse" href="#solicitudesMenu" aria-expanded="false">
+						<i class="fas fa-file-alt"></i>
+						<p>Solicitudes</p>
+						<span class="caret"></span>
+					</a>
+					<div class="collapse" id="solicitudesMenu">
+						<ul class="nav nav-collapse">
+							<li>
+								<a href="<?php echo getUrl('solicitudes','Solicitudes','listar',false); ?>">
+									<span class="sub-item">Listar Solicitudes</span>
+								</a>
+							</li>
+							<li>
+								<a href="<?php echo getUrl('solicitudes','solicitudes','enviarSolicitud',false); ?>">
+									<span class="sub-item">Enviar Solicitud / Reporte</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
 
 						<li class="nav-item">
                     		<a href="<?php echo getUrl('reportes','reportes','index',false); ?>">
