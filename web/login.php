@@ -30,8 +30,7 @@ if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.
 
 <div class="login-card">
     <div class="login-header">
-        <img src="assets/img/logoGeo.png" alt="Logo SIAV">
-        <h1>SIAV</h1>
+        <img class="logo" src="assets/img/logo.png" alt="Logo SIAV">
         <p>Sistema de Información de Accidentalidad Vial</p>
     </div>
     <div class="login-body">
@@ -57,16 +56,16 @@ if (!file_exists('../lib/helpers.php') || !file_exists('../view/partials/header.
             </div>
         <?php endif; ?>
 
-        <form action="<?php echo getUrl('acceso','acceso','login', false, 'ajax'); ?>" method="POST" novalidate>
+        <form action="<?php echo getUrl('acceso','acceso','login', false, 'ajax'); ?>" method="POST" novalidate >
 
             <div class="input-group-icon">
-                <label for="numero_documento">Número de documento</label>
+                <label for="numero_documento">Número de documento <i class="text-danger">*</i></label>
                 <i class="fas fa-id-card icon"></i>
                 <input type="text" id="numero_documento" name="numero_documento" placeholder="Ingrese su documento" required oninvalid="this.setCustomValidity('Por favor ingresa tu número de documento')" oninput="this.setCustomValidity('')">
             </div>
 
             <div class="input-group-icon">
-                <label for="password">Contraseña</label>
+                <label for="password">Contraseña <i class="text-danger">*</i></label>
                 <i class="fas fa-lock icon"></i>
                 <input type="password" id="password" name="contrasena" placeholder="Ingrese su contraseña" required oninvalid="this.setCustomValidity('Por favor ingresa tu contraseña')" oninput="this.setCustomValidity('')">
                 <button type="button" class="toggle-pass" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">

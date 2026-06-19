@@ -200,6 +200,7 @@ class UsuariosModel extends MasterModel {
 
         return null;
     }
+    
     public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario){
         $sql = "SELECT id_usuario
                 FROM usuarios
@@ -220,29 +221,35 @@ class UsuariosModel extends MasterModel {
         return pg_num_rows($this->select($sql)) > 0;
     }
 
-    public function actualizarPerfil($idUsuario, $datos){
-        $primer_nombre = pg_escape_string($datos['primer_nombre']);
-        $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
-        $primer_apellido = pg_escape_string($datos['primer_apellido']);
-        $segundo_apellido = pg_escape_string(isset($datos['segundo_apellido']) ? $datos['segundo_apellido'] : '');
-        $correo = pg_escape_string($datos['correo']);
-        $direccion = pg_escape_string($datos['direccion']);
+    // Esta funcion creo q se usa para el modulo de conusltar usuarios
 
-        $sql = "UPDATE usuarios SET
-            id_tipo_documento = {$datos['id_tipo_documento']},
-            primer_nombre = '$primer_nombre',
-            segundo_nombre = '$segundo_nombre',
-            primer_apellido = '$primer_apellido',
-            segundo_apellido = '$segundo_apellido',
-            numero_documento = {$datos['numero_documento']},
-            correo = '$correo',
-            telefono = {$datos['telefono']},
-            direccion = '$direccion'
-            WHERE id_usuario = $idUsuario";
+    // public function actualizarPerfil($idUsuario, $datos){
+        
+    //     $primer_nombre = pg_escape_string($datos['primer_nombre']);
+    //     $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
+    //     $primer_apellido = pg_escape_string($datos['primer_apellido']);
+    //     $segundo_apellido = pg_escape_string(isset($datos['segundo_apellido']) ? $datos['segundo_apellido'] : '');
+    //     $correo = pg_escape_string($datos['correo']);
+    //     $direccion = pg_escape_string($datos['direccion']);
+    //     $telefono = pg_escape_string($datos['telefono']);
 
-        return $this->update($sql);
-    }
+    //     $sql = "UPDATE usuarios SET
+    //         id_tipo_documento = {$datos['id_tipo_documento']},
+    //         primer_nombre = '$primer_nombre',
+    //         segundo_nombre = '$segundo_nombre',
+    //         primer_apellido = '$primer_apellido',
+    //         segundo_apellido = '$segundo_apellido',
+    //         numero_documento = {$datos['numero_documento']},
+    //         correo = '$correo',
+    //         telefono = {$datos['telefono']},
+    //         direccion = '$direccion'
+    //         WHERE id_usuario = $idUsuario";
 
+    //     return $this->update($sql);
+    // }
+
+    
+    
 }
 
 ?>
