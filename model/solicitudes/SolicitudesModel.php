@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     require_once dirname(__FILE__) . '/../MasterModel.php';
 
@@ -501,7 +501,7 @@
 
     private function queryOne($sql, $params = array()) {
             $res = $this->query($sql, $params);
-            return pg_fetch_assoc($res) ?: null;
+            $_row = pg_fetch_assoc($res); return $_row !== false ? $_row : null;
         }
 
         
@@ -523,7 +523,7 @@
                 $sql .= " WHERE s.id_usuario = $1
                         ORDER BY s.id_solicitud DESC";
 
-                $result = $this->query($sql, [$idUsuario]);
+                $result = $this->query($sql, array($idUsuario));
 
             } else {
 
@@ -561,7 +561,7 @@
                 $sql = $this->getBaseQuery() .
                     " WHERE s.id_solicitud = $1";
 
-                $result = $this->query($sql, [$id]);
+                $result = $this->query($sql, array($id));
 
                 
                 if ($row = pg_fetch_assoc($result)) {
@@ -627,10 +627,10 @@
 
             if ($this->yaTieneRespuesta($idSolicitud)) {
 
-                return [
+                return array(
                     'ok' => false,
                     'msg' => 'La solicitud ya fue respondida'
-                ];
+                );
             }
 
             $sql = "
@@ -668,10 +668,10 @@
                 ]
             );
 
-            return [
+            return array(
                 'ok' => true,
                 'msg' => 'Respuesta registrada correctamente'
-            ];
+            );
 
         } catch (Exception $e) {
 
@@ -680,10 +680,10 @@
                 $e->getMessage()
             );
 
-            return [
+            return array(
                 'ok' => false,
                 'msg' => 'Error interno'
-            ];
+            );
         }
     }
 
@@ -709,7 +709,7 @@
             LIMIT 1
         ";
 
-        $result = $this->query($sql, [$idSolicitud]);
+        $result = $this->query($sql, array($idSolicitud));
 
         return pg_fetch_assoc($result);
     }
@@ -722,7 +722,7 @@
             LIMIT 1
         ";
 
-        $result = $this->query($sql, [$idSolicitud]);
+        $result = $this->query($sql, array($idSolicitud));
 
         return pg_num_rows($result) > 0;
     }
@@ -738,7 +738,7 @@
             LIMIT 1
         ";
 
-        $result = $this->query($sql, [$idRol, $idModulo, $idAccion]);
+        $result = $this->query($sql, array($idRol, $idModulo, $idAccion));
 
         return pg_num_rows($result) > 0;
     }
@@ -756,13 +756,13 @@
                 SELECT id_estado_solicitud 
                 FROM solicitudes 
                 WHERE id_solicitud = $1
-            ", [$idSolicitud]);
+            ", array($idSolicitud));
 
             if (!$estadoActual) {
-                return [
+                return array(
                     'ok' => false,
                     'msg' => 'Solicitud no encontrada'
-                ];
+                );
             }
 
             $estadoActualId = $estadoActual['id_estado_solicitud'];
@@ -773,10 +773,10 @@
             // 3. VALIDACIÓN: reglas de negocio
             // =========================
             if (!$this->esTransicionValida($estadoActualId, $idEstado)) {
-                return [
+                return array(
                     'ok' => false,
                     'msg' => 'Transición de estado no permitida'
-                ];
+                );
             }
 
             // =========================
@@ -788,15 +788,15 @@
                 WHERE id_solicitud = $2
             ";
 
-            $this->query($sql, [
+            $this->query($sql, array(
                 $idEstado,
                 $idSolicitud
-            ]);
+            ));
 
-            return [
+            return array(
                 'ok' => true,
                 'msg' => 'Estado actualizado correctamente'
-            ];
+            );
 
         } catch (Exception $e) {
 
@@ -811,10 +811,10 @@
 
             error_log("Error actualizarEstadoSolicitud: " . $e->getMessage());
 
-            return [
+            return array(
                 'ok' => false,
                 'msg' => 'Error al actualizar estado'
-            ];
+            );
         }
     }
 
@@ -836,11 +836,11 @@
         }
 
         // ✔ Progresión lineal
-        $permitidas = [
-            1 => [2, 4],
-            2 => [3, 4],
-            3 => [5, 4],
-        ];
+        $permitidas = array(
+            1 => array(2, 4),
+            2 => array(3, 4),
+            3 => array(5, 4)
+        );
 
         return in_array($estadoNuevo, isset($permitidas[$estadoActual]) ? $permitidas[$estadoActual] : array());
     }
@@ -856,11 +856,11 @@
         // rechazo siempre permitido (lo manejas aparte)
         $rechazo = 4;
 
-        $flujo = [
+        $flujo = array(
             1 => 2,
             2 => 3,
             3 => 5
-        ];
+        );
 
         return array(
             'siguiente' => isset($flujo[$estadoActual]) ? $flujo[$estadoActual] : null,
@@ -879,7 +879,7 @@
             LIMIT 1
         ";
 
-        $result = $this->query($sql, [$idSolicitud]);
+        $result = $this->query($sql, array($idSolicitud));
 
         $row = pg_fetch_assoc($result);
 
@@ -916,13 +916,13 @@
             VALUES ($1,$2,$3,$4,$5,NOW())
         ";
 
-        return $this->query($sql, [
+        return $this->query($sql, array(
             $idSolicitud,
             $idUsuarioSolicitante,
             $idUsuarioEjecutor,
             $idEstado,
             $mensaje
-        ]);
+        ));
     }
 
     public function envioReportes_o_Solicitudes(
@@ -954,7 +954,7 @@
                 WHERE id_tipo_solicitud = $1
             ";
 
-            $resTipo = $this->query($sqlTipo, [$id_tipo_solicitud]);
+            $resTipo = $this->query($sqlTipo, array($id_tipo_solicitud));
             if (!$resTipo || pg_num_rows($resTipo) === 0) {
                 throw new Exception("Tipo de solicitud inválido.");
             }
@@ -1043,7 +1043,7 @@
                 RETURNING id_solicitud
             ";
 
-            $params = [
+            $params = array(
                 $id_usuario,
                 $id_estado_solicitud,
                 $id_tipo_solicitud,
@@ -1051,7 +1051,7 @@
                 $direccion,
                 $coordenadas,
                 $imagen_url
-            ];
+            );
 
             $res = $this->query($sql, $params);
             $row = pg_fetch_assoc($res);
@@ -1376,7 +1376,7 @@
             WHERE codigo = $1
         ";
 
-        $row = $this->queryOne($sql, [$codigo]);
+        $row = $this->queryOne($sql, array($codigo));
         return isset($row['id_tipo_solicitud']) ? $row['id_tipo_solicitud'] : null;
     }
 
@@ -1411,7 +1411,7 @@
             ORDER BY a.fecha DESC
         ";
 
-        $resultado = $this->query($sql, [$idSolicitud]);
+        $resultado = $this->query($sql, array($idSolicitud));
 
         $auditorias = array();
 
