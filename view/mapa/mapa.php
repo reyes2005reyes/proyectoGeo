@@ -6,7 +6,7 @@
     <title>Visor Dinámico Cali</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" type="text/css" href="misc/img/dc.css"> -->
-    <script type="text/javascript" src="/misc/lib/mscross-1.1.9.js"></script>
+    <script type="text/javascript" src="/proyectoGeo/web/misc/lib/mscross-1.1.9.js"></script>
 </head>
 <body>
 	<nav class="navbar shadow-sm mb-3" style="background-color:#1A3C5E;">
@@ -19,7 +19,7 @@
 		<div class="row g-3">
 
 			<!-- MAPA -->
-			<div class="col-12 col-lg-9">
+			<div class="col-12 col-lg-10">
 
 				<div class="card shadow-sm">
 					<div class="card-header text-white text-center fw-semibold"
@@ -52,50 +52,52 @@
 			</div>
 
 			<!-- PANEL DERECHO -->
-			<div class="col-12 col-lg-3">
+			<div class="col-12 col-lg-2">
 
-				<!-- Minimapa -->
-				<div class="card shadow-sm mb-3">
-					<div class="card-header text-white fw-semibold"
-						style="background-color:#1A3C5E;">
-						Referencia
-					</div>
+				<div style="max-width:320px;">
 
-					<div class="card-body p-2 text-center">
-
-						<div id="dc_main2"
-							style="width:100%; height:180px; position:relative;">
+					<!-- Minimapa -->
+					<div class="card shadow-sm mb-3" style="max-width:320px;">
+						<div class="card-header text-white fw-semibold"
+							style="background-color:#1A3C5E;">
+							Referencia
 						</div>
 
-					</div>
-				</div>
-
-				<!-- Capas -->
-				<div class="card shadow-sm">
-					<div class="card-header text-white fw-semibold"
-						style="background-color:#1A3C5E;">
-						Capas
+						<div class="card-body p-2 text-center">
+							<div id="dc_main2"
+								style="width:100%; max-width:250px; height:180px; margin:auto; position:relative;">
+							</div>
+						</div>
 					</div>
 
-					<div class="card-body">
-						<form name="select_layers">
-							<div class="form-switch">
-								<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[0]" value="Cali" id="chk0">
-								<label class="form-check-label" for="chk0">Cali</label>
-							</div>
-							<div class="form-switch">
-								<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[1]" value="Comunas" id="chk1">
-								<label class="form-check-label" for="chk1">Comunas</label>
-							</div>
-							<div class="form-switch">
-								<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[2]" value="Barrio" id="chk2">
-								<label class="form-check-label" for="chk2">Barrio</label>
-							</div>
-							<div class="form-switch">
-								<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[3]" value="MallaVial" id="chk3">
-								<label class="form-check-label" for="chk3">Malla Vial</label>
-							</div>	
-						</form>
+					<!-- Capas -->
+					<div class="card shadow-sm" style="max-width:320px;">
+						<div class="card-header text-white fw-semibold"
+							style="background-color:#1A3C5E;">
+							Capas
+						</div>
+
+						<div class="card-body">
+							<form name="select_layers">
+								<div class="form-switch">
+									<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[0]" value="Cali" id="chk0">
+									<label class="form-check-label" for="chk0">Cali</label>
+								</div>
+								<div class="form-switch">
+									<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[1]" value="Comunas" id="chk1">
+									<label class="form-check-label" for="chk1">Comunas</label>
+								</div>
+								<div class="form-switch">
+									<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[2]" value="Barrio" id="chk2">
+									<label class="form-check-label" for="chk2">Barrio</label>
+								</div>
+								<div class="form-switch">
+									<input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[3]" value="MallaVial" id="chk3">
+									<label class="form-check-label" for="chk3">Malla Vial</label>
+								</div>	
+							</form>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -115,7 +117,6 @@
 			mapaDiv.style.width = mapaDiv.parentNode.offsetWidth + "px";
 
 			myMap1 = new msMap(mapaDiv, 'standardRight');
-
 			myMap1.setCgi('/cgi-bin/mapserv.exe');
 			myMap1.setMapFile('c:/ms4w/Apache/htdocs/proyectoGeo/web/cali.map');
 			myMap1.setFullExtent(1053867, 1068491, 860190, 879441);
@@ -123,7 +124,6 @@
 
 			// MINIMAPA
 			myMap2 = new msMap(document.getElementById("dc_main2"));
-
 			myMap2.setActionNone();
 			myMap2.setFullExtent(1053867, 1068491, 860190, 879441);
 			myMap2.setMapFile('c:/ms4w/Apache/htdocs/proyectoGeo/web/cali.map');
@@ -197,7 +197,6 @@
 				myMap1.redraw();
 
 			}, 300);
-
 		};
 
     </script>
