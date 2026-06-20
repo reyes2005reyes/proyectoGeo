@@ -1,18 +1,18 @@
 <div class="container mt-4">
 
-```
 <div class="row mb-4">
     <div class="col-md-12 text-center">
 
-        <h2 class="text-danger">
-            Señales Reglamentarias
+        <h2 class="text-success">
+            Reductores de Velocidad
         </h2>
 
         <p class="lead">
-            Las señales reglamentarias tienen como finalidad indicar
-            prohibiciones, restricciones, obligaciones y prioridades en la vía.
-            Su cumplimiento es obligatorio para todos los usuarios y su
-            incumplimiento puede generar sanciones y situaciones de riesgo.
+            Los reductores de velocidad son dispositivos físicos instalados
+            sobre la vía con el propósito de disminuir la velocidad de los
+            vehículos y mejorar la seguridad vial. Se utilizan especialmente
+            en zonas escolares, áreas residenciales, cruces peatonales y
+            lugares donde se requiere proteger a los usuarios de la vía.
         </p>
 
         <hr>
@@ -22,7 +22,7 @@
 
 <div class="row">
 
-    <?php foreach($reglamentarias as $senal){ ?>
+    <?php foreach($reductores as $senal){ ?>
 
         <div class="col-md-4 mb-4">
 
@@ -36,7 +36,7 @@
                         style="max-height:120px;"
                     >
 
-                    <span class="badge badge-danger">
+                    <span class="badge badge-success">
                         <?php echo $senal['codigo']; ?>
                     </span>
 
@@ -55,5 +55,7 @@
         </div>
 
     <?php } ?>
+
+</div>
 
 </div>
