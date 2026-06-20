@@ -172,6 +172,8 @@ class UsuariosModel extends MasterModel {
 
 
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
+
+    // Esta funcion si la utiliza el modulo miPerfil
     public function obtenerPerfil($idUsuario){
         $sql = "SELECT
                     u.id_usuario,
@@ -200,20 +202,23 @@ class UsuariosModel extends MasterModel {
 
         return null;
     }
+
+    // Fin
+    
     public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario){
     $numeroDocumento = (int) $numeroDocumento;
 
-    if ($numeroDocumento <= 0) {
-        return false;
+        if ($numeroDocumento <= 0) {
+            return false;
+        }
+
+        $sql = "SELECT id_usuario
+                FROM usuarios
+                WHERE numero_documento = $numeroDocumento
+                AND id_usuario <> $idUsuario";
+
+        return pg_num_rows($this->select($sql)) > 0;
     }
-
-    $sql = "SELECT id_usuario
-            FROM usuarios
-            WHERE numero_documento = $numeroDocumento
-            AND id_usuario <> $idUsuario";
-
-    return pg_num_rows($this->select($sql)) > 0;
-}
 
     public function correoExisteEnOtroUsuario($correo, $idUsuario){
         $correo = pg_escape_string($correo);
@@ -226,6 +231,7 @@ class UsuariosModel extends MasterModel {
         return pg_num_rows($this->select($sql)) > 0;
     }
 
+    // Esta funcion la utiliza el modulo usuarios
     public function actualizarPerfil($idUsuario, $datos){
         $primer_nombre = pg_escape_string($datos['primer_nombre']);
         $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
@@ -249,6 +255,23 @@ class UsuariosModel extends MasterModel {
         return $this->update($sql);
     }
 
-}
+
+    //Funcion propia para actualizar los datos de miPerfil
+
+    public function actualizarDatosPerfil($idUsuario, $correo, $telefono, $direccion){
+
+        $correo = pg_escape_string($correo);
+        $direccion = pg_escape_string($direccion);
+        $telefono = $telefono;
+
+        $sql = "UPDATE usuarios
+                SET correo = '$correo',
+                    telefono = $telefono,
+                    direccion = '$direccion'
+                WHERE id_usuario = $idUsuario";
+
+        return $this->update($sql);
+    }
+    }
 
 ?>

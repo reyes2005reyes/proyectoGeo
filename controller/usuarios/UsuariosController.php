@@ -617,49 +617,78 @@ public function actualizarUsuario() {
         require_once __DIR__ . '/../../view/verPerfil/verPerfil.php';
     }
 
-   public function actualizar(){
+  public function actualizar(){
 
         if (!isset($_SESSION['id_usuario'])) {
             redirect('login.php');
             return;
         }
-        
 
         $idUsuario = $_SESSION['id_usuario'];
 
         $model = new UsuariosModel();
 
-        if ($model->documentoExisteEnOtroUsuario($_POST['numero_documento'], $idUsuario)) {
-            $_SESSION['error_perfil'] = 'El número de identificación ya pertenece a otro usuario.';
+        $correo = trim($_POST['correo']);
+        $telefono = $_POST['telefono'];
+        $direccion = trim($_POST['direccion']);
+
+        // Validar que la direccion no este vacia
+        if ($direccion == '') {
+            $_SESSION['error_perfil'] = 'Debe ingresar una dirección.';
             redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
             return;
         }
 
-        if ($model->correoExisteEnOtroUsuario($_POST['correo'], $idUsuario)) {
+        // Validar longitud minima de la direccion
+        if (strlen($direccion) < 5) {
+            $_SESSION['error_perfil'] = 'La dirección debe tener al menos 5 caracteres.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        // Validar correo vacio
+        if ($correo == '') {
+            $_SESSION['error_perfil'] = 'Debe ingresar un correo electrónico.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        // Validar formato del correo
+        // preg_match() sirve para verificar si un texto cumple un patrón (expresión regular).
+        if (!preg_match('/^[^@\s]+@[^@\s]+\.[^@\s]+$/', $correo)) {
+            $_SESSION['error_perfil'] = 'El correo electrónico no es válido.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        // Validar correo duplicado
+        if ($model->correoExisteEnOtroUsuario($correo, $idUsuario)) {
             $_SESSION['error_perfil'] = 'El correo electrónico ya pertenece a otro usuario.';
             redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
             return;
         }
 
-        $datos = array(
-            'id_tipo_documento' => $_POST['id_tipo_documento'],
-            'numero_documento' => $_POST['numero_documento'],
-            'primer_nombre' => trim($_POST['primer_nombre']),
-            'segundo_nombre' => trim(isset($_POST['segundo_nombre']) ? $_POST['segundo_nombre'] : ''),
-            'primer_apellido' => trim($_POST['primer_apellido']),
-            'segundo_apellido' => trim(isset($_POST['segundo_apellido']) ? $_POST['segundo_apellido'] : ''),
-            'correo' => trim($_POST['correo']),
-            'telefono' => $_POST['telefono'],
-            'direccion' => trim($_POST['direccion'])
+        // Validar teléfono vacío
+        if ($telefono == '') {
+            $_SESSION['error_perfil'] = 'Debe ingresar un teléfono.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+
+        // Validar formato del teléfono
+        if (!preg_match('/^[0-9]{10}$/', $telefono)) {
+            $_SESSION['error_perfil'] = 'El teléfono debe tener 10 dígitos.';
+            redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
+            return;
+        }
+        $resultado = $model->actualizarDatosPerfil(
+            $idUsuario,
+            $correo,
+            $telefono,
+            $direccion
         );
 
-        $resultado = $model->actualizarPerfil($idUsuario, $datos);
-
         if ($resultado) {
-            $_SESSION['primer_nombre'] = $datos['primer_nombre'];
-            $_SESSION['primer_apellido'] = $datos['primer_apellido'];
-            $_SESSION['numero_documento'] = $datos['numero_documento'];
-
             $_SESSION['exito_perfil'] = 'Datos actualizados correctamente.';
         } else {
             $_SESSION['error_perfil'] = 'No fue posible actualizar los datos.';
@@ -667,10 +696,6 @@ public function actualizarUsuario() {
 
         redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
     }
-
-
-
-
     
 
 }

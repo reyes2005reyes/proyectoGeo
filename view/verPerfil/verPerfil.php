@@ -51,19 +51,17 @@ if (!isset($perfil) || !is_array($perfil)) {
                     <div class="contenido-seccion">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                            <label class="form-label">Tipo de documento</label>
-                            <input type="text"
-                                class="form-control"
-                                value="<?php echo htmlspecialchars($perfil['nombre_tipo_documento']); ?>"
-                                readonly>
-                            <input type="hidden" name="id_tipo_documento" value="<?php echo htmlspecialchars($perfil['id_tipo_documento']); ?>">
-                        </div>
+                                <label class="form-label">Tipo de documento</label>
+                                <input type="text"
+                                    class="form-control"
+                                    value="<?php echo htmlspecialchars($perfil['nombre_tipo_documento']); ?>"
+                                    readonly>
+                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Número de identificación</label>
                                 <input type="text"
                                     class="form-control"
-                                    name="numero_documento"
                                     value="<?php echo htmlspecialchars($perfil['numero_documento']); ?>"
                                     readonly>
                             </div>
@@ -83,7 +81,6 @@ if (!isset($perfil) || !is_array($perfil)) {
                                 <input type="text"
                                     class="form-control perfil-campo"
                                     id="primer_nombre"
-                                    name="primer_nombre"
                                     value="<?php echo htmlspecialchars($perfil['primer_nombre']); ?>"
                                     readonly>
                             </div>
@@ -93,7 +90,6 @@ if (!isset($perfil) || !is_array($perfil)) {
                                 <input type="text"
                                     class="form-control perfil-campo"
                                     id="segundo_nombre"
-                                    name="segundo_nombre"
                                     value="<?php echo htmlspecialchars($perfil['segundo_nombre']); ?>"
                                     readonly>
                             </div>
@@ -105,7 +101,6 @@ if (!isset($perfil) || !is_array($perfil)) {
                                 <input type="text"
                                     class="form-control perfil-campo"
                                     id="primer_apellido"
-                                    name="primer_apellido"
                                     value="<?php echo htmlspecialchars($perfil['primer_apellido']); ?>"
                                     readonly>
                             </div>
@@ -115,7 +110,6 @@ if (!isset($perfil) || !is_array($perfil)) {
                                 <input type="text"
                                     class="form-control perfil-campo"
                                     id="segundo_apellido"
-                                    name="segundo_apellido"
                                     value="<?php echo htmlspecialchars($perfil['segundo_apellido']); ?>"
                                     readonly>
                             </div>
@@ -145,34 +139,30 @@ if (!isset($perfil) || !is_array($perfil)) {
                                     name="correo"
                                     value="<?php echo htmlspecialchars($perfil['correo']); ?>"
                                     readonly>
+                                <div id="errorCorreo" class="text-danger mt-1"></div>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="telefono" class="form-label">
-                                    Teléfono
-                                </label>
-
+                                <label for="telefono" class="form-label"> Teléfono </label>
                                 <input type="number"
                                     class="form-control perfil-campo  campo-editable"
                                     id="telefono"
                                     name="telefono"
                                     value="<?php echo htmlspecialchars($perfil['telefono']); ?>"
                                     readonly>
+                                <div id="errorTelefono" class="text-danger mt-1"></div>
                             </div>
 
                         </div>
 
                         <div class="mb-3">
-                            <label for="direccion" class="form-label">
-                                Dirección de residencia
-                            </label>
-
+                            <label for="direccion" class="form-label"> Dirección de residencia </label>
                             <input type="text"
-                                class="form-control perfil-campo  campo-editable"
-                                id="direccion"
-                                name="direccion"
+                                class="form-control perfil-campo  campo-editable"  
+                                id="direccion" name="direccion"  
                                 value="<?php echo htmlspecialchars($perfil['direccion']); ?>"
                                 readonly>
+                            <div id="errorDireccion" class="text-danger mt-1"></div>
                         </div>
 
                     </div>
@@ -182,34 +172,21 @@ if (!isset($perfil) || !is_array($perfil)) {
                 <!-- SEGURIDAD -->
                 <div class="seccion-perfil">
 
-                    <div class="cabecera-seccion">
-                        Seguridad
-                    </div>
+                    <div class="cabecera-seccion"> Seguridad </div>
 
                     <div class="contenido-seccion">
 
-                        <label class="form-label">
-                            Contraseña
-                        </label>
+                        <label class="form-label"> Contraseña </label>
 
                         <div class="input-group">
 
-                            <input type="password"
-                                class="form-control"
-                                value="********"
-                                readonly>
+                            <input type="password" class="form-control" value="********" readonly>
 
-                            <button type="button"
-                                    class="btn btn-warning"
-                                    id="btnCambiarContrasena">
-                                Actualizar contraseña
-                            </button>
+                            <button type="button" class="btn btn-warning" id="btnCambiarContrasena"> Actualizar contraseña </button>
 
                         </div>
 
-                        <small class="text-muted">
-                            Por seguridad la contraseña no se muestra.
-                        </small>
+                        <small class="text-muted"> Por seguridad la contraseña no se muestra. </small>
 
                     </div>
 
