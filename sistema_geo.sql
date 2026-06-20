@@ -800,3 +800,43 @@ INSERT INTO respuestas_solicitud (
 (8,2,2,
 'Se notificó a la dependencia encargada del mantenimiento vial para la inspección correspondiente.',
 '2026-03-10 15:40:00');
+
+-- Filas de prueba para reportes
+INSERT INTO solicitudes (
+    id_usuario,
+    id_estado_solicitud,
+    id_tipo_solicitud,
+    descripcion,
+    direccion,
+    coordenadas,
+    imagen_url,
+    fecha_solicitud
+)
+SELECT
+    (random() * 4 + 3)::int,
+    (random() * 4 + 1)::int,
+    (ARRAY[1,2,4])[floor(random()*3+1)],
+    CASE
+        WHEN (ARRAY[1,2,4])[floor(random()*3+1)] = 1
+            THEN 'Accidente de tránsito reportado #' || gs
+        WHEN (ARRAY[1,2,4])[floor(random()*3+1)] = 2
+            THEN 'Señal de tránsito deteriorada #' || gs
+        ELSE
+            'Reductor de velocidad deteriorado #' || gs
+    END,
+    'Dirección de prueba #' || gs || ', Cali',
+
+    ST_SetSRID(
+        ST_MakePoint(
+            -76.55 + (random() * 0.10),
+            3.45 + (random() * 0.10)
+        ),
+        4326
+    ),
+
+    'https://storage.geo.gov.co/img/prueba' || gs || '.jpg',
+
+    TIMESTAMP '2026-01-01'
+        + (random() * INTERVAL '180 days')
+
+FROM generate_series(1,3000) gs;

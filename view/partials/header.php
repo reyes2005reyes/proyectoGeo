@@ -1,5 +1,6 @@
 <?php if(!defined('HEADER_LOADED')) { define('HEADER_LOADED', true); ?>
 
+ 
 <!-- Fonts e iconos -->
     <script src="/proyectoGeo/web/assets/js/plugin/webfont/webfont.min.js"></script>
     <script>

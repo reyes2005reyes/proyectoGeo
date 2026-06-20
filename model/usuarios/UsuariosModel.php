@@ -172,32 +172,46 @@ class UsuariosModel extends MasterModel {
 
 
     // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
+
+    // Esta funcion si la utiliza el modulo miPerfil
     public function obtenerPerfil($idUsuario){
         $sql = "SELECT
-                    id_usuario,
-                    id_tipo_documento,
-                    id_rol,
-                    id_estado_usuario,
-                    primer_nombre,
-                    segundo_nombre,
-                    primer_apellido,
-                    segundo_apellido,
-                    numero_documento,
-                    correo,
-                    telefono,
-                    direccion
-                FROM usuarios
-                WHERE id_usuario = $idUsuario";
+                    u.id_usuario,
+                    u.id_tipo_documento,
+                    td.nombre_tipo_documento,
+                    u.id_rol,
+                    u.id_estado_usuario,
+                    u.primer_nombre,
+                    u.segundo_nombre,
+                    u.primer_apellido,
+                    u.segundo_apellido,
+                    u.numero_documento,
+                    u.correo,
+                    u.telefono,
+                    u.direccion
+                FROM usuarios u
+                INNER JOIN tipos_documento td
+                    ON u.id_tipo_documento = td.id_tipo_documento
+                WHERE u.id_usuario = $idUsuario";
 
         $resultado = $this->select($sql);
 
-        if (pg_num_rows($resultado) > 0) {
+        if(pg_num_rows($resultado) > 0){
             return pg_fetch_assoc($resultado);
         }
 
         return null;
     }
+
+    // Fin
+    
     public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario){
+    $numeroDocumento = (int) $numeroDocumento;
+
+        if ($numeroDocumento <= 0) {
+            return false;
+        }
+
         $sql = "SELECT id_usuario
                 FROM usuarios
                 WHERE numero_documento = $numeroDocumento
@@ -217,6 +231,7 @@ class UsuariosModel extends MasterModel {
         return pg_num_rows($this->select($sql)) > 0;
     }
 
+    // Esta funcion la utiliza el modulo usuarios
     public function actualizarPerfil($idUsuario, $datos){
         $primer_nombre = pg_escape_string($datos['primer_nombre']);
         $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
@@ -240,6 +255,23 @@ class UsuariosModel extends MasterModel {
         return $this->update($sql);
     }
 
-}
+
+    //Funcion propia para actualizar los datos de miPerfil
+
+    public function actualizarDatosPerfil($idUsuario, $correo, $telefono, $direccion){
+
+        $correo = pg_escape_string($correo);
+        $direccion = pg_escape_string($direccion);
+        $telefono = $telefono;
+
+        $sql = "UPDATE usuarios
+                SET correo = '$correo',
+                    telefono = $telefono,
+                    direccion = '$direccion'
+                WHERE id_usuario = $idUsuario";
+
+        return $this->update($sql);
+    }
+    }
 
 ?>

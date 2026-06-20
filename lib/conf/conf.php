@@ -4,7 +4,7 @@
     $port = "5433";             // Puerto (5432 es el estándar)
     $database = "sistema_geo";  // Nombre de la BD
     $user = "postgres";         // Usuario
-    $password = "1234";             // Contraseña (vacía para sistemas sin contraseña)
+    $password = "";             // Contraseña (vacía para sistemas sin contraseña)
 
 
     //Hola, te preguntaras porque no hay contrasenia, en mi caso

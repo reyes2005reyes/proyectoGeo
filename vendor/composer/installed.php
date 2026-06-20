@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'ccc0d1810eaf98745e8c8179cf1ea12fca551941',
+        'reference' => '61f08461c8f846a9a167ecdb97350b3b884cd4c7',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'ccc0d1810eaf98745e8c8179cf1ea12fca551941',
+            'reference' => '61f08461c8f846a9a167ecdb97350b3b884cd4c7',
             'dev_requirement' => false,
         ),
         'myclabs/deep-copy' => array(

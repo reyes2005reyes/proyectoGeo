@@ -87,51 +87,16 @@
 							</a>
 							<div class="collapse" id="solicitudesMenu">
 								<ul class="nav nav-collapse">
-									<?php if(isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 2): ?>
 									<li>
 										<a href="<?php echo getUrl('solicitudes','Solicitudes','listar',false); ?>">
 											<span class="sub-item">Listar Solicitudes</span>
 										</a>
 									</li>
-								<?php endif; ?>
-								<!-- //Se muestran solo al ciudadano. -->
-								<?php if(isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 3): ?>
 									<li>
-										<a href="<?php echo getUrl('solicitudes','solicitudes','reportar_accidente',false); ?>">
-											<span class="sub-item">Reportar Accidente</span>
+										<a href="<?php echo getUrl('solicitudes','solicitudes','enviarSolicitud',false); ?>">
+											<span class="sub-item">Enviar Solicitud / Reporte</span>
 										</a>
 									</li>
-									<li>
-										<a href="<?php echo getUrl('solicitudes','solicitudes','reportar_senal_mal_estado',false); ?>">
-											<span class="sub-item">Reportar Señal en mal estado</span>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo getUrl('solicitudes','solicitudes','solicitar_nueva_senalizacion',false); ?>">
-											<span class="sub-item">Solicitar Nueva Señalizacion</span>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
-											<span class="sub-item">Reductor De Velocidad En Mal Estado</span>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
-											<span class="sub-item">Solicitar Nuevo Reductor De Velocidad</span>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
-											<span class="sub-item">Via Publica En Mal Estado</span>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo getUrl('ponganlosuyo','ponganlosuyo','yaqui',false); ?>">
-											<span class="sub-item">PQRSF</span>
-										</a>
-									</li>
-									<?php endif; ?>
 								</ul>
 							</div>
 						</li>
@@ -151,11 +116,14 @@
                 		</li>
 
 						<li class="nav-item">
-							<a href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
-								<i class="fas fa-sign-out-alt"></i>
-								<p>Cerrar Sesión</p>
-							</a>
-						</li>
+       							<?php if (isset($_SESSION['auth']) && $_SESSION['auth'] === 'ok'): ?>
+										<a class="dropdown-item text-danger" href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
+                						<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
+        						<?php else: ?>
+										<a class="dropdown-item text-primary" href="login.php">
+										<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</a>
+        						<?php endif; ?>
+    					</li>
 
 					</ul>
 				</div>

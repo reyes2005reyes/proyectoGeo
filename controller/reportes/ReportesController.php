@@ -43,12 +43,20 @@ class ReportesController {
                 return;
             }
 
+            // Excepción: Fecha fin no puede ser mayor a hoy
+            if (strtotime($fecha_fin) > strtotime(date('Y-m-d'))) {
+                $_SESSION['error_reportes'] = 'La fecha final no puede ser mayor a la fecha actual.';
+                redirect('index.php?modulo=reportes&controlador=reportes&funcion=index');
+                return;
+            }
+
             // Excepcion 2 Rango de fechas invertido
             if (strtotime($fecha_inicio) > strtotime($fecha_fin)) {
                 $_SESSION['error_reportes'] = 'La fecha inicial no puede ser mayor a la fecha final de la consulta.';
                 redirect('index.php?modulo=reportes&controlador=reportes&funcion=index');
                 return;
             }
+
 
             // 3 segun tipo de reporte
             $model = new ReportesModel();

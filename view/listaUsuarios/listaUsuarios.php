@@ -2,7 +2,7 @@
 // La consulta se realiza en el modelo y el controlador pasa las variables
 // Variables esperadas: $usuarios (array) y $numeroDocumento (string)
 if (!isset($usuarios) || !is_array($usuarios)) {
-    $usuarios = [];
+    $usuarios = array();
 }
 
 if (!isset($numeroDocumento)) {
@@ -11,19 +11,19 @@ if (!isset($numeroDocumento)) {
 
 function formatNombreCompleto($usuario)
 {
-    $partes = array_filter([
-        $usuario['primer_nombre'] ?? '',
-        $usuario['segundo_nombre'] ?? ''
-    ]);
+    $partes = array_filter(array(
+        isset($usuario['primer_nombre'])  ? $usuario['primer_nombre']  : '',
+        isset($usuario['segundo_nombre']) ? $usuario['segundo_nombre'] : ''
+    ));
     return implode(' ', $partes);
 }
 
 function formatApellidoCompleto($usuario)
 {
-    $partes = array_filter([
-        $usuario['primer_apellido'] ?? '',
-        $usuario['segundo_apellido'] ?? ''
-    ]);
+    $partes = array_filter(array(
+        isset($usuario['primer_apellido'])  ? $usuario['primer_apellido']  : '',
+        isset($usuario['segundo_apellido']) ? $usuario['segundo_apellido'] : ''
+    ));
     return implode(' ', $partes);
 }
 
@@ -237,6 +237,27 @@ let roles = [];
 let datosYaCargados = false;
 
 // Cargar tipos de documento y roles al iniciar
+
+// Restricción de campos según rol
+var idRolSesion = <?php echo isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0; ?>;
+
+function aplicarRestriccionesRol() {
+    var camposSoloAdmin = ['tipoDocumento', 'numeroDocumento', 'rol', 'contrasena'];
+    var esAdmin = (idRolSesion === 1);
+    for (var i = 0; i < camposSoloAdmin.length; i++) {
+        var el = document.getElementById(camposSoloAdmin[i]);
+        if (el) {
+            el.disabled = !esAdmin;
+            var contenedor = el.closest('.mb-3');
+            if (contenedor) {
+                contenedor.style.opacity = esAdmin ? '1' : '0.5';
+                contenedor.title = esAdmin ? '' : 'Solo el administrador puede modificar este campo';
+            }
+        }
+    }
+}
+
+
 function cargarDatos() {
     if (datosYaCargados) {
         return;
@@ -329,7 +350,8 @@ function abrirModalEditar(idUsuario) {
             document.getElementById('tipoDocumento').value = usuario.id_tipo_documento || '';
             document.getElementById('rol').value = usuario.id_rol || '';
             
-            const modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
+            aplicarRestriccionesRol();
+            var modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
             modal.show();
         },
         error: function(xhr, status, error) {
