@@ -4,44 +4,46 @@ require_once dirname(__FILE__) . '/../MasterModel.php';
 class UsuariosModel extends MasterModel {
         // estas funciones son para las consulastas para el registro de un usuario y para verificar si el numero de documento o el correo ya existen en la base de datos
         public function registrar($datos) {
-            $tipo_doc  = $datos['id_tipo_documento'];
-            $primer_nombre = pg_escape_string($datos['primer_nombre']);
-            $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
-            $primer_apellido  = pg_escape_string($datos['primer_apellido']);
-            $segundo_apellido = pg_escape_string(isset($datos['segundo_apellido']) ? $datos['segundo_apellido'] : '');
-            $numero_documento = $datos['numero_documento'];
-            $correo = pg_escape_string($datos['correo']);
-            $telefono = $datos['telefono'];
-            $direccion = pg_escape_string($datos['direccion']);
-            $contrasena = md5($datos['contrasena']);
+            $sql = "SELECT registrar_usuario($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) AS id_usuario";
 
-            $sql = "INSERT INTO usuarios (id_tipo_documento, id_rol, id_estado_usuario,
-                    primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
-                    numero_documento, correo, telefono, direccion, contrasena) VALUES 
-                    ($tipo_doc, 3, 1,
-                    '$primer_nombre', '$segundo_nombre', '$primer_apellido', '$segundo_apellido',
-                $numero_documento, '$correo', $telefono, '$direccion', '$contrasena')";
-    return $this->insert($sql);
-}
-    public function existeDocumento($numero_documento) {
-        $sql = "SELECT id_usuario FROM usuarios WHERE numero_documento = $numero_documento";
-        return pg_num_rows($this->select($sql)) > 0;
-    }
-
-    public function existeCorreo($correo) {
-        $correo = pg_escape_string($correo);
-        $sql = "SELECT id_usuario FROM usuarios WHERE correo = '$correo'";
-        return pg_num_rows($this->select($sql)) > 0;
-    }
-
-    public function tipo_documento($tipo_documento) {
-        $sql = "SELECT nombre_tipo_documento FROM tipos_documento WHERE id_tipo_documento = $tipo_documento";
-        $resultado = $this->select($sql);
-        if ($row = pg_fetch_assoc($resultado)) {
-            return $row['nombre_tipo_documento'];
+            $params = array(
+                (int) $datos['id_tipo_documento'],
+                trim($datos['primer_nombre']),
+                trim(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : ''),
+                trim($datos['primer_apellido']),
+                trim(isset($datos['segundo_apellido']) ? $datos['segundo_apellido'] : ''),
+                (int) $datos['numero_documento'],
+                trim($datos['correo']),
+                (int) $datos['telefono'],
+                trim($datos['direccion']),
+                md5($datos['contrasena'])
+            );
+            $resultado = $this->query($sql, $params);
+            if (!$resultado) {
+                return false;
+            }
+            $fila = pg_fetch_assoc($resultado);
+            return isset($fila['id_usuario']) ? $fila['id_usuario'] : false;
         }
-        return null;
-    }
+
+        public function existeDocumento($numero_documento) {
+            $sql = "SELECT existe_documento($1) AS existe";
+            $resultado = $this->query($sql, array((int) $numero_documento));
+            $fila = pg_fetch_assoc($resultado);
+            return isset($fila['existe']) && $fila['existe'] === 't';
+        }
+        public function existeCorreo($correo) {
+            $sql = "SELECT existe_correo($1) AS existe";
+            $resultado = $this->query($sql, array(trim($correo)));
+            $fila = pg_fetch_assoc($resultado);
+            return isset($fila['existe']) && $fila['existe'] === 't';
+        }
+        public function tipo_documento($tipo_documento) {
+            $sql = "SELECT obtener_tipo_documento($1) AS nombre_tipo_documento";
+            $resultado = $this->query($sql, array((int) $tipo_documento));
+            $fila = pg_fetch_assoc($resultado);
+            return isset($fila['nombre_tipo_documento']) ? $fila['nombre_tipo_documento'] : null;
+        }
     // aqui termina el registro del usuario
 
 
