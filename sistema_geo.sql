@@ -840,3 +840,81 @@ SELECT
         + (random() * INTERVAL '180 days')
 
 FROM generate_series(1,3000) gs;
+
+
+// funciom para el registro de un usuario 
+CREATE OR REPLACE FUNCTION registrar_usuario(
+    p_id_tipo_documento INTEGER,
+    p_primer_nombre VARCHAR,
+    p_segundo_nombre VARCHAR,
+    p_primer_apellido VARCHAR,
+    p_segundo_apellido VARCHAR,
+    p_numero_documento INTEGER,
+    p_correo VARCHAR,
+    p_telefono BIGINT,
+    p_direccion VARCHAR,
+    p_contrasena VARCHAR
+) RETURNS INTEGER AS $$
+DECLARE
+    v_id_usuario INTEGER;
+BEGIN
+    INSERT INTO usuarios (
+        id_tipo_documento, id_rol, id_estado_usuario,
+        primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
+        numero_documento, correo, telefono, direccion, contrasena
+    ) VALUES (
+        p_id_tipo_documento, 3, 1,
+        p_primer_nombre, p_segundo_nombre, p_primer_apellido, p_segundo_apellido,
+        p_numero_documento, p_correo, p_telefono, p_direccion, p_contrasena
+    )
+    RETURNING id_usuario INTO v_id_usuario;
+
+    RETURN v_id_usuario;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Verifica si ya existe un usuario con ese número de documento
+CREATE OR REPLACE FUNCTION existe_documento(p_numero_documento INTEGER)
+RETURNS BOOLEAN AS $$
+DECLARE
+    v_existe BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1 FROM usuarios WHERE numero_documento = p_numero_documento
+    ) INTO v_existe;
+
+    RETURN v_existe;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Verifica si ya existe un usuario con ese correo
+CREATE OR REPLACE FUNCTION existe_correo(p_correo VARCHAR)
+RETURNS BOOLEAN AS $$
+DECLARE
+    v_existe BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1 FROM usuarios WHERE correo = p_correo
+    ) INTO v_existe;
+
+    RETURN v_existe;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Devuelve el nombre del tipo de documento dado su ID
+CREATE OR REPLACE FUNCTION obtener_tipo_documento(p_id_tipo_documento INTEGER)
+RETURNS VARCHAR AS $$
+DECLARE
+    v_nombre VARCHAR;
+BEGIN
+    SELECT nombre_tipo_documento
+    INTO v_nombre
+    FROM tipos_documento
+    WHERE id_tipo_documento = p_id_tipo_documento;
+
+    RETURN v_nombre; -- si no encuentra nada, devuelve NULL automaticamente
+END;
+$$ LANGUAGE plpgsql;
+

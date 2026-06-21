@@ -60,7 +60,7 @@ if (!isset($perfil) || !is_array($perfil)) {
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Número de identificación</label>
-                                <input type="text"
+                                <input type="text"s
                                     class="form-control"
                                     value="<?php echo htmlspecialchars($perfil['numero_documento']); ?>"
                                     readonly>
