@@ -205,6 +205,7 @@ class UsuariosModel extends MasterModel {
 
     // Fin
     
+    // Esta funcion la utiliza el modulo usuarios
     public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario){
     $numeroDocumento = (int) $numeroDocumento;
 

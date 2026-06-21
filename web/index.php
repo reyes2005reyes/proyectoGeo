@@ -27,11 +27,9 @@ header('Content-Type: text/html; charset=utf-8');
             // En lugar de incluir el archivo en PHP, creamos la ventana iframe
             ?>
             <div class="mapa-contenedor">
-                <iframe 
-                    src="../view/mapa/mapa.php" 
-                    width="100%" 
-                    height="750px" 
-                    style="border: none;" 
+                <iframe
+                    src="../view/mapa/mapa.php"
+                    style="width:100%; height:85vh; border:none;"
                     title="Mapa del Proyecto">
                 </iframe>
             </div>

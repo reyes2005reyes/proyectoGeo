@@ -65,7 +65,7 @@
 
 						<div class="card-body p-2 text-center">
 							<div id="dc_main2"
-								style="width:100%; max-width:250px; height:180px; margin:auto; position:relative;">
+								style="width:100%; max-width:350px; height:180px; margin:auto; position:relative;">
 							</div>
 						</div>
 					</div>
