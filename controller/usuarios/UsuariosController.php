@@ -533,7 +533,7 @@ public function actualizarUsuario() {
         'direccion'         => $direccion,
     );
 
-    $resultado = $obj->actualizarPerfil($idUsuario, $datos);
+    $resultado = $obj->actualizarDatosUsuario($idUsuario, $datos);
 
     if ($resultado) {
         echo json_encode(array('success' => true, 'message' => 'Usuario actualizado correctamente'));
@@ -558,38 +558,23 @@ public function actualizarUsuario() {
         $obj = new UsuariosModel();
         
         // Obtener estado actual
-        $sqlEstado = "SELECT id_estado_usuario FROM usuarios WHERE id_usuario = $idUsuario";
-        $resultEstado = $obj->select($sqlEstado);
+        $estadoActual = $obj->obtenerEstadoUsuario($idUsuario);
         
-        if (pg_num_rows($resultEstado) === 0) {
+        if ($estadoActual === null) {
             http_response_code(404);
             echo json_encode(array('success' => false, 'message' => 'Usuario no encontrado'));
             exit;
         }
         
-        $rowEstado = pg_fetch_assoc($resultEstado);
-        $estadoActual = $rowEstado['id_estado_usuario'];
-        
         // Obtener IDs de estados
-        $sqlEstados = "SELECT id_estado_usuario, nombre_estado_usuario FROM estados_usuario";
-        $resultEstados = $obj->select($sqlEstados);
-        
-        $idEstadoHabilitado = 1;
-        $idEstadoInhabilitado = 2;
-        
-        while ($row = pg_fetch_assoc($resultEstados)) {
-            if (stripos($row['nombre_estado_usuario'], 'habilitado') !== false && stripos($row['nombre_estado_usuario'], 'inhabilitado') === false) {
-                $idEstadoHabilitado = $row['id_estado_usuario'];
-            } elseif (stripos($row['nombre_estado_usuario'], 'inhabilitado') !== false) {
-                $idEstadoInhabilitado = $row['id_estado_usuario'];
-            }
-        }
+        $idsEstados = $obj->obtenerIdsEstados();
+        $idEstadoHabilitado = $idsEstados['habilitado'];
+        $idEstadoInhabilitado = $idsEstados['inhabilitado'];
         
         // Cambiar estado
         $nuevoEstado = ($estadoActual == $idEstadoHabilitado) ? $idEstadoInhabilitado : $idEstadoHabilitado;
-        $sqlUpdate = "UPDATE usuarios SET id_estado_usuario = $nuevoEstado WHERE id_usuario = $idUsuario";
         
-        if ($obj->update($sqlUpdate)) {
+        if ($obj->cambiarEstadoUsuario($idUsuario, $nuevoEstado)) {
             echo json_encode(array('success' => true, 'message' => 'Estado del usuario actualizado correctamente'));
         } else {
             echo json_encode(array('success' => false, 'message' => 'Error al cambiar el estado'));

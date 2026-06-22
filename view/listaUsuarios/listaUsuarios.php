@@ -33,6 +33,92 @@ function formatEstado($estado)
 }
 ?>
 
+<!-- Flash mensajes -->
+<div id="flashContainer" style="position:fixed;top:20px;right:20px;z-index:9999;min-width:300px;max-width:400px;"></div>
+
+<style>
+    /* ── Tabla oscura igual al sidebar ── */
+    #listaUsuariosCard {
+        border: none;
+    }
+    #listaUsuariosCard .card-header {
+        background-color: #1a2035 !important;
+        border-bottom: 1px solid #2c3154;
+    }
+    #listaUsuariosCard .table {
+        background-color: #1a2035;
+        color: #a9b0c3;
+        margin-bottom: 0;
+    }
+    #listaUsuariosCard .table thead th {
+        background-color: #1e2746;
+        color: #ffffff;
+        border-color: #2c3154;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    #listaUsuariosCard .table tbody tr {
+        border-color: #2c3154;
+    }
+    #listaUsuariosCard .table-hover tbody tr:hover {
+        background-color: #1e2746;
+        color: #ffffff;
+    }
+    #listaUsuariosCard .table tbody td {
+        border-color: #2c3154;
+        vertical-align: middle;
+    }
+    #listaUsuariosCard .card-body {
+        background-color: #1a2035;
+    }
+    #listaUsuariosCard .form-control {
+        background-color: #1e2746;
+        border-color: #2c3154;
+        color: #a9b0c3;
+    }
+    #listaUsuariosCard .form-control::placeholder {
+        color: #6c757d;
+    }
+    #listaUsuariosCard .form-control:focus {
+        background-color: #1e2746;
+        border-color: #5f73e0;
+        color: #ffffff;
+        box-shadow: 0 0 0 0.2rem rgba(95,115,224,0.25);
+    }
+
+    /* ── Flash mensajes ── */
+    .flash-msg {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px 16px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+        font-size: 0.9rem;
+    }
+    .flash-msg.success { background-color: #1a7a4a; color: #fff; border-left: 4px solid #28a745; }
+    .flash-msg.error   { background-color: #7a1a2a; color: #fff; border-left: 4px solid #dc3545; }
+    .flash-msg.warning { background-color: #7a5a1a; color: #fff; border-left: 4px solid #ffc107; }
+    .flash-msg .flash-icon { font-size: 1.1rem; margin-top: 1px; }
+    .flash-msg .flash-text { flex: 1; }
+    .flash-msg .flash-close {
+        background: none; border: none; color: inherit;
+        cursor: pointer; font-size: 1rem; opacity: 0.7; padding: 0;
+    }
+    .flash-msg .flash-close:hover { opacity: 1; }
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to   { transform: translateX(0);   opacity: 1; }
+    }
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to   { opacity: 0; transform: translateX(30px); }
+    }
+</style>
+
 <div id="listaUsuariosCard" class="card shadow-sm mt-0">
     <div class="card-header bg-primary text-white">
         <h4 class="mb-0">Lista de Usuarios</h4>
@@ -115,7 +201,7 @@ function formatEstado($estado)
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
+                                <label for="tipoDocumento" class="form-label">Tipo de Documento <span class="text-danger">*</span></label>
                                 <select id="tipoDocumento" name="id_tipo_documento" class="form-control" required>
                                     <option value="">Seleccione...</option>
                                     <!-- Se llenará con JavaScript -->
@@ -124,7 +210,7 @@ function formatEstado($estado)
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="numeroDocumento" class="form-label">Número de Documento</label>
+                                <label for="numeroDocumento" class="form-label">Número de Documento <span class="text-danger">*</span></label>
                                 <input type="text" id="numeroDocumento" name="numero_documento" class="form-control" required>
                             </div>
                         </div>
@@ -133,7 +219,7 @@ function formatEstado($estado)
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="primerNombre" class="form-label">Primer Nombre</label>
+                                <label for="primerNombre" class="form-label">Primer Nombre <span class="text-danger">*</span></label>
                                 <input type="text" id="primerNombre" name="primer_nombre" class="form-control" required>
                             </div>
                         </div>
@@ -148,7 +234,7 @@ function formatEstado($estado)
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="primerApellido" class="form-label">Primer Apellido</label>
+                                <label for="primerApellido" class="form-label">Primer Apellido <span class="text-danger">*</span></label>
                                 <input type="text" id="primerApellido" name="primer_apellido" class="form-control" required>
                             </div>
                         </div>
@@ -163,27 +249,27 @@ function formatEstado($estado)
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="correo" class="form-label">Correo Electrónico</label>
+                                <label for="correo" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
                                 <input type="email" id="correo" name="correo" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="telefono" class="form-label">Teléfono</label>
+                                <label for="telefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
                                 <input type="tel" id="telefono" name="telefono" class="form-control">
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="direccion" class="form-label">Dirección de Residencia</label>
+                        <label for="direccion" class="form-label">Dirección de Residencia <span class="text-danger">*</span></label>
                         <input type="text" id="direccion" name="direccion" class="form-control">
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="rol" class="form-label">Rol</label>
+                                <label for="rol" class="form-label">Rol <span class="text-danger">*</span></label>
                                 <select id="rol" name="id_rol" class="form-control" required>
                                     <option value="">Seleccione...</option>
                                     <!-- Se llenará con JavaScript -->
@@ -231,6 +317,31 @@ function formatEstado($estado)
 </div>
 
 <script>
+// ── Flash mensajes ──────────────────────────────────────────
+function mostrarFlash(mensaje, tipo) {
+    const iconos = { success: '&#10003;', error: '&#10007;', warning: '&#9888;' };
+    const icono  = iconos[tipo] || '&#9432;';
+
+    const div = document.createElement('div');
+    div.className = 'flash-msg ' + tipo;
+    div.innerHTML =
+        '<span class="flash-icon">' + icono + '</span>' +
+        '<span class="flash-text">' + mensaje + '</span>' +
+        '<button class="flash-close" onclick="cerrarFlash(this)">&#10005;</button>';
+
+    document.getElementById('flashContainer').appendChild(div);
+
+    setTimeout(() => cerrarFlash(div.querySelector('.flash-close')), 4000);
+}
+
+function cerrarFlash(btn) {
+    const div = btn.closest('.flash-msg');
+    if (div) {
+        div.style.animation = 'fadeOut 0.3s ease forwards';
+        setTimeout(() => { if (div.parentNode) div.parentNode.removeChild(div); }, 300);
+    }
+}
+
 // Variables globales para almacenar datos
 let tiposDocumento = [];
 let roles = [];
@@ -356,7 +467,7 @@ function abrirModalEditar(idUsuario) {
         },
         error: function(xhr, status, error) {
             console.error('Error al cargar los datos del usuario:', status, error);
-            alert('Error al cargar los datos del usuario');
+            mostrarFlash('Error al cargar los datos del usuario', 'error');
         }
     });
 }
@@ -379,7 +490,20 @@ function abrirModalCambiarEstado(idUsuario) {
         },
         error: function(xhr, status, error) {
             console.error('Error al cargar los datos del usuario:', status, error);
-            alert('Error al cargar los datos del usuario');
+            mostrarFlash('Error al cargar los datos del usuario', 'error');
+        }
+    });
+}
+
+// Refrescar la tabla de usuarios vía AJAX
+function refrescarTabla() {
+    const busqueda = document.getElementById('filtro') ? document.getElementById('filtro').value : '';
+    $.ajax({
+        url: '<?php echo getUrl('usuarios','usuarios','filtro',false,'ajax'); ?>',
+        type: 'GET',
+        data: { buscar: busqueda },
+        success: function(html) {
+            document.getElementById('usuariosFiltro').innerHTML = html;
         }
     });
 }
@@ -401,16 +525,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 success: function(response) {
                     console.log('Respuesta:', response);
                     if(response.success) {
-                        alert('Usuario actualizado correctamente');
                         bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario')).hide();
-                        location.reload();
+                        mostrarFlash('Usuario actualizado correctamente', 'success');
+                        refrescarTabla();
                     } else {
-                        alert('Error: ' + (response.message || 'No se pudo actualizar el usuario'));
+                        mostrarFlash(response.message || 'No se pudo actualizar el usuario', 'error');
                     }
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', status, error);
-                    alert('Error al actualizar el usuario');
+                    mostrarFlash('Error al actualizar el usuario', 'error');
                 }
             });
         });
@@ -432,23 +556,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 success: function(response) {
     if(response.success) {
         bootstrap.Modal.getInstance(document.getElementById('modalCambiarEstado')).hide();
-        // Refrescar la tabla usando el filtro que ya existe
-        const busqueda = document.getElementById('filtro') ? document.getElementById('filtro').value : '';
-        $.ajax({
-            url: '<?php echo getUrl('usuarios','usuarios','filtro',false,'ajax'); ?>',
-            type: 'GET',
-            data: { buscar: busqueda },
-            success: function(html) {
-                document.getElementById('usuariosFiltro').innerHTML = html;
-            }
-        });
+        mostrarFlash('Estado del usuario actualizado correctamente', 'success');
+        refrescarTabla();
     } else {
-        alert('Error: ' + (response.message || 'No se pudo cambiar el estado'));
+        mostrarFlash(response.message || 'No se pudo cambiar el estado', 'error');
     }
 },
                 error: function(xhr, status, error) {
                     console.error('Error:', status, error);
-                    alert('Error al cambiar el estado');
+                    mostrarFlash('Error al cambiar el estado', 'error');
                 }
             });
         });
