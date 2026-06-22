@@ -2,8 +2,10 @@
 header('Content-Type: text/html; charset=utf-8');
 ?>
 <?php include_once '../lib/helpers.php'; ?>
+<?php include_once '../lib/helpersLogin.php'; ?>
 <?php include_once '../view/partials/header.php'; ?>
 <?php include_once '../view/partials/navbar.php'; ?>
+
 
     <?php if(isset($_SESSION['bienvenida'])): ?>
         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
