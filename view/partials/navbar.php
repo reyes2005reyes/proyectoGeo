@@ -183,7 +183,13 @@
             										</div>
             										<div class="u-text">
                 										<h4><?php echo isset($_SESSION['primer_nombre']) ? $_SESSION['primer_nombre'] . ' ' . $_SESSION['primer_apellido'] : 'Invitado'; ?></h4>
-                										<p class="text-muted"><?php echo isset($_SESSION['numero_documento']) ? 'Doc: ' . $_SESSION['numero_documento'] : 'No has iniciado sesión'; ?></p>
+														<p class="text-muted">
+															Documento: <?php echo $_SESSION['numero_documento']; ?>
+														</p>
+														<p class="text-muted">
+															Rol: <?php echo (isset($_SESSION['nombre_rol']) && !empty($_SESSION['nombre_rol'])) ? $_SESSION['nombre_rol'] : 'Usuario'; ?>
+
+														</p>
             										</div>
         										</div>
     										</li>

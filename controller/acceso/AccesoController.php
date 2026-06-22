@@ -31,7 +31,10 @@
             return;
         }
 
-        $resultado = @$obj->select("SELECT * FROM usuarios WHERE numero_documento = '$numero_documento'");
+        $resultado = @$obj->select("SELECT u.*, r.nombre_rol 
+        FROM usuarios u 
+        JOIN roles r ON u.id_rol = r.id_rol 
+        WHERE u.numero_documento = '$numero_documento'");
         
         
 
@@ -59,6 +62,7 @@
                 $_SESSION['numero_documento'] = $usuario['numero_documento'];
                 $_SESSION['id_usuario'] = $usuario['id_usuario'];
                 $_SESSION['id_rol'] = $usuario['id_rol'];
+                $_SESSION['nombre_rol'] = $usuario['nombre_rol'];
                 $_SESSION['auth'] = "ok";
                 $_SESSION['bienvenida'] = "Bienvenido, {$usuario['primer_nombre']} {$usuario['primer_apellido']}. Has iniciado sesión correctamente.";
                 redirect('index.php');
