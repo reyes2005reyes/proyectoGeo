@@ -234,8 +234,48 @@ class UsuariosModel extends MasterModel {
         return pg_num_rows($this->select($sql)) > 0;
     }
 
+    // aqui comienza la funcion para cambiar el estado (habilitado / inhabilitado) de un usuario
+    public function obtenerEstadoUsuario($idUsuario) {
+        $sql = "SELECT id_estado_usuario FROM usuarios WHERE id_usuario = $idUsuario";
+        $result = $this->select($sql);
+
+        if (pg_num_rows($result) === 0) {
+            return null;
+        }
+
+        $row = pg_fetch_assoc($result);
+        return $row['id_estado_usuario'];
+    }
+
+    public function obtenerIdsEstados() {
+        $sql = "SELECT id_estado_usuario, nombre_estado_usuario FROM estados_usuario";
+        $result = $this->select($sql);
+
+        $idEstadoHabilitado = 1;
+        $idEstadoInhabilitado = 2;
+
+        while ($row = pg_fetch_assoc($result)) {
+            if (stripos($row['nombre_estado_usuario'], 'habilitado') !== false && stripos($row['nombre_estado_usuario'], 'inhabilitado') === false) {
+                $idEstadoHabilitado = $row['id_estado_usuario'];
+            } elseif (stripos($row['nombre_estado_usuario'], 'inhabilitado') !== false) {
+                $idEstadoInhabilitado = $row['id_estado_usuario'];
+            }
+        }
+
+        return array(
+            'habilitado' => $idEstadoHabilitado,
+            'inhabilitado' => $idEstadoInhabilitado
+        );
+    }
+
+    public function cambiarEstadoUsuario($idUsuario, $nuevoEstado) {
+        $sql = "UPDATE usuarios SET id_estado_usuario = $nuevoEstado WHERE id_usuario = $idUsuario";
+        return $this->update($sql);
+    }
+    // aqui termina la funcion para cambiar el estado de un usuario
+
     // Esta funcion la utiliza el modulo usuarios
-    public function actualizarPerfil($idUsuario, $datos){
+    public function actualizarDatosUsuario($idUsuario, $datos){
         $primer_nombre = pg_escape_string($datos['primer_nombre']);
         $segundo_nombre = pg_escape_string(isset($datos['segundo_nombre']) ? $datos['segundo_nombre'] : '');
         $primer_apellido = pg_escape_string($datos['primer_apellido']);
