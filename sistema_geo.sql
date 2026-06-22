@@ -187,9 +187,7 @@ CREATE TABLE codigos_recuperacion (
 
 CREATE TABLE lesionados (
     id_lesionado    SERIAL PRIMARY KEY,
-    nombre_completo VARCHAR(100) NOT NULL,
-    documento       VARCHAR(50)  NOT NULL,
-    observacion     VARCHAR(255)
+    numero_lesionados INTEGER NOT NULL
 );
 
 CREATE TABLE solicitudes (
@@ -229,8 +227,7 @@ CREATE TABLE respuestas_solicitud (
 CREATE TABLE solicitudes_reporte_accidentes (
     id_solicitud_reporte_accidente SERIAL PRIMARY KEY,
     id_solicitud                   INTEGER NOT NULL REFERENCES solicitudes(id_solicitud) ON DELETE CASCADE,
-    id_causa_accidente             INTEGER NOT NULL REFERENCES causas_accidente(id_causa_accidente),
-    observacion                    VARCHAR(255)
+    id_causa_accidente             INTEGER NOT NULL REFERENCES causas_accidente(id_causa_accidente)
 );
 
 CREATE TABLE vehiculos (
@@ -548,33 +545,33 @@ INSERT INTO usuarios (
 -- Administrador
 (1,1,1,'Carlos','Ramírez',1023456789,'admin@geo.gov.co',3001234567,
 'Calle 10 #5-20 Cali',
-'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+'5f4dcc3b5aa765d61d8327deb882cf99'),
 
 -- Funcionario
 (1,2,1,'Andrés','Moreno',1067890123,'funcionario@geo.gov.co',3023456789,
 'Avenida 6N #12-40 Cali',
-'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+'5f4dcc3b5aa765d61d8327deb882cf99'),
 
 -- Ciudadanos
 (1,3,1,'Juan','García',1098765432,'juan.garcia@gmail.com',3045678901,
 'Calle 45 #10-22 Cali',
-'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+'5f4dcc3b5aa765d61d8327deb882cf99'),
 
 (1,3,1,'María','López',1087654321,'maria.lopez@gmail.com',3114567890,
 'Carrera 15 #30-45 Cali',
-'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+'5f4dcc3b5aa765d61d8327deb882cf99'),
 
 (1,3,1,'Luis','Martínez',1076543210,'luis.martinez@gmail.com',3156789012,
 'Calle 80 #12-18 Cali',
-'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+'5f4dcc3b5aa765d61d8327deb882cf99'),
 
 (1,3,1,'Ana','Rodríguez',1065432109,'ana.rodriguez@gmail.com',3167890123,
 'Barrio El Ingenio, Cali',
-'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+'5f4dcc3b5aa765d61d8327deb882cf99'),
 
 (1,3,1,'Santiago','Castro',1054321098,'santiago.castro@gmail.com',3178901234,
 'Ciudad Jardín, Cali',
-'$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+'5f4dcc3b5aa765d61d8327deb882cf99');
 
 
 -- =====================================
@@ -669,30 +666,27 @@ NULL,
 -- =====================================
 
 INSERT INTO solicitudes_reporte_accidentes
-(id_solicitud, id_causa_accidente, observacion)
+(id_solicitud, id_causa_accidente)
 VALUES
-(1,1,'Colisión entre automóvil y motocicleta. Posible irrespeto a señal de tránsito.'),
-(7,4,'Volcamiento asociado a pérdida de control del vehículo.');
-
+(1,1),
+(7,4);
 
 -- =====================================
 -- LESIONADOS
 -- =====================================
 
 INSERT INTO lesionados
-(nombre_completo, documento, observacion)
+(numero_lesionados)
 VALUES
-('Carlos Eduardo Muñoz Ríos','1099887766','Fractura leve'),
-('Sandra Milena Pinto Arango','1088776655','Contusiones'),
-('Pedro Antonio Leal Vásquez','1077665544','Lesiones menores');
+(2),
+(1);
 
 
 INSERT INTO reporte_lesionado
 (id_solicitud_reporte_accidente, id_lesionado)
 VALUES
 (1,1),
-(1,2),
-(2,3);
+(2,2);
 
 
 -- =====================================
@@ -842,7 +836,7 @@ SELECT
 FROM generate_series(1,3000) gs;
 
 
-// funciom para el registro de un usuario 
+-- funciom para el registro de un usuario 
 CREATE OR REPLACE FUNCTION registrar_usuario(
     p_id_tipo_documento INTEGER,
     p_primer_nombre VARCHAR,

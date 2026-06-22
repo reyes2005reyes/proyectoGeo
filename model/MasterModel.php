@@ -73,8 +73,6 @@ class MasterModel extends Connection{
     }
 
 
-
-
     protected function query($sql, $params = array()) {
             $result = pg_query_params($this->getConnect(), $sql, $params);
 
