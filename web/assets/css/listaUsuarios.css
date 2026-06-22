@@ -1,0 +1,93 @@
+/* ===========================================================
+   listaUsuarios.css
+   Estilos de la vista Lista de Usuarios:
+   - Tabla en tono oscuro, igual al sidebar
+   - Flash mensajes (sustituyen los alert() del navegador)
+   =========================================================== */
+
+/* ── Tabla oscura igual al sidebar ── */
+#listaUsuariosCard {
+    border: none;
+}
+#listaUsuariosCard .card-header {
+    background-color: #1a2035 !important;
+    border-bottom: 1px solid #2c3154;
+}
+#listaUsuariosCard .table {
+    background-color: #1a2035;
+    color: #a9b0c3;
+    margin-bottom: 0;
+}
+#listaUsuariosCard .table thead th {
+    background-color: #1e2746;
+    color: #ffffff;
+    border-color: #2c3154;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+#listaUsuariosCard .table tbody tr {
+    border-color: #2c3154;
+}
+#listaUsuariosCard .table-hover tbody tr:hover {
+    background-color: #1e2746;
+    color: #ffffff;
+}
+#listaUsuariosCard .table tbody td {
+    border-color: #2c3154;
+    vertical-align: middle;
+}
+#listaUsuariosCard .card-body {
+    background-color: #1a2035;
+}
+#listaUsuariosCard .form-control {
+    background-color: #1e2746;
+    border-color: #2c3154;
+    color: #a9b0c3;
+}
+#listaUsuariosCard .form-control::placeholder {
+    color: #6c757d;
+}
+#listaUsuariosCard .form-control:focus {
+    background-color: #1e2746;
+    border-color: #5f73e0;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(95,115,224,0.25);
+}
+
+/* ── Flash mensajes ── */
+.flash-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s ease;
+    font-size: 0.9rem;
+}
+.flash-msg.success { background-color: #1a7a4a; color: #fff; border-left: 4px solid #28a745; }
+.flash-msg.error   { background-color: #7a1a2a; color: #fff; border-left: 4px solid #dc3545; }
+.flash-msg.warning { background-color: #7a5a1a; color: #fff; border-left: 4px solid #ffc107; }
+.flash-msg .flash-icon { font-size: 1.1rem; margin-top: 1px; }
+.flash-msg .flash-text { flex: 1; }
+.flash-msg .flash-close {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0.7;
+    padding: 0;
+}
+.flash-msg .flash-close:hover { opacity: 1; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);   opacity: 1; }
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; transform: translateX(30px); }
+}
