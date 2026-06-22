@@ -73,7 +73,6 @@
         }
 
     } catch (Exception $e) {
-        error_log("ERROR login(): " . $e->getMessage());
         // Error 3: Error interno del sistema durante el procesamiento de la solicitud de inicio de sesión.
         $_SESSION['error'] = 'Error inesperado. Estamos trabajando para solucionarlo.';
         redirect('login.php');
