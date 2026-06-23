@@ -2,6 +2,7 @@
     include_once '../model/usuarios/UsuariosModel.php';
     require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.phpmailer.php';
     require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.smtp.php';
+
     
 class UsuariosController{
         // esta funcion es para el registro del usuario
@@ -109,21 +110,79 @@ class UsuariosController{
                 }
 
                 // Enviar correo con PHPMailer
-                $mail = new PHPMailer(true);
+                $mail = new PHPMailer();
                 try {
                     $mail->IsSMTP();
-                    $mail->Host = 'sandbox.smtp.mailtrap.io';
+                    $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
-                    $mail->Username = '812ca204a23bca';
-                    $mail->Password = '2bc5e19bc4cef0';
+                    $mail->Username = 'reyesmontoyamonor@gmail.com';
+                    $mail->Password = 'iylaxpku mury dmgk';
                     $mail->Port = 587;
-                    $mail->Timeout = 10;
-                    $mail->CharSet = 'UTF-8';
+                    $mail->SMTPSecure = 'tls';
+                    $mail->CharSet  = 'UTF-8';
                     $mail->SetFrom('reyesmontoyamonor@gmail.com', 'SIAV');
                     $mail->AddAddress($correo);
                     $mail->Subject = 'Código de recuperación de contraseña - SIAV';
-                    $mail->Body = "Tu código de verificación es: $codigo. Válido por 15 minutos.";
                     $mail->IsHTML(true);
+                    $mail->Body ='
+                                    <!DOCTYPE html>
+                                    <html>
+                                    <head><meta charset="UTF-8"></head>
+                                    <body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,sans-serif;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;padding:30px 0;">
+                                        <tr>
+                                        <td align="center">
+                                            <table width="500" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;">
+                                            
+                                            <!-- Encabezado -->
+                                            <tr>
+                                                <td align="center" style="background-color:#1a3a5c;padding:30px 20px;">
+                                                <img src="https://drive.google.com/uc?export=view&id=19BCcLXVJQEEHweyDH9TYm8Q9zX6U8Cwq" width="80" alt="Logo SIAV">
+                                                <p style="color:#a0b8d0;margin:5px 0 0;font-size:13px;">Sistema de Información de Accidentalidad Vial</p>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Cuerpo -->
+                                            <tr>
+                                                <td style="padding:35px 40px;">
+                                                <p style="color:#333333;font-size:15px;margin:0 0 15px;">Hola, Usario </p>
+                                                <p style="color:#333333;font-size:15px;margin:0 0 25px;">Recibimos una solicitud para recuperar tu contraseña. Usa el siguiente código de verificación:</p>
+
+                                                <!-- Código -->
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                    <td align="center" style="padding:20px 0;">
+                                                        <span style="background-color:#f0f4f8;border:2px dashed #1a3a5c;border-radius:8px;padding:15px 40px;font-size:32px;font-weight:bold;color:#1a3a5c;letter-spacing:8px;">' . $codigo . '</span>
+                                                    </td>
+                                                    </tr>
+                                                </table>
+
+                                                <!-- Instrucciones -->
+                                                <p style="color:#555555;font-size:14px;margin:25px 0 10px;"><strong>Instrucciones:</strong></p>
+                                                <ol style="color:#555555;font-size:14px;margin:0;padding-left:20px;line-height:1.8;">
+                                                    <li>Ingresa este código en la pantalla de verificación.</li>
+                                                    <li>El código es válido por <strong>15 minutos</strong>.</li>
+                                                    <li>Solo puedes intentarlo <strong>3 veces</strong>.</li>
+                                                    <li>Si no solicitaste esto, ignora este correo.</li>
+                                                </ol>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Pie -->
+                                            <tr>
+                                                <td align="center" style="background-color:#f0f4f8;padding:20px;border-top:1px solid #e0e0e0;">
+                                                <p style="color:#999999;font-size:12px;margin:0;">Este es un correo automático, por favor no respondas.</p>
+                                                <p style="color:#999999;font-size:12px;margin:5px 0 0;">© 2026 SIAV - 3-JAV Tech</p>
+                                                </td>
+                                            </tr>
+
+                                            </table>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                    </body>
+                                    </html>
+                                    ';
                     $mail->Send();
 
                 } catch (Exception $e) {

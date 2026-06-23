@@ -19,7 +19,77 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok' ||
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <?php endif; ?>
+<!-- Grafica de solicitudes por tipo -->
+<div class="row mb-4">
+    <div class="col-md-10 offset-md-1">
+        <div class="card shadow-sm">
+            <div class="card-header" style="background-color:#1A3C5E;">
+                <div class="card-title text-white mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Solicitudes registradas por tipo
+                </div>
+            </div>
+            <div class="card-body text-center">
+                <?php if (!empty($totales_tipo)): ?>
+                    <canvas id="graficaTipo" style="max-height:350px;"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+                    <script>
+                    (function() {
+                        var labels = [];
+                        var datos  = [];
+                        var colores = [
+                            '#1A3C5E','#2E6DA4','#3498DB',
+                            '#27AE60','#F39C12','#E74C3C',
+                            '#9B59B6','#1ABC9C','#E67E22','#95A5A6'
+                        ];
+                         //   Carga los datos obtenidos desde PHP
+                        <?php foreach ($totales_tipo as $t): ?>
+                            labels.push('<?php echo addslashes($t['tipo']); ?>');
+                            datos.push(<?php echo (int)$t['total']; ?>);
+                        <?php endforeach; ?>
 
+                        var total = datos.reduce(function(a, b) { return a + b; }, 0);
+                            // Obtiene el contexto del canvas donde se dibujara
+                        var ctx = document.getElementById('graficaTipo').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: datos,
+                                    backgroundColor: colores.slice(0, labels.length),
+                                    borderWidth: 2,
+                                    borderColor: '#fff'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { position: 'right' },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                var val = context.parsed;
+                                                var pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                                                return context.label + ': ' + val + ' (' + pct + '%)';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })();
+                    </script>
+                <?php else: ?>
+                    <div class="text-muted py-4">
+                        <i class="fas fa-chart-pie fa-2x mb-2 d-block"></i>
+                        No hay solicitudes registradas aún.
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-10 offset-md-1">
         <div class="card shadow-sm">
@@ -107,6 +177,71 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok' ||
                     </div>
 
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-10 offset-md-1">
+        <div class="card shadow-sm">
+            <div class="card-header" style="background-color:#1A3C5E;">
+                <div class="card-title text-white mb-0">
+                    <i class="fas fa-history me-2"></i>
+                    Historial de reportes generados
+                </div>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($historial)): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Tipo de reporte</th>
+                                    <th>Rango de fechas</th>
+                                    <th>Generado por</th>
+                                    <th>Fecha de generación</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $tipos = array(
+                                    'accidentes' => 'Accidentes de tránsito',
+                                    'senales'    => 'Señalización vial en mal estado',
+                                    'reductores' => 'Reductores de velocidad en mal estado'
+                                );
+                                foreach ($historial as $h):
+                                ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars(isset($tipos[$h['tipo_reporte']]) ? $tipos[$h['tipo_reporte']] : $h['tipo_reporte']); ?></td>
+                                        <td>
+                                            <?php echo date('d/m/Y', strtotime($h['fecha_inicio'])); ?> — <?php echo date('d/m/Y', strtotime($h['fecha_fin'])); ?>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($h['primer_nombre'] . ' ' . $h['primer_apellido']); ?></td>
+                                        <td><?php echo date('d/m/Y h:i A', strtotime($h['fecha_generacion'])); ?></td>
+                                        <td class="text-center">
+                                            <form method="POST" action="<?php echo getUrl('reportes','reportes','descargar', false, 'ajax'); ?>">
+                                                <input type="hidden" name="tipo_reporte" value="<?php echo htmlspecialchars($h['tipo_reporte']); ?>">
+                                                <input type="hidden" name="fecha_inicio" value="<?php echo htmlspecialchars($h['fecha_inicio']); ?>">
+                                                <input type="hidden" name="fecha_fin" value="<?php echo htmlspecialchars($h['fecha_fin']); ?>">
+                                                <input type="hidden" name="estado" value="<?php echo htmlspecialchars($h['id_estado_solicitud']); ?>">
+                                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-download me-1"></i>
+                                                    Descargar
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-folder-open fa-2x mb-2 d-block"></i>
+                        Aún no se han generado reportes.
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

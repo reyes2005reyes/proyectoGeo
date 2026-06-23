@@ -9,8 +9,10 @@ require_once '../lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 class ReportesController {
 
     public function index() {
-        $model   = new ReportesModel();
-        $estados = array();
+        $model  = new ReportesModel();
+        $estados  = array();
+        $historial = array();
+        $totales_tipo = array();
 
         $result = $model->obtenerEstados();
         if ($result && pg_num_rows($result) > 0) {
@@ -18,6 +20,24 @@ class ReportesController {
                 $estados[] = $row;
             }
         }
+
+        $id_usuario = isset($_SESSION['id_usuario']) ? (int)$_SESSION['id_usuario'] : 0;
+        $id_rol  = isset($_SESSION['id_rol'])  ? (int)$_SESSION['id_rol'] : 0;
+
+        $resultH = $model->obtenerHistorial($id_usuario, $id_rol);
+        if ($resultH && pg_num_rows($resultH) > 0) {
+            while ($row = pg_fetch_assoc($resultH)) {
+                $historial[] = $row;
+            }
+        }
+
+        $resultT = $model->obtenerTotalesPorTipo();
+        if ($resultT && pg_num_rows($resultT) > 0) {
+            while ($row = pg_fetch_assoc($resultT)) {
+                $totales_tipo[] = $row;
+            }
+        }
+
         require_once dirname(__FILE__) . '/../../view/reportes/reportes.php';
     }
 
@@ -284,12 +304,25 @@ class ReportesController {
             }
 
             header('Content-Type: application/vnd.ms-excel');
+            $nombreArchivo = "Reporte_{$tipoNombreArchivo}_{$fechaArchivo}.xls";
+
+            // Registrar en historial
+            $model->registrarHistorial(
+                $_SESSION['id_usuario'],
+                $tipo_reporte,
+                $fecha_inicio,
+                $fecha_fin,
+                $estado,
+                $nombreArchivo
+            );
+
             header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
             header('Cache-Control: max-age=0');
 
             $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $writer->save('php://output');
             exit;
+            
 
         } catch (Exception $e) {
             // Error 1 · Caída de conexion de base de datos durante la consulta

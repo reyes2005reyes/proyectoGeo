@@ -24,7 +24,7 @@ include_once '../../lib/helpers.php';
 
     <div class="auth-body">
 
-        <h2>Recuperar acceso</h2>
+        <h2>Recuperar acceso a la cuenta</h2>
 
         <?php if(isset($_SESSION['error_recuperacion'])): ?>
             <div class="auth-alert auth-alert-error">
@@ -38,24 +38,24 @@ include_once '../../lib/helpers.php';
         <form action="<?php echo getUrl('usuarios','usuarios','enviarCodigo',false,'ajax'); ?>" method="POST">
 
             <div class="input-group-icon">
-                <label for="numero_documento">Número de documento</label>
-                <div class="input-wrapper">
-                    <i class="fa fa-id-card icon"></i>
-                    <input type="text" id="numero_documento" name="numero_documento" required minlength="6"maxlength="12" pattern="[0-9]+" inputmode="numeric" placeholder="Ej: 1023456789">
+                <label for="numero_documento" class="auth-label">Número de documento</label>
+                <div class="input-wrapper" style="position: relative;">
+                    <i class="fa fa-id-card icon" style="position: absolute; left: 10px; top: 10px; color: #94a3b8;"></i>
+                    <input type="text" id="numero_documento" name="numero_documento" class="auth-input" style="padding-left: 35px;" required minlength="6" maxlength="12" pattern="[0-9]+" inputmode="numeric" placeholder="Ej: 1023456789">
                 </div>
             </div>
 
-            <div class="input-group-icon">
-                <label for="correo">Correo electrónico</label>
-                <div class="input-wrapper">
-                    <i class="fa fa-envelope icon"></i>
-                    <input type="email" id="correo" name="correo" required placeholder="correo@ejemplo.com">
+            <div class="input-group-icon" style="margin-top: 15px;">
+                <label for="correo" class="auth-label">Correo electrónico</label>
+                <div class="input-wrapper" style="position: relative;">
+                    <i class="fa fa-envelope icon" style="position: absolute; left: 10px; top: 10px; color: #94a3b8;"></i>
+                    <input type="email" id="correo" name="correo" class="auth-input" style="padding-left: 35px;" required placeholder="correo@ejemplo.com">
                 </div>
             </div>
+
             <button type="submit" class="auth-btn">
                 Enviar código
             </button>
-
         </form>
         <div class="auth-link">
             <a href="../../web/login.php">

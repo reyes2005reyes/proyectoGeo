@@ -286,6 +286,17 @@ CREATE TABLE solicitudes_pqrsf (
     id_tipo_pqrsf INTEGER NOT NULL REFERENCES tipos_pqrsf(id_tipo_pqrsf),
     mensaje       TEXT NOT NULL
 );
+CREATE TABLE historial_reportes (
+    id_historial_reporte SERIAL PRIMARY KEY,
+    id_usuario           INTEGER NOT NULL,
+    tipo_reporte         VARCHAR(50) NOT NULL,
+    fecha_inicio         DATE NOT NULL,
+    fecha_fin            DATE NOT NULL,
+    id_estado_solicitud  INTEGER NULL,
+    nombre_archivo       VARCHAR(255) NOT NULL,
+    fecha_generacion     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 
 -- ------------------------------------------------------------
 -- 4. FUNCIONES Y TRIGGERS DE AUDITORÍA
@@ -823,7 +834,7 @@ SELECT
     ST_SetSRID(
         ST_MakePoint(
             -76.55 + (random() * 0.10),
-            3.45 + (random() * 0.10)
+            3.45 + (random() * 0.10)s
         ),
         4326
     ),

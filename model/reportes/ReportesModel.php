@@ -97,5 +97,47 @@ class ReportesModel extends MasterModel {
                 ORDER BY id_estado_solicitud";
         return $this->select($sql);
     }
+
+    public function registrarHistorial($id_usuario, $tipo_reporte, $fecha_inicio, $fecha_fin, $id_estado_solicitud, $nombre_archivo) {
+        $id_usuario   = (int) $id_usuario;
+        $tipo_reporte = pg_escape_string($tipo_reporte);
+        $fecha_inicio = pg_escape_string($fecha_inicio);
+        $fecha_fin    = pg_escape_string($fecha_fin);
+        $nombre_archivo = pg_escape_string($nombre_archivo);
+
+        $estado_val = (!empty($id_estado_solicitud) && is_numeric($id_estado_solicitud)) ? (int)$id_estado_solicitud : 'NULL';
+
+        $sql = "INSERT INTO historial_reportes
+                    (id_usuario, tipo_reporte, fecha_inicio, fecha_fin, id_estado_solicitud, nombre_archivo)
+                VALUES
+                    ($id_usuario, '$tipo_reporte', '$fecha_inicio', '$fecha_fin', $estado_val, '$nombre_archivo')";
+
+        return $this->select($sql);
+    }
+
+    public function obtenerHistorial($id_usuario, $id_rol) {
+            $id_usuario = (int) $id_usuario;
+            $id_rol     = (int) $id_rol;
+            $condicion = ($id_rol === 1) ? '' : "WHERE hr.id_usuario = $id_usuario";
+
+            $sql = "SELECT hr.*, u.primer_nombre, u.primer_apellido
+                    FROM historial_reportes hr
+                    JOIN usuarios u ON u.id_usuario = hr.id_usuario
+                    $condicion
+                    ORDER BY hr.fecha_generacion DESC
+                    LIMIT 50";
+
+            return $this->select($sql);
+        }
+        public function obtenerTotalesPorTipo() {
+        $sql = "SELECT ts.nombre AS tipo, COUNT(s.id_solicitud) AS total
+                FROM solicitudes s
+                INNER JOIN tipos_solicitud ts ON s.id_tipo_solicitud = ts.id_tipo_solicitud
+                GROUP BY ts.nombre
+                ORDER BY total DESC";
+        return $this->select($sql);
+    }
+
+
 }
 ?>
