@@ -283,8 +283,7 @@ CREATE TABLE solicitudes_via_publica_mal_estado (
 CREATE TABLE solicitudes_pqrsf (
     id_pqrsf      SERIAL PRIMARY KEY,
     id_solicitud  INTEGER NOT NULL REFERENCES solicitudes(id_solicitud) ON DELETE CASCADE,
-    id_tipo_pqrsf INTEGER NOT NULL REFERENCES tipos_pqrsf(id_tipo_pqrsf),
-    mensaje       TEXT NOT NULL
+    id_tipo_pqrsf INTEGER NOT NULL REFERENCES tipos_pqrsf(id_tipo_pqrsf)
 );
 
 -- ------------------------------------------------------------
@@ -757,10 +756,10 @@ VALUES
 -- =====================================
 
 INSERT INTO solicitudes_pqrsf
-(id_solicitud, id_tipo_pqrsf, mensaje)
+(id_solicitud, id_tipo_pqrsf)
 VALUES
-(6,2,'Queja por demora en la atención de solicitudes ciudadanas.'),
-(10,1,'Solicitud de información sobre el estado de la malla vial del sector.');
+(6,2),
+(10,1);
 
 
 -- =====================================
