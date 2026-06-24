@@ -5,8 +5,8 @@ MAP
     STATUS ON
     EXTENT 1053867 860190 1068491 879441
 
-    FONTSET "C:/ms4w/Apache/htdocs/proyectoGeo_prueba/web/misc/fonts/fonts.txt"
-    SYMBOLSET "C:/ms4w/Apache/htdocs/proyectoGeo_prueba/web/misc/symbols/symbols.sym"
+    FONTSET "C:/ms4w/Apache/htdocs/proyectoGeo/web/misc/fonts/fonts.txt"
+    SYMBOLSET "C:/ms4w/Apache/htdocs/proyectoGeo/web/misc/symbols/symbols.sym"
 
     IMAGECOLOR 218 235 247
 
@@ -19,7 +19,7 @@ MAP
     LAYER
         NAME "Cali"
         STATUS ON
-        DATA "C:\ms4w\Apache\htdocs\proyectoGeo_prueba\web\assets\shapeCali41\CaliArea.shp"  
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\CaliArea.shp"  
         TYPE POLYGON
         CLASS
             STYLE
@@ -33,7 +33,7 @@ MAP
         TRANSPARENCY 50
         NAME "Comunas"
         STATUS ON
-        DATA "C:\ms4w\Apache\htdocs\proyectoGeo_prueba\web\assets\shapeCali41\ComunasC.shp" 
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\ComunasC.shp" 
         TYPE POLYGON
         CLASS
             STYLE
@@ -47,7 +47,7 @@ MAP
         TRANSPARENCY 45
         NAME "Barrio"
         STATUS ON
-        DATA "C:\ms4w\Apache\htdocs\proyectoGeo_prueba\web\assets\shapeCali41\Barrios.shp" 
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\Barrios.shp" 
         TYPE POLYGON
         LABELITEM "BARRIO"
         CLASS
@@ -67,7 +67,7 @@ MAP
         TRANSPARENCY 25
         NAME "MallaVial"
         STATUS ON
-        DATA "C:\ms4w\Apache\htdocs\proyectoGeo_prueba\web\assets\shapeCali41\MallaVialC.shp" 
+        DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\MallaVialC.shp" 
         TYPE LINE
         CLASS
             STYLE
