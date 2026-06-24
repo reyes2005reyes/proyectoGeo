@@ -162,93 +162,7 @@
 									<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</a>
 							<?php endif; ?>
 						</li>
-<<<<<<< HEAD
-						
-						<li class="nav-item">
-						    <a data-bs-toggle="collapse" href="#rolesmenu" aria-expanded="false">
-								<i class="fas fa-file-alt"></i>
-								<p>Roles</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="rolesmenu">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="<?php echo getUrl('roles','roles','getCreate',false); ?>">
-											<span class="sub-item">Registro Roles</span>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo getUrl('roles','roles','getRoles',false); ?>">
-											<span class="sub-item">Lista de Roles</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-
-						<li class="nav-section">
-							<span class="sidebar-mini-icon">
-								<i class="fa fa-ellipsis-h"></i>
-							</span>
-							<h4 class="text-section">Sistema</h4>
-						</li>
-
-						<li class="nav-item">
-                    		<a href="<?php echo getUrl('usuarios','usuarios','lista',false); ?>">
-                        		<i class="fas fa-users"></i>
-								<p>Usuarios</p>
-                    		</a>    
-                		</li>
-
-						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#solicitudesMenu" aria-expanded="false">
-								<i class="fas fa-file-alt"></i>
-								<p>Solicitudes</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="solicitudesMenu">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="<?php echo getUrl('solicitudes','Solicitudes','listar',false); ?>">
-											<span class="sub-item">Listar Solicitudes</span>
-										</a>
-									</li>
-									<li>
-										<a href="<?php echo getUrl('solicitudes','solicitudes','getCreate',false); ?>">
-											<span class="sub-item">Enviar Solicitud / Reporte</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-
-						<li class="nav-item">
-                    		<a href="<?php echo getUrl('reportes','reportes','index',false); ?>">
-                        		<i class="fas fa-file-invoice"></i>
-								<p>Reportes</p>
-                    		</a>    
-                		</li>
-
-						<li class="nav-item">
-                    		<a href="<?php echo getUrl('educativo','educativo','catalogo',false); ?>">
-                        		<i class="fas fa-info-circle"></i>
-								<p>Educación Vial</p>
-                    		</a>    
-                		</li>
-
-						<li class="nav-item">
-       							<?php if (isset($_SESSION['auth']) && $_SESSION['auth'] === 'ok'): ?>
-										<a class="dropdown-item text-danger" href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
-                						<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
-        						<?php else: ?>
-										<a class="dropdown-item text-primary" href="login.php">
-										<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</a>
-        						<?php endif; ?>
-    					</li>
-
-=======
  
->>>>>>> e4faf33 (Cambios en el accesoController y accesoModel en helperlogin se hacen las funciones par avalidar roles y permisos yse modifica el navbar paraque se alinee con lo mencionado)
 					</ul>
 				</div>
 			</div>
@@ -297,40 +211,6 @@
 								</a>
 								<ul class="dropdown-menu dropdown-user animated fadeIn">
 									<div class="dropdown-user-scroll scrollbar-outer">
-<<<<<<< HEAD
-    										<li>
-        										<div class="user-box">
-            										<div class="avatar-lg">
-                										<img src="assets/img/logoUser.png" alt="image profile" class="avatar-img rounded">
-            										</div>
-            										<div class="u-text">
-                										<h4><?php echo isset($_SESSION['primer_nombre']) ? $_SESSION['primer_nombre'] . ' ' . $_SESSION['primer_apellido'] : 'Invitado'; ?></h4>
-														<p class="text-muted">
-															Documento: <?php echo $_SESSION['numero_documento']; ?>
-														</p>
-														<p class="text-muted">
-															Rol: <?php echo (isset($_SESSION['nombre_rol']) && !empty($_SESSION['nombre_rol'])) ? $_SESSION['nombre_rol'] : 'Usuario'; ?>
-
-														</p>
-            										</div>
-        										</div>
-    										</li>
-    										<li>
-        										<div class="dropdown-divider"></div>
-       											<?php if (isset($_SESSION['auth']) && $_SESSION['auth'] === 'ok'): ?>
-            										<a class="dropdown-item" href="<?php echo getUrl('usuarios', 'usuarios', 'ver', false); ?>">
-                										<i class="fas fa-user me-2"></i>Mi Perfil
-            										</a>
-            										<a class="dropdown-item text-danger" href="<?php echo getUrl('acceso','acceso','logout',false); ?>">
-                										<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-            										</a>
-        										<?php else: ?>
-            										<a class="dropdown-item text-primary" href="login.php">
-                										<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
-            										</a>
-        										<?php endif; ?>
-    										</li>
-=======
 										<li>
 											<div class="user-box">
 												<div class="avatar-lg">
@@ -357,7 +237,6 @@
 												</a>
 											<?php endif; ?>
 										</li>
->>>>>>> e4faf33 (Cambios en el accesoController y accesoModel en helperlogin se hacen las funciones par avalidar roles y permisos yse modifica el navbar paraque se alinee con lo mencionado)
 									</div>
 								</ul>
 							</li>

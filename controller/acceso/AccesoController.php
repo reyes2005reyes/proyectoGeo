@@ -9,12 +9,6 @@ class AccesoController{
 
             $obj = new AccesoModel();
 
-        $resultado = @$obj->select("SELECT u.*, r.nombre_rol 
-        FROM usuarios u 
-        JOIN roles r ON u.id_rol = r.id_rol 
-        WHERE u.numero_documento = '$numero_documento'");
-        
-        
             // Error 1: Fallo en la conexión con la base de datos durante la validación de credenciales.
             if (!$obj->getConnect()) {
 
@@ -110,20 +104,6 @@ class AccesoController{
 
                 }
 
-<<<<<<< HEAD
-            $verificacion = (md5($contrasena) === $usuario['contrasena']);
-            if ($verificacion) {
-                $_SESSION['primer_nombre'] = $usuario['primer_nombre'];
-                $_SESSION['primer_apellido'] = $usuario['primer_apellido'];
-                $_SESSION['numero_documento'] = $usuario['numero_documento'];
-                $_SESSION['id_usuario'] = $usuario['id_usuario'];
-                $_SESSION['id_rol'] = $usuario['id_rol'];
-                $_SESSION['nombre_rol'] = $usuario['nombre_rol'];
-                $_SESSION['auth'] = "ok";
-                $_SESSION['bienvenida'] = "Bienvenido, {$usuario['primer_nombre']} {$usuario['primer_apellido']}. Has iniciado sesión correctamente.";
-                redirect('index.php');
-=======
->>>>>>> e4faf33 (Cambios en el accesoController y accesoModel en helperlogin se hacen las funciones par avalidar roles y permisos yse modifica el navbar paraque se alinee con lo mencionado)
             } else {
 
                 $_SESSION['error'] = 'Documento o contraseña incorrectos.';
