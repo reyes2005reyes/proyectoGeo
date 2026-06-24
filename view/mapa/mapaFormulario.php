@@ -6,7 +6,7 @@
     <title>Visor Dinámico Cali</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" type="text/css" href="misc/img/dc.css"> -->
-    <script type="text/javascript" src="/proyectoGeo_prueba/web/misc/lib/mscross-1.1.9.js"></script>
+    <script type="text/javascript" src="/proyectoGeo/web/misc/lib/mscross-1.1.9.js"></script>
 </head>
 <body>
 	<nav class="navbar shadow-sm mb-3" style="background-color:#1A3C5E;">
@@ -41,7 +41,7 @@
 
         myMap1 = new msMap(mapaDiv, 'standardRight');
         myMap1.setCgi('/cgi-bin/mapserv.exe');
-        myMap1.setMapFile('c:/ms4w/Apache/htdocs/proyectoGeo_prueba/web/cali.map');
+        myMap1.setMapFile('c:/ms4w/Apache/htdocs/proyectoGeo/web/cali.map');
         myMap1.setFullExtent(1053867,1068491,860190, 879441);
         myMap1.setLayers('Cali Comunas Barrio MallaVial ReportesAccidentes');
         myMap1.redraw();
