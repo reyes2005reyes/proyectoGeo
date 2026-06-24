@@ -93,7 +93,7 @@
 										</a>
 									</li>
 									<li>
-										<a href="<?php echo getUrl('solicitudes','solicitudes','enviarSolicitud',false); ?>">
+										<a href="<?php echo getUrl('solicitudes','solicitudes','getCreate',false); ?>">
 											<span class="sub-item">Enviar Solicitud / Reporte</span>
 										</a>
 									</li>
