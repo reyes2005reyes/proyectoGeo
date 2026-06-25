@@ -11,6 +11,7 @@ include_once '../../lib/helpers.php';
 <link rel="stylesheet" href="../../web/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="../../web/assets/css/recuperarContrasena.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="icon" type="image/png" href="../../web/assets/img/logo-64.png">
 </head>
 
 <body>

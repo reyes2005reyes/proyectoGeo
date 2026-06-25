@@ -45,7 +45,7 @@ function formatEstado($estado)
         <div class="mb-3 row align-items-center">
             <div class="col-md-4">
                 <input
-                    type="search"
+                    type="number"
                     name="numero_documento"
                     id="filtro"
                     class="form-control"
