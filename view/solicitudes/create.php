@@ -1,3 +1,11 @@
+<?php
+if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
+    redirect('/proyectoGeo/web/login.php');
+    exit;
+}
+?>
+
+
 <div class="container py-4">
     <div class="mb-4">
         <h2 class="fw-bold">Nueva Solicitud</h2>
