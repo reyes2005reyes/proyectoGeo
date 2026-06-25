@@ -35,6 +35,11 @@ class SolicitudesController {
 
         include_once "../view/solicitudes/create.php";
     }
+    public function getPQRSF() {
+        $obj = new SolicitudesModel();
+        $catalogos = $obj->obtenerCatalogosFormulario();
+        include_once "../view/solicitudes/forms/pqrsf.php";
+    }
 
     public function postCreate() {
 

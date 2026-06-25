@@ -113,8 +113,8 @@
 											<?php endif; ?>
 											<?php if (tienePermiso('Solicitudes', 'registrar')): ?>
 												<li>
-													<a href="<?php echo getUrl('solicitudes', 'solicitudes', 'getCreate', false); ?>">
-														<span class="sub-item">Enviar Solicitud / Reporte</span>
+													<a href="<?php echo getUrl('solicitudes', 'Solicitudes', 'getPQRSF', false); ?>">
+														<span class="sub-item">PQRSF</span>
 													</a>
 												</li>
 											<?php endif; ?>
