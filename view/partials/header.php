@@ -16,5 +16,6 @@
     <link rel="stylesheet" href="/proyectoGeo/web/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/proyectoGeo/web/assets/css/plugins.min.css">
     <link rel="stylesheet" href="/proyectoGeo/web/assets/css/kaiadmin.min.css">
+    <link rel="icon" type="image/png" href="assets/img/logo-64.png">
 
 <?php } ?>

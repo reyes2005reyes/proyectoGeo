@@ -5,9 +5,9 @@
 		<div class="sidebar" data-background-color="dark">
 			<div class="sidebar-logo">
 				<!-- Logo Header -->
-				<div class="logo-header" data-background-color="dark">
+				<div class="logo-header " data-background-color="dark">
 					<a href="index.php" class="logo">
-						<img src="assets/img/logoGeoNav.png" alt="navbar brand" class="navbar-brand" height="60">
+						<img src="assets/img/logo.png" alt="navbar brand" class="navbar-brand text-center" height="70">
 					</a>
 					<div class="nav-toggle">
 						<button class="btn btn-toggle toggle-sidebar">
@@ -217,8 +217,9 @@
 													<img src="assets/img/logoUser.png" alt="image profile" class="avatar-img rounded">
 												</div>
 												<div class="u-text">
-													<h4><?php echo isset($_SESSION['primer_nombre']) ? $_SESSION['primer_nombre'] . ' ' . $_SESSION['primer_apellido'] : 'Invitado'; ?></h4>
+													<h4><?php echo isset($_SESSION['primer_nombre']) ? $_SESSION['primer_nombre'] . ' ' . $_SESSION['primer_apellido'] : 'Usuario'; ?></h4>
 													<p class="text-muted"><?php echo isset($_SESSION['numero_documento']) ? 'Doc: ' . $_SESSION['numero_documento'] : 'No has iniciado sesión'; ?></p>
+													<p class="text-muted"><?php echo isset($_SESSION['nombre_rol']) ? 'Rol: ' . $_SESSION['nombre_rol'] : 'Usuario'; ?></p>
 												</div>
 											</div>
 										</li>

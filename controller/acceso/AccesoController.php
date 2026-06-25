@@ -39,8 +39,10 @@ class AccesoController{
             }
 
             $resultado = @$obj->select(
-                "SELECT * FROM usuarios
-                WHERE numero_documento = '$numero_documento'"
+                "SELECT u.*, r.nombre_rol
+                FROM usuarios u
+                INNER JOIN roles r ON u.id_rol = r.id_rol
+                WHERE u.numero_documento = '$numero_documento'"
             );
 
             if ($resultado === false) {
@@ -72,6 +74,7 @@ class AccesoController{
                     $_SESSION['primer_apellido'] = $usuario['primer_apellido'];
                     $_SESSION['numero_documento'] = $usuario['numero_documento'];
                     $_SESSION['id_usuario'] = $usuario['id_usuario'];
+                    $_SESSION['nombre_rol'] = $usuario['nombre_rol'];
                     $_SESSION['id_rol'] = $usuario['id_rol'];
 
                     // Cargar permisos del rol
