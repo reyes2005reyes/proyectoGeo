@@ -58,12 +58,21 @@
                 <td>
                     <?php if (!empty($solicitud['imagen_url'])) { ?>
 
+                        <?php
+                        $imagenUrl = $solicitud['imagen_url'];
+                        // Ese bloque normaliza la ruta de la imagen para que funcione en localhost
+                        if (strpos($imagenUrl, '../web/') === 0) {
+                            $imagenUrl = '/proyectoGeo/web/' . substr($imagenUrl, strlen('../web/'));
+                        } elseif (strpos($imagenUrl, 'web/assets/') === 0) {
+                            $imagenUrl = '/proyectoGeo/' . $imagenUrl;
+                        }
+                        ?>
+
                         <img
-                            src="<?php echo htmlspecialchars($solicitud['imagen_url']); ?>"
+                            src="<?php echo htmlspecialchars($imagenUrl); ?>"
                             alt="Imagen de la solicitud"
                             class="img-fluid"
                             style="max-width:300px;">
-
                     <?php } else { ?>
 
                         Sin imagen

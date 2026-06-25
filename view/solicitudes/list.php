@@ -33,10 +33,14 @@
                         <td>
                             <a class="btn btn-info btn-sm" href="<?php echo getUrl('solicitudes','solicitudes','getShow', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">
                                 Ver
-                            </a>
-                            <a class="btn btn-primary btn-sm" href="<?php echo getUrl('solicitudes','solicitudes','getShow', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">
-                                Responder
-                            </a>
+                            </a>  
+
+                           <?php if (isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 2) { ?>
+                                <a class="btn btn-primary btn-sm"
+                                href="<?php echo getUrl('solicitudes','solicitudes','getShow', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">
+                                    Responder
+                                </a>
+                            <?php } ?>  
                         </td>
                     </tr>
                 <?php } ?>

@@ -170,42 +170,6 @@ class UsuariosModel extends MasterModel {
         return $usuarios;
     }
     // fin aqui termina la funcion para mostrar los usuarios registrados en el sistema y editarlo xd
-
-
-
-    // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
-
-    // Esta funcion si la utiliza el modulo miPerfil
-    public function obtenerPerfil($idUsuario){
-        $sql = "SELECT
-                    u.id_usuario,
-                    u.id_tipo_documento,
-                    td.nombre_tipo_documento,
-                    u.id_rol,
-                    u.id_estado_usuario,
-                    u.primer_nombre,
-                    u.segundo_nombre,
-                    u.primer_apellido,
-                    u.segundo_apellido,
-                    u.numero_documento,
-                    u.correo,
-                    u.telefono,
-                    u.direccion
-                FROM usuarios u
-                INNER JOIN tipos_documento td
-                    ON u.id_tipo_documento = td.id_tipo_documento
-                WHERE u.id_usuario = $idUsuario";
-
-        $resultado = $this->select($sql);
-
-        if(pg_num_rows($resultado) > 0){
-            return pg_fetch_assoc($resultado);
-        }
-
-        return null;
-    }
-
-    // Fin
     
     // Esta funcion la utiliza el modulo usuarios
     public function documentoExisteEnOtroUsuario($numeroDocumento, $idUsuario){
@@ -218,17 +182,6 @@ class UsuariosModel extends MasterModel {
         $sql = "SELECT id_usuario
                 FROM usuarios
                 WHERE numero_documento = $numeroDocumento
-                AND id_usuario <> $idUsuario";
-
-        return pg_num_rows($this->select($sql)) > 0;
-    }
-
-    public function correoExisteEnOtroUsuario($correo, $idUsuario){
-        $correo = pg_escape_string($correo);
-
-        $sql = "SELECT id_usuario
-                FROM usuarios
-                WHERE correo = '$correo'
                 AND id_usuario <> $idUsuario";
 
         return pg_num_rows($this->select($sql)) > 0;
@@ -298,7 +251,48 @@ class UsuariosModel extends MasterModel {
         return $this->update($sql);
     }
 
+    // aqui comienza la funcion para mostrar el perfil del usuario y actualizarlo
 
+      public function obtenerPerfil($idUsuario){
+        $sql = "SELECT
+                    u.id_usuario,
+                    u.id_tipo_documento,
+                    td.nombre_tipo_documento,
+                    u.id_rol,
+                    u.id_estado_usuario,
+                    u.primer_nombre,
+                    u.segundo_nombre,
+                    u.primer_apellido,
+                    u.segundo_apellido,
+                    u.numero_documento,
+                    u.correo,
+                    u.telefono,
+                    u.direccion
+                FROM usuarios u
+                INNER JOIN tipos_documento td
+                    ON u.id_tipo_documento = td.id_tipo_documento
+                WHERE u.id_usuario = $idUsuario";
+
+        $resultado = $this->select($sql);
+
+        if(pg_num_rows($resultado) > 0){
+            return pg_fetch_assoc($resultado);
+        }
+
+        return null;
+    }
+
+    public function correoExisteEnOtroUsuario($correo, $idUsuario){
+        $correo = pg_escape_string($correo);
+
+        $sql = "SELECT id_usuario
+                FROM usuarios
+                WHERE correo = '$correo'
+                AND id_usuario <> $idUsuario";
+
+        return pg_num_rows($this->select($sql)) > 0;
+    }
+    
     //Funcion propia para actualizar los datos de miPerfil
 
     public function actualizarDatosPerfil($idUsuario, $correo, $telefono, $direccion){
@@ -315,6 +309,10 @@ class UsuariosModel extends MasterModel {
 
         return $this->update($sql);
     }
+
+
+  
     }
+
 
 ?>

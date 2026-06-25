@@ -56,17 +56,30 @@ class SolicitudesController {
 
         if (
             isset($_FILES['imagen']) &&
-            is_file($_FILES['imagen']['tmp_name'])
+            is_uploaded_file($_FILES['imagen']['tmp_name'])
         ) {
 
-            $nombreImagen = $_FILES['imagen']['name'];
             $archivoTemporal = $_FILES['imagen']['tmp_name'];
+                         // El strolower convierte a minusculas
+            $extension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+            $extensionesPermitidas = array('jpg', 'jpeg', 'png');
 
-            $ruta = "../web/assets/img/solicitudes/" . $nombreImagen;
+            if (in_array($extension, $extensionesPermitidas)) {
 
-            if (move_uploaded_file($archivoTemporal, $ruta)) {
+                $directorioFisico = "../web/assets/img/solicitudes/";
 
-                $datos['imagen_url'] = $ruta;
+                if (!is_dir($directorioFisico)) {
+                    // mkdir crear la carpeta en caso de que no exista
+                    mkdir($directorioFisico, 0777, true);
+                }
+                                //Genera fecha y hora en texto.
+                $nombreImagen = date('Ymd_His') . '_solicitud_' . $_SESSION['id_usuario'] . '.' . $extension;
+                $rutaFisica = $directorioFisico . $nombreImagen;
+
+                if (move_uploaded_file($archivoTemporal, $rutaFisica)) {
+
+                    $datos['imagen_url'] = "/proyectoGeo/web/assets/img/solicitudes/" . $nombreImagen;
+                }
             }
         }
 
