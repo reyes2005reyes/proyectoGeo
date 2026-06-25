@@ -4,10 +4,10 @@
         <p class="text-muted">Petición, Queja, Reclamo, Sugerencia o Felicitación</p>
     </div>
 
-    <form action="<?php echo getUrl('solicitudes', 'pqrsf', 'postCreate'); ?>" method="post" id="formPqrsf">
+    <form action="<?php echo getUrl('solicitudes', 'Solicitudes', 'postCreate', false); ?>" method="post" id="formPqrsf">
 
         <input type="hidden" name="id_estado_solicitud" value="1">
-
+        <input type="hidden" name="id_tipo_solicitud" value="5">
         <div class="card shadow-sm mb-4">
             <div class="card-header text-white fw-semibold" style="background-color: #1a2942;">
                 <i class="fa fa-envelope me-2"></i> PQRSF
