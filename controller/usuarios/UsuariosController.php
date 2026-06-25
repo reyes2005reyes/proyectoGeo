@@ -476,6 +476,21 @@ class UsuariosController{
             exit;
         }
 
+        // Verificar el rol del usuario que se va a editar
+        $obj = new UsuariosModel();
+        $usuarioObjetivo = $obj->obtenerPerfil($idUsuario);
+        if (!$usuarioObjetivo) {
+            echo json_encode(array('success' => false, 'message' => 'Usuario no encontrado'));
+            exit;
+        }
+        $idRolObjetivo = (int)$usuarioObjetivo['id_rol'];
+
+        // Funcionario (2) solo puede editar ciudadanos (3)
+        if ($idRolSesion === 2 && $idRolObjetivo !== 3) {
+            echo json_encode(array('success' => false, 'message' => 'No tiene permisos para modificar este usuario'));
+            exit;
+        }
+
         // Recoger y limpiar campos editables por todos
         $primerNombre = trim(isset($_POST['primer_nombre']) ? $_POST['primer_nombre']    : '');
         $segundoNombre  = trim(isset($_POST['segundo_nombre'])   ? $_POST['segundo_nombre']   : '');
@@ -570,9 +585,8 @@ class UsuariosController{
         } else {
             // ── FUNCIONARIO: no puede editar documento, tipo doc, rol ni contraseña ──
             // Tomamos esos valores directamente de la BD para no perderlos
-            $usuarioActual   = $obj->obtenerPerfil($idUsuario);
-            $numeroDoc       = $usuarioActual['numero_documento'];
-            $idTipoDocumento = $usuarioActual['id_tipo_documento'];
+            $numeroDoc       = $usuarioObjetivo['numero_documento'];
+            $idTipoDocumento = $usuarioObjetivo['id_tipo_documento'];
 
             if ($obj->correoExisteEnOtroUsuario($correo, $idUsuario)) {
                 echo json_encode(array('success' => false, 'message' => 'El correo ya pertenece a otro usuario'));
@@ -605,6 +619,13 @@ class UsuariosController{
     // Método para cambiar estado del usuario (AJAX)
     public function cambiarEstadoUsuario() {
         header('Content-Type: application/json; charset=utf-8');
+
+        // Solo el administrador puede cambiar el estado
+        $idRolSesion = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
+        if ($idRolSesion !== 1) {
+            echo json_encode(array('success' => false, 'message' => 'No tiene permisos para cambiar el estado de un usuario'));
+            exit;
+        }
         
         $idUsuario = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
         

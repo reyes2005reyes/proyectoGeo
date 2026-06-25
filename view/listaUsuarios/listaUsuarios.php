@@ -84,9 +84,20 @@ function formatEstado($estado)
                                 <td><?php echo htmlspecialchars($usuario['nombre_rol']); ?></td>
                                 <td><?php echo htmlspecialchars(formatEstado($usuario['nombre_estado_usuario'])); ?></td>
                                 <td class="text-end">
+                                    <?php 
+                                    $idRolSesionVista = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
+                                    $idRolObjetivoVista = isset($usuario['id_rol']) ? (int)$usuario['id_rol'] : 0;
+                                    $esAdminVista = ($idRolSesionVista === 1);
+                                    $puedeEditar = $esAdminVista || ($idRolSesionVista === 2 && $idRolObjetivoVista === 3);
+                                    $puedeCambiarEstado = $esAdminVista;
+                                    ?>
                                     <div class="btn-group" role="group" aria-label="Acciones usuario">
+                                        <?php if ($puedeEditar): ?>
                                         <button type="button" class="btn btn-sm btn-primary" onclick="abrirModalEditar(<?php echo $usuario['id_usuario']; ?>)">Actualizar datos</button>
+                                        <?php endif; ?>
+                                        <?php if ($puedeCambiarEstado): ?>
                                         <button type="button" class="btn btn-sm btn-warning" onclick="abrirModalCambiarEstado(<?php echo $usuario['id_usuario']; ?>)">Cambiar estado</button>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
