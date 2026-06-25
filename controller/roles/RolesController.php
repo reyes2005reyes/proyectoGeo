@@ -21,11 +21,33 @@ class RolesController {
 
         $obj = new MasterModel();
 
-        $rol_nombre = $_POST['rol_nombre'];
+        $rol_nombre = trim($_POST['rol_nombre']);
+
+        if (strlen($rol_nombre) < 3) {
+
+            echo "<script>
+                alert('El nombre del rol debe tener mínimo 3 caracteres');
+                history.back();
+              </script>";
+            exit();
+        }
+
+        $sql = "SELECT * FROM roles WHERE LOWER(nombre_rol) = LOWER('$rol_nombre')";
+ 
+        $validar = $obj->select($sql);
+
+        if (pg_num_rows($validar) > 0) {
+
+            echo "<script>
+                alert('Ya existe un rol con ese nombre');
+                history.back();
+              </script>";
+            exit();
+        }
+
         $rol_id = $obj->autoincrement("roles", "id_rol");
 
-        $sql = "INSERT INTO roles (id_rol, nombre_rol)
-                VALUES($rol_id, '$rol_nombre')";
+        $sql = "INSERT INTO roles (id_rol, nombre_rol) VALUES($rol_id, '$rol_nombre')";
         $obj->insert($sql);
 
         if (isset($_POST['permisos'])) {
@@ -36,17 +58,21 @@ class RolesController {
 
         foreach ($permisos as $modulo_id => $acciones) {
 
-            foreach ($acciones as $accion_id => $valor) {
+        foreach ($acciones as $accion_id => $valor) {
 
-                $per_id = $obj->autoincrement("permisos", "id_permiso");
+            $per_id = $obj->autoincrement("permisos", "id_permiso");
 
-                $sql = "INSERT INTO permisos
-                        (id_permiso, id_rol, id_modulo, id_accion)
-                        VALUES($per_id, $rol_id, $modulo_id, $accion_id)";
+            $sql = "INSERT INTO permisos
+                    (id_permiso, id_rol, id_modulo, id_accion)
+                    VALUES($per_id, $rol_id, $modulo_id, $accion_id)";
 
-                $obj->insert($sql);
+            $obj->insert($sql);
             }
         }
+
+        echo "<script>
+                alert('Rol registrado correctamente');
+          </script>";
 
         redirect(getUrl("roles", "roles", "getRoles"));
     }
@@ -93,16 +119,37 @@ class RolesController {
         include_once '../view/roles/update.php';
     }
 
+
     public function postUpdate() {
 
         $obj = new MasterModel();
 
         $id_rol = $_POST['id_rol'];
-        $rol_nombre = $_POST['rol_nombre'];
+        $rol_nombre = trim($_POST['rol_nombre']);
 
-        $sql = "UPDATE roles
-                SET nombre_rol = '$rol_nombre'
-                WHERE id_rol = $id_rol";
+        if (strlen($rol_nombre) < 3) {
+
+            echo "<script>
+                    alert('El nombre del rol debe tener mínimo 3 caracteres');
+                    history.back();
+                </script>";
+            exit();
+        }
+
+        $sql = "SELECT * FROM roles WHERE LOWER(nombre_rol) = LOWER('$rol_nombre') AND id_rol <> $id_rol";
+
+        $validar = $obj->select($sql);
+
+        if (pg_num_rows($validar) > 0) {
+
+            echo "<script>
+                    alert('Ya existe un rol con ese nombre');
+                    history.back();
+                </script>";
+            exit();
+        }
+
+        $sql = "UPDATE roles SET nombre_rol = '$rol_nombre' WHERE id_rol = $id_rol";
 
         $obj->update($sql);
 
@@ -121,16 +168,17 @@ class RolesController {
 
                 $per_id = $obj->autoincrement("permisos", "id_permiso");
 
-                $sql = "INSERT INTO permisos
-                        (id_permiso, id_rol, id_modulo, id_accion)
-                        VALUES($per_id, $id_rol, $modulo_id, $accion_id)";
+                $sql = "INSERT INTO permisos (id_permiso, id_rol, id_modulo, id_accion) VALUES($per_id, $id_rol, $modulo_id, $accion_id)";
 
                 $obj->insert($sql);
             }
         }
 
+        echo "<script>
+                alert('Rol actualizado correctamente');
+            </script>";
+
         redirect(getUrl("roles", "roles", "getRoles"));
     }
 }
-
 ?>
