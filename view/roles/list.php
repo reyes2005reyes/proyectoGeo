@@ -1,4 +1,3 @@
-```php
 <div class="container-fluid mt-4">
 
     <h1 class="mb-2">Listado de Roles</h1>
@@ -80,5 +79,3 @@
     </div>
 
 </div>
-```
-
