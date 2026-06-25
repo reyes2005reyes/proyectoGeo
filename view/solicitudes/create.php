@@ -2,15 +2,6 @@
     <h1 class="display-4">Nueva Solicitud</h1>
 </div>
 <div class="mt-4">
-    <label>Seleccione la ubicación en el mapa</label>
-    <iframe
-        src="../view/mapa/mapaFormulario.php"
-        width="100%"
-        height="500"
-        style="border:1px solid #ccc;">
-    </iframe>
-</div>
-<div class="mt-4">
     <form action="<?php echo getUrl('solicitudes', 'solicitudes', 'postCreate'); ?>" method="post"  enctype="multipart/form-data" id="formSolicitud">
         <div class="row">
             <div class="col-md-4 mt-3">
@@ -106,29 +97,5 @@
     </form>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const tipoSelect = document.getElementById('id_tipo_solicitud');
-    const sections = document.querySelectorAll('.tipo-section');
-
-    function toggleSections() {
-        const selected = tipoSelect.options[tipoSelect.selectedIndex];
-        const codigo = selected ? selected.dataset.codigo : '';
-
-        sections.forEach(function (section) {
-            const active = section.dataset.tipo === codigo;
-            section.classList.toggle('d-none', !active);
-            section.querySelectorAll('.detalle-required').forEach(function (field) {
-                field.required = active;
-                field.disabled = !active;
-            });
-            section.querySelectorAll('input:not(.detalle-required), select:not(.detalle-required), textarea:not(.detalle-required)').forEach(function (field) {
-                field.disabled = !active;
-            });
-        });
-    }
-
-    tipoSelect.addEventListener('change', toggleSections);
-    toggleSections();
-});
-</script>
+<script src="/proyectoGeo/web/js/createSoli.js"></script>
+<script src="/proyectoGeo/web/js/capturarCoordenadas.js"></script>
