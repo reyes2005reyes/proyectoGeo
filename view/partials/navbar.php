@@ -139,6 +139,13 @@
 										<p>Educación Vial</p>
 									</a>
 								</li>
+
+								<li class="nav-item">
+								<a href="<?php echo getUrl('acercade', 'acercade', 'index', false); ?>">
+									<i class="fas fa-info-circle"></i>
+									<p>Acerca De..</p>
+								</a>
+							</li>
 							<?php endif; ?>
  
 						<?php else: ?>
@@ -148,6 +155,12 @@
 								<a href="<?php echo getUrl('educativo', 'educativo', 'catalogo', false); ?>">
 									<i class="fas fa-info-circle"></i>
 									<p>Educación Vial</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="<?php echo getUrl('acercade', 'acercade', 'index', false); ?>">
+									<i class="fas fa-info-circle"></i>
+									<p>Acerca De..</p>
 								</a>
 							</li>
  
