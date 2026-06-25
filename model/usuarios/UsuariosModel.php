@@ -310,7 +310,21 @@ class UsuariosModel extends MasterModel {
         return $this->update($sql);
     }
 
+    public function validarContrasenaActual($id_usuario, $contrasena){
 
+        $hash = md5($contrasena);
+
+        $hash = pg_escape_string($hash);
+
+        $sql = "SELECT id_usuario
+                FROM usuarios
+                WHERE id_usuario = $id_usuario
+                AND contrasena = '$hash'";
+
+        $resultado = $this->select($sql);
+
+        return pg_num_rows($resultado) > 0;
+    }
   
     }
 

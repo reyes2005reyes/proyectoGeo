@@ -21,14 +21,10 @@
             <div class="col-12 col-lg-10">
 
                 <div class="card shadow-sm">
-                    <div class="card-header text-white text-center fw-semibold"
-                        style="background-color:#1A3C5E;">
+                    <div class="card-header text-white text-center fw-semibold" style="background-color:#1A3C5E;">
                         Mapa de Cali
                     </div>
-                    <div id="dc_main"
-                        class="mscross border w-100"
-                        style="height:700px; position:relative; overflow:hidden;">
-                    </div>
+                    <div id="dc_main" class="mscross border w-100" style="height:550px; position:relative; overflow:hidden;"> </div>
                 </div>
 
                 <!-- Inputs hidden de coordenadas -->
