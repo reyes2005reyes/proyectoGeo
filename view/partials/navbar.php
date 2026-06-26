@@ -262,3 +262,12 @@
 			</div>
 			<div class="container">
 				<div class="page-inner">
+				<?php if (!estaLogueado()): ?>
+					<div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+						<i class="fas fa-exclamation-triangle me-2"></i>
+						<strong>Acceso limitado.</strong> Debe 
+						<a href="/proyectoGeo/web/login.php" class="alert-link">iniciar sesión</a> 
+						para poder enviar solicitudes o consultarlas.
+						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+					</div>
+				<?php endif; ?>

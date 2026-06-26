@@ -62,7 +62,7 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                     <!-- Imagen: oculta si es PQRSF -->
                     <div class="col-12" id="campo-imagen">
                         <label for="imagen" class="form-label fw-semibold">Imagen</label>
-                        <input type="file" class="form-control" id="imagen" name="imagen" accept=".jpg,.jpeg,.png">
+                        <input type="file" class="form-control" id="imagen" name="imagen" accept=".jpg,.jpeg,.png" required>
                         <div class="form-text">Formatos permitidos: JPG, JPEG, PNG</div>
                     </div>
 
