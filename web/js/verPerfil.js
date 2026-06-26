@@ -131,16 +131,9 @@
 
             var xhr = new XMLHttpRequest();
 
-            xhr.open(
-                "POST",
-                "/proyectoGeo/web/ajax.php?modulo=usuarios&controlador=usuarios&funcion=verificarContrasenaAjax",
-                true
-            );
+            xhr.open("POST","/proyectoGeo/web/ajax.php?modulo=usuarios&controlador=usuarios&funcion=verificarContrasenaAjax", true );
 
-            xhr.setRequestHeader(
-                "Content-Type",
-                "application/x-www-form-urlencoded"
-            );
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
             xhr.onreadystatechange = function(){
 

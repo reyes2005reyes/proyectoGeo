@@ -194,21 +194,14 @@ if (!isset($perfil) || !is_array($perfil)) {
 
                 <div class="d-flex gap-2 justify-content-end mt-4">
 
-                    <button type="button"
-                            class="btn btn-primary"
-                            id="btnEditar">
+                    <button type="button" class="btn btn-primary"nid="btnEditar">
                         Actualizar datos
                     </button>
-
-                    <button type="submit"
-                            class="btn btn-success d-none"
-                            id="btnGuardar">
+                    <button type="submit" class="btn btn-success d-none" id="btnGuardar">
                         Guardar cambios
                     </button>
 
-                    <button type="button"
-                            class="btn btn-secondary d-none"
-                            id="btnCancelar">
+                    <button type="button" class="btn btn-secondary d-none" id="btnCancelar">
                         Cancelar
                     </button>
                 </div>

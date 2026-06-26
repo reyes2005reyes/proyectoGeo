@@ -15,6 +15,8 @@ MAP
         IMAGEPATH "c:/ms4w/tmp/ms_tmp/" 
         IMAGEURL "/ms_tmp/"
     END
+       
+
 
     LAYER
         NAME "Cali"
@@ -53,12 +55,21 @@ MAP
         CLASS
             NAME "LABEL"
             STYLE
-                COLOR 190 55 45
-                OUTLINECOLOR 90 40 35
+                COLOR 245 245 245
+                OUTLINECOLOR 205 205 205
             END
             LABEL   
-                SIZE SMALL
-                COLOR 0 0 0
+                TYPE TRUETYPE
+                FONT "sans"
+                ENCODING "UTF-8"
+                POSITION CC 
+                ANGLE auto
+                PARTIALS true
+                SIZE 7
+                COLOR 45 45 45
+                OUTLINECOLOR 255 255 255
+                SHADOWCOLOR 255 255 255
+                SHADOWSIZE 1 1
             END
         END
     END
@@ -69,10 +80,24 @@ MAP
         STATUS ON
         DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\MallaVialC.shp" 
         TYPE LINE
+        LabelItem "nombre"
         CLASS
             STYLE
                 COLOR 0 0 0
                 WIDTH 2
+            END
+            LABEL   
+                TYPE TRUETYPE
+                FONT "sans"
+                ENCODING "UTF-8"
+                POSITION CC 
+                ANGLE auto
+                PARTIALS true
+                SIZE 7
+                COLOR 45 45 45
+                OUTLINECOLOR 255 255 255
+                SHADOWCOLOR 255 255 255
+                SHADOWSIZE 1 1
             END
         END
     END
@@ -84,18 +109,11 @@ MAP
 
         CONNECTION "user=postgres password=123 dbname=sistema_geo host=localhost port=5432"
 
-       DATA "coordenadas FROM (
-                SELECT
-                    id_solicitud,
-                    coordenadas
-                FROM solicitudes
-                WHERE id_tipo_solicitud = 1
-            ) AS accidentes
+        DATA "coordenadas FROM (SELECT id_solicitud, coordenadas FROM solicitudes WHERE id_tipo_solicitud = 1) AS accidentes
             USING UNIQUE id_solicitud
             USING SRID=4326"
 
         TYPE POINT
-
         CLASS
             STYLE
                 SYMBOL star
