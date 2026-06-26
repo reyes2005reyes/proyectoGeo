@@ -44,7 +44,7 @@
                                     </a>
                                     <?php if (isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 2) { ?>
                                         <a class="btn btn-sm btn-outline-secondary"
-                                           href="<?php echo getUrl('solicitudes','solicitudes','getResponder', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">
+                                           href="<?php echo getUrl('solicitudes','solicitudes','getShow', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">
                                             <i class="fa fa-reply me-1"></i> Responder
                                         </a>
                                     <?php } ?>
