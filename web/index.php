@@ -30,13 +30,15 @@ header('Content-Type: text/html; charset=utf-8');
             ?>
             <div class="mapa-contenedor">
                 <iframe
+                    id="iframe_mapa"
                     src="../view/mapa/mapa.php"
                     style="width:100%; height:85vh; border:none;"
                     title="Mapa del Proyecto">
                 </iframe>
             </div>
+            
             <?php
         }
     ?>
-	
+
 <?php include_once '../view/partials/footer.php'; ?>

@@ -110,28 +110,3 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
 
 <script src="/proyectoGeo/web/js/createSoli.js"></script>
 <script src="/proyectoGeo/web/js/capturarCoordenadas.js"></script>
-
-<script>
-document.getElementById('id_tipo_solicitud').addEventListener('change', function () {
-    var codigo = this.options[this.selectedIndex].getAttribute('data-codigo');
-
-    // Mostrar/ocultar imagen según tipo
-    var campoImagen = document.getElementById('campo-imagen');
-    if (codigo === 'pqrsf') {
-        campoImagen.style.display = 'none';
-        document.getElementById('imagen').removeAttribute('required');
-    } else {
-        campoImagen.style.display = '';
-    }
-
-    // Mostrar seccion dinámica
-    var secciones = document.querySelectorAll('.tipo-section');
-    for (var i = 0; i < secciones.length; i++) {
-        secciones[i].classList.add('d-none');
-    }
-    if (codigo) {
-        var activa = document.querySelector('.tipo-section[data-tipo="' + codigo + '"]');
-        if (activa) activa.classList.remove('d-none');
-    }
-});
-</script>

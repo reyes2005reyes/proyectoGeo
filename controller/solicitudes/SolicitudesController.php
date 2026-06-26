@@ -16,7 +16,7 @@ class SolicitudesController {
 
         } else {
 
-            // Administrador y Funcionario ven todas
+            // Funcionario ve todas
             $solicitudes = $obj->listarSolicitudes();
         }
 
@@ -35,6 +35,7 @@ class SolicitudesController {
 
         include_once "../view/solicitudes/create.php";
     }
+
     public function getPQRSF() {
         $obj = new SolicitudesModel();
         $catalogos = $obj->obtenerCatalogosFormulario();
@@ -93,6 +94,7 @@ class SolicitudesController {
             $datos['id_tipo_solicitud']
         );
 
+        // Toma la primera fila de la consulta
         $tipoSolicitud = pg_fetch_assoc($tipoSolicitud);
 
         $codigo_tipo = $tipoSolicitud['codigo'];
@@ -108,13 +110,7 @@ class SolicitudesController {
 
         if ($resultado) {
 
-            redirect(
-                getUrl(
-                    "solicitudes",
-                    "solicitudes",
-                    "listar"
-                )
-            );
+            redirect(getUrl("solicitudes","solicitudes", "listar"));
 
         } else {
 

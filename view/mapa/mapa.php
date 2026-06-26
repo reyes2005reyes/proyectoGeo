@@ -1,3 +1,59 @@
+<?php
+
+include_once '../../lib/conf/connection.php';
+
+session_start();
+
+    $objConexion = new Connection();
+    $conexion = $objConexion->getConnect();
+
+    $dir1 = $_GET['x'];
+    $dir2 = $_GET['y'];
+
+    $sqlconsult = "
+        SELECT
+            id_solicitud,
+            descripcion,
+            direccion,
+            ST_AsText(coordenadas) AS astext
+        FROM solicitudes
+        WHERE id_tipo_solicitud = 1
+    ";
+
+    $queryConsult = pg_query($conexion, $sqlconsult);
+
+    while($resultado = pg_fetch_array($queryConsult)){
+
+        $astext = $resultado["astext"];
+        $arreglo = explode(" ", $astext);
+        $astext_x = substr($arreglo[0], 6);
+        $astext_y = substr($arreglo[1],0,strlen($arreglo[1])-1);
+
+        if((($dir1 >= $astext_x-100 && $dir1 <= $astext_x+100)) && (($dir2 >= $astext_y-100 && $dir2 <= $astext_y+100))){
+
+            $id = $resultado["id_solicitud"];
+
+            $sql1 = "
+                SELECT
+                    direccion,
+                    descripcion
+                FROM solicitudes
+                WHERE id_solicitud = $id
+            ";
+
+            $query1 = pg_query($conexion,$sql1);
+            $array1 = pg_fetch_array($query1);
+
+            echo json_encode(array("direccion"=>$array1["direccion"],"descripcion"=>$array1["descripcion"]));
+
+            exit;
+        }
+    }
+
+   // echo json_encode(false);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,27 +128,30 @@
                                     <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[3]" value="MallaVial" id="chk3">
                                     <label class="form-check-label" for="chk3">Malla Vial</label>
                                 </div>
-                                <div class="form-switch">
-                                    <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[4]" value="ReportesAccidentes" id="chk4">
-                                    <label class="form-check-label" for="chk4">Reportes Accidentes</label>
-                                </div>
+
+                                <?php if(isset($_SESSION['id_usuario'])){ ?>
+                                    <div class="form-switch">
+                                        <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[4]" value="ReportesAccidentes" id="chk4">
+                                        <label class="form-check-label" for="chk4">Reportes Accidentes</label>
+                                    </div>
+                                <?php } ?>
                             </form>
                         </div>
                     </div>
 
-                    <!-- BOTON DE UBICACION -->
+                    <!-- CARTA DE UBICACION -->
                     <div class="card shadow-sm mt-3">
                         <div class="card-header text-white fw-semibold" style="background-color:#1A3C5E;">
                             Ubicación
                         </div>
                         <div class="card-body text-center p-3">
 
-                            <!-- Hint inicial -->
+                            <!-- inicial -->
                             <p id="hint_click" class="text-muted small mb-0">
                                 Haz clic en el mapa<br>para seleccionar una ubicación
                             </p>
 
-                            <!-- Panel tras el clic -->
+                            <!-- Panel Boton solicitud -->
                             <div id="panel_solicitud" class="d-none">
 
                                 <div class="bg-light rounded p-2 mb-3 text-start">
@@ -130,14 +189,10 @@
 
         var myMap1;
         var myMap2;
+        var seleccionado2 = false;
+        var consulta2 = null;
 
-		function ajustarMapa(){
-			var mapaDiv = document.getElementById("dc_main");
-			mapaDiv.style.width  = mapaDiv.parentNode.offsetWidth + "px";
-			mapaDiv.style.height = (window.innerHeight * 0.75) + "px";
-			myMap1.recalc_map_size();
-			myMap1.redraw();
-		}
+		
 
         window.onload = function(){
 
@@ -148,7 +203,16 @@
             myMap1.setCgi('/cgi-bin/mapserv.exe');
             myMap1.setMapFile('c:/ms4w/Apache/htdocs/proyectoGeo/web/cali.map');
             myMap1.setFullExtent(1053867, 1068491, 860190, 879441);
-            myMap1.setLayers('Cali Comunas Barrio MallaVial ReportesAccidentes');
+
+            <?php if(isset($_SESSION['id_usuario'])){ ?>
+
+              myMap1.setLayers('Cali Comunas Barrio MallaVial ReportesAccidentes');
+
+            <?php }else{ ?>
+
+                myMap1.setLayers('Cali Comunas Barrio MallaVial');
+
+            <?php } ?>
 
             myMap2 = new msMap(document.getElementById("dc_main2"));
             myMap2.setActionNone();
@@ -161,7 +225,13 @@
             myMap2.redraw();
             chgLayers();
 
-            // EVENTO CLICK
+            <?php if(isset($_SESSION['id_usuario'])){ ?>
+
+                var infola2 = new msTool('Ver descripción del reporte', infolay2,'/proyectoGeo/web/misc/img/descripcion.png', query2);
+                myMap1.getToolbar(0).addMapTool(infola2);
+
+            <?php } ?>
+
             document.getElementById('dc_main').onclick = function(e){
 
                 var xPixel = myMap1.getClick_X(e);
@@ -177,15 +247,78 @@
                 document.getElementById('label_x').textContent = parseFloat(xReal).toFixed(2);
                 document.getElementById('label_y').textContent = parseFloat(yReal).toFixed(2);
 
-                // Guardar en botón para usar al redirigir
+                // Guardar en botOn para usar al redirigir
                 document.getElementById('btn_crear_solicitud').dataset.x = xReal;
                 document.getElementById('btn_crear_solicitud').dataset.y = yReal;
 
-                // Mostrar panel y ocultar hint
+                // Mostrar panel 
                 document.getElementById('hint_click').classList.add('d-none');
                 document.getElementById('panel_solicitud').classList.remove('d-none');
             };
         };
+
+        function infolay2(e,map){
+
+            map.getTagMap().style.cursor = "crosshair";
+
+            seleccionado2 = true;
+        }
+
+        function objetoAjax(){
+
+            var xmlhttp = false;
+            try{
+                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch(e){
+                try{
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch(E){
+                    xmlhttp = false;
+                }
+            }
+            if(!xmlhttp && typeof XMLHttpRequest != 'undefined'){
+                xmlhttp = new XMLHttpRequest();
+            }
+
+            return xmlhttp;
+        }
+
+        function query2(event,map,x,y,xx,yy){
+
+            if(seleccionado2){
+
+                consulta2 = objetoAjax();
+                consulta2.open("GET","mapa.php?accion=consultar&x="+xx+"&y="+yy,true);
+                consulta2.onreadystatechange = function(){
+
+                    if(consulta2.readyState == 4){
+
+                        var datos = JSON.parse(consulta2.responseText);
+
+                        if(datos){
+
+                            document.getElementById("direccionReporte").innerHTML = datos.direccion;
+                            document.getElementById("descripcionReporte").innerHTML = datos.descripcion;
+
+                            var modal = new bootstrap.Modal(document.getElementById("modalReporte") );
+
+                            modal.show();
+
+                        }else{
+
+                            alert("No se encontró ningún reporte.");
+
+                        }
+
+                        seleccionado2 = false;
+                        map.getTagMap().style.cursor = "default";
+                        myMap1.redraw();
+                    }
+                };
+                consulta2.send(null);
+            }
+
+        }
 
         function irAlFormulario(){
             var btn = document.getElementById('btn_crear_solicitud');
@@ -216,13 +349,31 @@
             myMap1.redraw();
         }
 
-        window.onresize = function(){
-			if(!myMap1) return;
-			clearTimeout(window.resizeTimer);
-			window.resizeTimer = setTimeout(ajustarMapa, 300);
-		};
-
     </script>
-	
+    <div class="modal fade" id="modalReporte" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Informacion del reporte </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">  
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        <strong>Direccion</strong>
+                        <br>
+                        <span id="direccionReporte"></span>
+                    </p>
+                    <hr>
+                    <p>
+                        <strong>Descripcion Reporte</strong>
+                        <br>
+                        <span id="descripcionReporte"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
