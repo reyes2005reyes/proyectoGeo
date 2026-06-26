@@ -38,10 +38,12 @@
                                 <td><?php echo htmlspecialchars($solicitud['fecha_solicitud']); ?></td>
                                 <td><?php echo htmlspecialchars($solicitud['primer_nombre'] . ' ' . $solicitud['primer_apellido']); ?></td>
                                 <td>
+                                    <?php if (isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 3) { ?>
                                     <a class="btn btn-sm text-white" style="background-color: #1a2942;"
                                        href="<?php echo getUrl('solicitudes','solicitudes','getShow', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">
                                         <i class="fa fa-eye me-1"></i> Ver
                                     </a>
+                                    <?php } ?>
                                     <?php if (isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 2) { ?>
                                         <a class="btn btn-sm btn-outline-secondary"
                                            href="<?php echo getUrl('solicitudes','solicitudes','getShow', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">

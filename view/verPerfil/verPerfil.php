@@ -215,5 +215,42 @@ if (!isset($perfil) || !is_array($perfil)) {
             </form>
         </div>
     </div>
+
+    <!-- Aqui empieza el modal para cambiar la contraseña -->
+    <div class="modal fade" id="modalContrasena" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="<?php echo getUrl('usuarios','usuarios','postActualizarContrasena', false); ?>" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Actualizar contraseña</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>Contraseña actual</label>
+                            <input type="password"  class="form-control"  id="password_actual" name="password_actual" required>
+                            <div id="mensajePassword"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label>Nueva contraseña</label>
+                            <input type="password" class="form-control"  name="password_nueva" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Confirmar contraseña</label>
+                            <input type="password" class="form-control" name="password_confirmacion" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                             Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-warning">
+                            Actualizar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="/proyectoGeo/web/js/verPerfil.js"></script>

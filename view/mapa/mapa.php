@@ -21,14 +21,10 @@
             <div class="col-12 col-lg-10">
 
                 <div class="card shadow-sm">
-                    <div class="card-header text-white text-center fw-semibold"
-                        style="background-color:#1A3C5E;">
+                    <div class="card-header text-white text-center fw-semibold" style="background-color:#1A3C5E;">
                         Mapa de Cali
                     </div>
-                    <div id="dc_main"
-                        class="mscross border w-100"
-                        style="height:700px; position:relative; overflow:hidden;">
-                    </div>
+                    <div id="dc_main" class="mscross border w-100" style="height:550px; position:relative; overflow:hidden;"> </div>
                 </div>
 
                 <!-- Inputs hidden de coordenadas -->
@@ -48,7 +44,7 @@
                         </div>
                         <div class="card-body p-2 text-center">
                             <div id="dc_main2"
-                                style="width:100%; max-width:350px; height:180px; margin:auto; position:relative;">
+                                style="width:100%; max-width:350px; height:100%; max-height:140px; margin:auto; position:relative;">
                             </div>
                         </div>
                     </div>
@@ -58,7 +54,7 @@
                         <div class="card-header text-white fw-semibold" style="background-color:#1A3C5E;">
                             Capas
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="height:100%; max-height:300px; font-size:0.8rem; overflow-y:scroll;">
                             <form name="select_layers">
                                 <div class="form-switch">
                                     <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[0]" value="Cali" id="chk0">
@@ -84,7 +80,7 @@
                         </div>
                     </div>
 
-                    <!-- UBICACIÓN Y BOTÓN -->
+                    <!-- BOTON DE UBICACION -->
                     <div class="card shadow-sm mt-3">
                         <div class="card-header text-white fw-semibold" style="background-color:#1A3C5E;">
                             Ubicación

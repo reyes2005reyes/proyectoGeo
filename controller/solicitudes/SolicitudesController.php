@@ -138,20 +138,6 @@ class SolicitudesController {
         include_once "../view/solicitudes/show.php";
     }
 
-    public function getResponder() {
-
-        $obj = new SolicitudesModel();
-
-        $id_solicitud = $_GET['id_solicitud'];
-
-        $solicitud = $obj->obtenerSolicitud($id_solicitud);
-        $solicitud = pg_fetch_assoc($solicitud);
-
-        $estados = $obj->obtenerEstadosSolicitud();
-
-        include_once "../view/solicitudes/responder.php";
-    }
-
     public function postResponder() {
 
         $obj = new SolicitudesModel();
