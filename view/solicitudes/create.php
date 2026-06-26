@@ -58,7 +58,6 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                         </div>
                         <input type="hidden" id="coord_y" name="coord_y">
                     </div>
-
                     <!-- Imagen: oculta si es PQRSF -->
                     <div class="col-12" id="campo-imagen">
                         <label for="imagen" class="form-label fw-semibold">Imagen</label>
