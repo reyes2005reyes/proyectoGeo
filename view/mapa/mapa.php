@@ -4,16 +4,6 @@ include_once '../../lib/conf/connection.php';
 
     session_start();
 
-    if(!extension_loaded("MapScript")){
-            dl('php_mapscript.'.PHP_SHLIB_SUFFIX);
-        }
-
-    $mapObject = ms_newMapObj("C:/ms4w/Apache/htdocs/proyectoGeo/web/cali.map");
-    $mapImage = $mapObject -> draw();
-    $urlImage = $mapImage -> saveWebImage();
-    $mapLegend= $mapObject -> drawLegend();
-    $urlLegend= $mapLegend -> saveWebImage();
-
     $objConexion = new Connection();
     $conexion = $objConexion->getConnect();
 
@@ -360,7 +350,6 @@ include_once '../../lib/conf/connection.php';
         }
 
     </script>
-    <img src="<?php echo $urlLegend;?>" alt="leyenda" border="0">
     <div class="modal fade" id="modalReporte" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -16,39 +16,7 @@ MAP
         IMAGEURL "/ms_tmp/"
     END
        
-    LEGEND 
-			STATUS ON
-			IMAGECOLOR 255 255 102
-			POSITION LC
-			KEYSIZE 30 30
-			KEYSPACING 10 10
-                LABEL
-                    TYPE TRUETYPE
-                    FONT "sans"
-                    SIZE 9
-                    COLOR 0 0 0
-                END
-			OUTLINECOLOR 51 51 51
-			TRANSPARENT ON
-	END
 
-	SCALEBAR
-		STYLE 0
-		STATUS EMBED
-		SIZE 250 4
-		COLOR  0 0 0
-		UNITS KILOMETERS
-		INTERVALS 5
-		TRANSPARENT OFF
-		POSITION LL
-		BACKGROUNDCOLOR 255 255 255 
-		IMAGECOLOR 255 255 255 
-		OUTLINECOLOR 211 211 211
-			LABEL
-				COLOR 0 0 0
-				SIZE TINY
-			END
-	END 
 
     LAYER
         NAME "Cali"
@@ -56,11 +24,6 @@ MAP
         DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\CaliArea.shp"  
         TYPE POLYGON
         CLASS
-            NAME "Area De Cali"
-                STYLE
-                    COLOR 245 245 245
-                    OUTLINECOLOR 205 205 205
-            END
             STYLE
                 COLOR 232 224 196
                 OUTLINECOLOR 95 95 95 
@@ -75,11 +38,6 @@ MAP
         DATA "C:\ms4w\Apache\htdocs\proyectoGeo\web\assets\shapeCali41\ComunasC.shp" 
         TYPE POLYGON
         CLASS
-            NAME "Comunas"
-                STYLE
-                    COLOR 245 245 245
-                    OUTLINECOLOR 205 205 205
-            END
             STYLE
                 COLOR 207 222 184
                 OUTLINECOLOR 105 125 95
@@ -95,7 +53,7 @@ MAP
         TYPE POLYGON
         LABELITEM "BARRIO"
         CLASS
-            NAME "Barrios"
+            NAME "LABEL"
             STYLE
                 COLOR 245 245 245
                 OUTLINECOLOR 205 205 205
@@ -124,11 +82,6 @@ MAP
         TYPE LINE
         LabelItem "nombre"
         CLASS
-            NAME "Malla Vial"
-                STYLE
-                    COLOR 245 245 245
-                    OUTLINECOLOR 205 205 205
-            END
             STYLE
                 COLOR 0 0 0
                 WIDTH 2
