@@ -34,7 +34,7 @@ class UsuariosController{
                 redirect('/proyectoGeo/view/registro/Registro.php');
                 return;
             }
-
+            // Validar seguridad alta de contraseña
             if (!preg_match('/[0-9]/', $contrasena)) {
                 $_SESSION['error_registro'] = 'La contraseña debe contener al menos un número.';
                 redirect('/proyectoGeo/view/registro/Registro.php');
@@ -236,9 +236,8 @@ class UsuariosController{
             redirect('../view/recuperarContrasena/SolicitarCodigo.php');
             return;
         }
-
+        // Recoger código ingresado por el usuario
         $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : '';
-
         $resultado = $obj->verificarCodigo($id_usuario, $codigo);
         $intentos = $obj->getIntentos($id_usuario);
 
@@ -254,7 +253,6 @@ class UsuariosController{
             $_SESSION['recuperacion_verificada'] = true;
             redirect('../view/recuperarContrasena/NuevaContrasena.php');
         } else {
-
                 $codigoExiste = $obj->existeCodigo($id_usuario, $codigo);
         //Invalida el código y notifica en pantalla que debe solicitar uno nuevo
         if (pg_num_rows($codigoExiste) > 0) {
@@ -306,25 +304,41 @@ class UsuariosController{
                 redirect('../../view/recuperarContrasena/SolicitarCodigo.php');
                 return;
             }
-
+            // Recoger datos del formulario
             $id_usuario = $_SESSION['id_usuario_recuperacion'];
             $nueva = isset($_POST['nueva_contrasena']) ? $_POST['nueva_contrasena'] : '';
             $confirmar = isset( $_POST['confirmar_contrasena']) ? $_POST['confirmar_contrasena'] : '';
-
+            // Validaciones
             if (empty($nueva) || empty($confirmar)) {
                 $_SESSION['error_nueva'] = 'Todos los campos son obligatorios.';
                 redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
-
+            // Validar contraseña
             if ($nueva !== $confirmar) {
                 $_SESSION['error_nueva'] = 'Las contraseñas no coinciden.';
                 redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
-
+            // Validar seguridad de la contraseña
             if (strlen($nueva) < 8) {
                 $_SESSION['error_nueva'] = 'La contraseña debe tener mínimo 8 caracteres.';
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
+                return;
+            }
+            if (!preg_match('/[A-Z]/', $nueva)) {
+                $_SESSION['error_nueva'] = 'La contraseña debe contener al menos una letra mayúscula.';
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
+                return;
+            }
+
+            if (!preg_match('/[0-9]/', $nueva)) {
+                $_SESSION['error_nueva'] = 'La contraseña debe contener al menos un número.';
+                redirect('../view/recuperarContrasena/NuevaContrasena.php');
+                return;
+            }
+            if (!preg_match('/[^a-zA-Z0-9]/', $nueva)) {
+                $_SESSION['error_nueva'] = 'La contraseña debe contener al menos un símbolo especial.';
                 redirect('../view/recuperarContrasena/NuevaContrasena.php');
                 return;
             }
@@ -351,7 +365,6 @@ class UsuariosController{
     }
     // aqui finaliza la funcion para enviar el correo de recuperacion de contraseña
 
-
     // esta funcion es para mostrar la lista de usuarios
     public function lista() {
         $numeroDocumento = isset($_GET['numero_documento']) ? trim($_GET['numero_documento']) : '';
@@ -362,12 +375,11 @@ class UsuariosController{
         // pasar variables a la vista
         require_once __DIR__ . '/../../view/listaUsuarios/listaUsuarios.php'; // Se corrigio la ruta del archivo de vista para que apunte a la carpeta correcta
     }
-
+    // esta funcion es para filtrar la lista de usuarios
     public function filtro(){
         $obj = new UsuariosModel();
         $buscar = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
         $buscarEscapado = pg_escape_string($buscar);
-
         $sql = "SELECT
                     u.id_usuario,
                     td.nombre_tipo_documento,
@@ -383,15 +395,14 @@ class UsuariosController{
                 LEFT JOIN tipos_documento td ON u.id_tipo_documento = td.id_tipo_documento
                 LEFT JOIN roles r ON u.id_rol = r.id_rol
                 LEFT JOIN estados_usuario eu ON u.id_estado_usuario = eu.id_estado_usuario";
-
+        // Si se proporciona un valor de búsqueda, se agrega la cláusula WHERE para filtrar por número de documento
         if ($buscarEscapado !== '') {
             $sql .= " WHERE u.numero_documento::text LIKE '%$buscarEscapado%'";
         }
-
+        // Se agrega la cláusula ORDER BY para ordenar los resultados por id_usuario de forma descendente
         $sql .= " ORDER BY u.id_usuario DESC";
-
         $usuarios = $obj->select($sql);
-
+        // Se crea un array para almacenar los resultados de la consulta
         $usuariosArray = array();
         if($usuarios && pg_num_rows($usuarios) > 0) {
             while($row = pg_fetch_assoc($usuarios)) {
@@ -402,15 +413,11 @@ class UsuariosController{
         include_once __DIR__ . '/../../view/listaUsuarios/filtro.php';
     }
 
-
-
-    // falta terminarlo xd
-
     // Método para obtener tipos de documento y roles (AJAX)
     public function obtenerTiposYRoles() {
         header('Content-Type: application/json; charset=utf-8');
         $obj = new UsuariosModel();
-        
+        // Obtener tipos de documento
         $tiposDoc = array();
         $sqlTipos = "SELECT id_tipo_documento, nombre_tipo_documento FROM tipos_documento ORDER BY nombre_tipo_documento";
         $resultTipos = $obj->select($sqlTipos);
@@ -419,7 +426,7 @@ class UsuariosController{
                 $tiposDoc[] = $row;
             }
         }
-        
+        // Obtener roles
         $rolesArr = array();
         $sqlRoles = "SELECT id_rol, nombre_rol FROM roles ORDER BY nombre_rol";
         $resultRoles = $obj->select($sqlRoles);
@@ -428,7 +435,7 @@ class UsuariosController{
                 $rolesArr[] = $row;
             }
         }
-        
+        // Devolver los datos
         echo json_encode(array(
             'tiposDocumento' => $tiposDoc,
             'roles' => $rolesArr
@@ -436,17 +443,18 @@ class UsuariosController{
         exit;
     }
 
-    // Método para obtener datos de un usuario en JSON (AJAX)
+    // Método para obtener datos de un usuario
     public function obtenerUsuarioJson() {
         header('Content-Type: application/json; charset=utf-8');
         $idUsuario = isset($_GET['id_usuario']) ? (int)$_GET['id_usuario'] : 0;
-        
+        // Validar que se haya proporcionado un ID de usuario
         if (!$idUsuario) {
+            // Responder con un error si no se proporciona un ID de usuario
             http_response_code(400);
             echo json_encode(array('error' => 'ID usuario requerido'));
             exit;
         }
-        
+        // Obtener datos del usuario
         $obj = new UsuariosModel();
         $usuario = $obj->obtenerPerfil($idUsuario);
         
@@ -460,7 +468,7 @@ class UsuariosController{
             } else {
                 $usuario['nombre_rol'] = '';
             }
-            
+            // Obtener nombre del estado del usuario
             $sqlEstado = "SELECT nombre_estado_usuario FROM estados_usuario WHERE id_estado_usuario = " . (int)$usuario['id_estado_usuario'];
             $resultEstado = $obj->select($sqlEstado);
             if (pg_num_rows($resultEstado) > 0) {
@@ -469,7 +477,7 @@ class UsuariosController{
             } else {
                 $usuario['nombre_estado_usuario'] = '';
             }
-            
+            // Devolver los datos del usuario en formato
             echo json_encode($usuario);
         } else {
             http_response_code(404);
@@ -478,10 +486,10 @@ class UsuariosController{
         exit;
     }
 
-    // Método para actualizar datos del usuario (AJAX)
+    // Método para actualizar datos del usuario
     public function actualizarUsuario() {
         header('Content-Type: application/json; charset=utf-8');
-
+        // Recoger datos de sesión y POST
         $idRolSesion = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
         $idUsuario   = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
 
@@ -490,7 +498,7 @@ class UsuariosController{
             echo json_encode(array('success' => false, 'message' => 'No tiene permisos para realizar esta acción'));
             exit;
         }
-
+        // Validar que se haya proporcionado un ID de usuario
         if (!$idUsuario) {
             http_response_code(400);
             echo json_encode(array('success' => false, 'message' => 'ID de usuario requerido'));
@@ -532,14 +540,17 @@ class UsuariosController{
             echo json_encode(array('success' => false, 'message' => 'El primer nombre solo puede contener letras'));
             exit;
         }
+        // Validar segundo nombre si no está vacío
         if ($segundoNombre !== '' && !preg_match('/^[a-zA-Z\xc0-\xff\s]+$/', $segundoNombre)) {
             echo json_encode(array('success' => false, 'message' => 'El segundo nombre solo puede contener letras'));
             exit;
         }
+        // Validar primer apellido
         if (!preg_match('/^[a-zA-Z\xc0-\xff\s]+$/', $primerApellido)) {
             echo json_encode(array('success' => false, 'message' => 'El primer apellido solo puede contener letras'));
             exit;
         }
+        // Validar segundo apellido si no está vacío
         if ($segundoApellido !== '' && !preg_match('/^[a-zA-Z\xc0-\xff\s]+$/', $segundoApellido)) {
             echo json_encode(array('success' => false, 'message' => 'El segundo apellido solo puede contener letras'));
             exit;
@@ -567,14 +578,15 @@ class UsuariosController{
 
         if ($idRolSesion === 1) {
             // ── ADMINISTRADOR: puede editar todos los campos ──
-            $numeroDoc       = trim(isset($_POST['numero_documento'])  ? $_POST['numero_documento']  : '');
+            $numeroDoc  = trim(isset($_POST['numero_documento'])  ? $_POST['numero_documento']  : '');
             $idTipoDocumento = isset($_POST['id_tipo_documento']) ? (int)$_POST['id_tipo_documento'] : 0;
-            $idRol           = isset($_POST['id_rol']) ? (int)$_POST['id_rol'] : 0;
+            $idRol = isset($_POST['id_rol']) ? (int)$_POST['id_rol'] : 0;
 
             if (empty($numeroDoc) || !is_numeric($numeroDoc)) {
                 echo json_encode(array('success' => false, 'message' => 'El número de documento es obligatorio y debe ser numérico'));
                 exit;
             }
+            // Validar que se haya seleccionado un tipo de documento
             if (!$idTipoDocumento) {
                 echo json_encode(array('success' => false, 'message' => 'Debe seleccionar un tipo de documento'));
                 exit;
@@ -590,45 +602,55 @@ class UsuariosController{
 
             // Actualizar contraseña si se proporcionó
             if (!empty($_POST['contrasena'])) {
+                // Validar seguridad de la contraseña
                 if (strlen($_POST['contrasena']) < 8) {
-                    echo json_encode(array('success' => false, 'message' => 'La contraseña debe tener al menos 8 caracteres'));
+                    echo json_encode(array('success' => false, 'message' => 'La contraseña debe tener al menos 8 caracteres.'));
+                    exit;
+                }
+                if (!preg_match('/[A-Z]/', $_POST['contrasena'])) {
+                    echo json_encode(array('success' => false, 'message' => 'La contraseña debe contener al menos una letra mayúscula.'));
+                    exit;
+                }
+                if (!preg_match('/[0-9]/', $_POST['contrasena'])) {
+                    echo json_encode(array('success' => false, 'message' => 'La contraseña debe contener al menos un número.'));
+                    exit;
+                }
+                if (!preg_match('/[^a-zA-Z0-9]/', $_POST['contrasena'])) {
+                    echo json_encode(array('success' => false, 'message' => 'La contraseña debe contener al menos un símbolo especial.'));
                     exit;
                 }
                 $hash = md5($_POST['contrasena']);
                 $obj->update("UPDATE usuarios SET contrasena = '" . pg_escape_string($hash) . "' WHERE id_usuario = $idUsuario");
             }
-
             // Actualizar rol si se proporcionó
             if ($idRol) {
                 $obj->update("UPDATE usuarios SET id_rol = $idRol WHERE id_usuario = $idUsuario");
             }
-
         } else {
             // ── FUNCIONARIO: no puede editar documento, tipo doc, rol ni contraseña ──
             // Tomamos esos valores directamente de la BD para no perderlos
             $numeroDoc       = $usuarioObjetivo['numero_documento'];
             $idTipoDocumento = $usuarioObjetivo['id_tipo_documento'];
-
             if ($obj->correoExisteEnOtroUsuario($correo, $idUsuario)) {
                 echo json_encode(array('success' => false, 'message' => 'El correo ya pertenece a otro usuario'));
                 exit;
             }
         }
-
+        // Preparar datos para actualizar
         $datos = array(
             'id_tipo_documento' => $idTipoDocumento,
-            'primer_nombre'     => $primerNombre,
-            'segundo_nombre'    => $segundoNombre,
-            'primer_apellido'   => $primerApellido,
-            'segundo_apellido'  => $segundoApellido,
-            'numero_documento'  => $numeroDoc,
-            'correo'            => $correo,
-            'telefono'          => $telefono,
-            'direccion'         => $direccion,
+            'primer_nombre' => $primerNombre,
+            'segundo_nombre' => $segundoNombre,
+            'primer_apellido' => $primerApellido,
+            'segundo_apellido'=> $segundoApellido,
+            'numero_documento' => $numeroDoc,
+            'correo'  => $correo,
+            'telefono'  => $telefono,
+            'direccion' => $direccion,
         );
 
         $resultado = $obj->actualizarDatosUsuario($idUsuario, $datos);
-
+        // Responder con éxito o error
         if ($resultado) {
             echo json_encode(array('success' => true, 'message' => 'Usuario actualizado correctamente'));
         } else {
@@ -647,7 +669,7 @@ class UsuariosController{
             echo json_encode(array('success' => false, 'message' => 'No tiene permisos para cambiar el estado de un usuario'));
             exit;
         }
-        
+        // Recoger ID de usuario a cambiar
         $idUsuario = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
         
         if (!$idUsuario) {
@@ -655,12 +677,11 @@ class UsuariosController{
             echo json_encode(array('success' => false, 'message' => 'ID usuario requerido'));
             exit;
         }
-        
+        // Verificar que el usuario exista
         $obj = new UsuariosModel();
-        
         // Obtener estado actual
         $estadoActual = $obj->obtenerEstadoUsuario($idUsuario);
-        
+        // Si el usuario no existe, responder con error
         if ($estadoActual === null) {
             http_response_code(404);
             echo json_encode(array('success' => false, 'message' => 'Usuario no encontrado'));
@@ -710,13 +731,14 @@ class UsuariosController{
         $model = new UsuariosModel();
 
         $existe = $model->correoExisteEnOtroUsuario($correo, $idUsuario);
-
+        // indicando si el correo está disponible o no
         echo json_encode(array(
             'disponible' => !$existe,
-            'mensaje'    => $existe ? 'El correo ya pertenece a otro usuario.' : ''
+            'mensaje' => $existe ? 'El correo ya pertenece a otro usuario.' : ''
         ));
         exit;
     }
+    // Verificar contraseña actual
     public function verificarContrasenaAjax(){
 
         if(!isset($_SESSION['id_usuario'])){
@@ -725,100 +747,80 @@ class UsuariosController{
             ));
             exit;
         }
-
         $password = $_POST['password_actual'];
-
         $obj = new UsuariosModel();
-
         $valida = $obj->validarContrasenaActual(
             $_SESSION['id_usuario'],
             $password
         );
-
+        // indicar si la contraseña actual es válida o no
         echo json_encode(array(
             'valida' => $valida
         ));
-
         exit;
     }
-
+    // aqui comienza la funcion para actualizar la contraseña del usuario
     public function postActualizarContrasena(){
 
         $obj = new UsuariosModel();
-
         $idUsuario = $_SESSION['id_usuario'];
-
         $actual = $_POST['password_actual'];
         $nueva = $_POST['password_nueva'];
         $confirmar = $_POST['password_confirmacion'];
-
+        // Validar campos vacíos
         if(empty($actual) || empty($nueva) || empty($confirmar)){
-
             $_SESSION['error_perfil'] = "Todos los campos son obligatorios.";
-
             redirect(getUrl("usuarios","usuarios","ver"));
-
             return;
         }
+        // Validar seguridad de la nueva contraseña
         if (!preg_match('/[A-Z]/', $nueva)) {
             $_SESSION['error_perfil'] = "La nueva contraseña debe contener al menos una letra mayúscula.";
             redirect(getUrl("usuarios","usuarios","ver"));
             return;
         }
-
+        // Validar que contenga al menos un número
         if (!preg_match('/[0-9]/', $nueva)) {
             $_SESSION['error_perfil'] = "La nueva contraseña debe contener al menos un número.";
             redirect(getUrl("usuarios","usuarios","ver"));
             return;
         }
-
+        // Validar que contenga al menos un símbolo especial
         if (!preg_match('/[^a-zA-Z0-9]/', $nueva)) {
             $_SESSION['error_perfil'] = "La nueva contraseña debe contener al menos un símbolo especial.";
             redirect(getUrl("usuarios","usuarios","ver"));
             return;
         }
-
+        // Validar longitud mínima de la nueva contraseña
         if(!$obj->validarContrasenaActual($idUsuario,$actual)){
-
             $_SESSION['error_perfil'] = "La contraseña actual es incorrecta.";
-
             redirect(getUrl("usuarios","usuarios","ver"));
-
             return;
         }
 
         if($nueva != $confirmar){
-
             $_SESSION['error_perfil'] = "La confirmación de la contraseña no coincide.";
-
             redirect(getUrl("usuarios","usuarios","ver"));
-
             return;
         }
-
+        // Contraseña actual es correcta y la nueva contraseña es válida, proceder a actualizar
         $obj->actualizarContrasena($idUsuario,$nueva);
-
         $_SESSION['exito_perfil'] = "La contraseña se actualizó correctamente.";
-
         redirect(getUrl("usuarios","usuarios","ver"));
     }
 
+    // aqui comienza la funcion para actualizar los datos del usuario
     public function actualizar(){
-
             if (!isset($_SESSION['id_usuario'])) {
                 redirect('login.php');
                 return;
             }
-
             $idUsuario = $_SESSION['id_usuario'];
 
             $model = new UsuariosModel();
-
             $correo = trim($_POST['correo']);
             $telefono = $_POST['telefono'];
             $direccion = trim($_POST['direccion']);
-
-            
 
             // Validar que la direccion no este vacia
             if ($direccion == '') {
@@ -881,7 +883,6 @@ class UsuariosController{
             } else {
                 $_SESSION['error_perfil'] = 'No fue posible actualizar los datos.';
             }
-
             redirect('index.php?modulo=usuarios&controlador=usuarios&funcion=ver');
     }
         

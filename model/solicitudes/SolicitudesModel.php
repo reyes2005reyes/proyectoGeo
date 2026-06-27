@@ -3,22 +3,18 @@
 require_once  dirname(__FILE__) . '/../MasterModel.php';
 
 class SolicitudesModel extends MasterModel {
-
+    // Función para convertir el resultado de la consulta en un array
     private function resultadoAArray($resultado) {
-
         $datos = array();
-
         while ($fila = pg_fetch_assoc($resultado)) {
             $datos[] = $fila;
         }
 
         return $datos;
     }
-
+    // Función para obtener los catálogos necesarios para el formulario de solicitud
     public function obtenerCatalogosFormulario() {
-
         $catalogos = array();
-
         $catalogos['causas_accidente'] = $this->resultadoAArray(
             $this->select("
                 SELECT
@@ -90,9 +86,8 @@ class SolicitudesModel extends MasterModel {
 
         return $catalogos;
     }
-
+    // Función para obtener los tipos de solicitud disponibles
     public function obtenerTiposSolicitud() {
- 
         $sql = "
             SELECT
                 id_tipo_solicitud,
@@ -106,9 +101,8 @@ class SolicitudesModel extends MasterModel {
             $this->select($sql)
         );
     }
-
+    // Función para obtener los estados de solicitud disponibles
     public function obtenerEstadosSolicitud() {
-
         $sql = "
             SELECT
                 id_estado_solicitud,
@@ -116,12 +110,10 @@ class SolicitudesModel extends MasterModel {
             FROM estados_solicitud
             ORDER BY id_estado_solicitud
         ";
-
         return $this->select($sql);
     }
-
+    // Función para listar las solicitudes con filtros opcionales
     public function listarSolicitudes($id_usuario = null, $fecha_inicio = null, $fecha_fin = null) {
-
         $sql = "
             SELECT
                 s.id_solicitud,
@@ -137,28 +129,25 @@ class SolicitudesModel extends MasterModel {
             INNER JOIN usuarios u ON s.id_usuario = u.id_usuario
             WHERE 1=1
         ";
-
+        // Aplicar filtros si se proporcionan
         if ($id_usuario != null) {
             $sql .= " AND s.id_usuario = $id_usuario";
         }
-
+        // Aplicar filtros de fecha si se proporcionan
         if (!empty($fecha_inicio)) {
             $fecha_inicio = pg_escape_string($fecha_inicio);
             $sql .= " AND s.fecha_solicitud::DATE >= '$fecha_inicio'";
         }
-
+        // Aplicar filtros de fecha si se proporcionan
         if (!empty($fecha_fin)) {
             $fecha_fin = pg_escape_string($fecha_fin);
             $sql .= " AND s.fecha_solicitud::DATE <= '$fecha_fin'";
         }
-
         $sql .= " ORDER BY s.fecha_solicitud DESC";
-
         return $this->select($sql);
     }
-
+    // Función para obtener los detalles de una solicitud específica
     public function obtenerSolicitud($id_solicitud) {
-
         $sql = "
             SELECT
                 s.*,
@@ -178,12 +167,11 @@ class SolicitudesModel extends MasterModel {
                 ON s.id_usuario = u.id_usuario
             WHERE s.id_solicitud = $id_solicitud
         ";
-
         return $this->select($sql);
     }
 
+    // Función para obtener los detalles específicos de una solicitud según su tipo
     public function obtenerTipoSolicitud($id_tipo_solicitud) {
-
         $sql = "
             SELECT
                 id_tipo_solicitud,
@@ -196,9 +184,8 @@ class SolicitudesModel extends MasterModel {
         return $this->select($sql);
     }
 
+    // Función para crear una nueva solicitud en la base de datos
     public function crearSolicitud($datos) {
-
-       
         $sql = "
             INSERT INTO solicitudes (
                 id_usuario,
@@ -215,21 +202,17 @@ class SolicitudesModel extends MasterModel {
                 ".$datos['id_tipo_solicitud'].",
                 '".$datos['descripcion']."',
                 '".$datos['direccion']."',
-
                 ST_SetSRID(
                     GeometryFromText('POINT(".$datos['coord_x']." ".$datos['coord_y'].")'),
                     4326
                 ),
-
                 '".$datos['imagen_url']."'
             )
-
             RETURNING id_solicitud
         ";
-
         return $this->select($sql);
     }
-
+    // Función para crear el detalle de una solicitud según su tipo
     public function crearDetalleSolicitud($id_solicitud, $codigo_tipo, $datos) {
 
         switch ($codigo_tipo) {
@@ -251,7 +234,6 @@ class SolicitudesModel extends MasterModel {
 
                 $reporte = $this->select($sql);
                 $reporte = pg_fetch_assoc($reporte);
-
                 // Registrar vehículo involucrado
                 $sqlVehiculo = "
                     INSERT INTO vehiculos (
@@ -263,7 +245,7 @@ class SolicitudesModel extends MasterModel {
                         ".$datos['id_tipo_vehiculo']."
                     )
                 ";
-
+                // Ejecutar la inserción del vehículo
                 $this->insert($sqlVehiculo);
 
                 // Registrar cantidad de lesionados
@@ -276,7 +258,6 @@ class SolicitudesModel extends MasterModel {
                     )
                     RETURNING id_lesionado
                 ";
-
                 $lesionado = $this->select($sqlLesionado);
                 $lesionado = pg_fetch_assoc($lesionado);
 
@@ -291,13 +272,9 @@ class SolicitudesModel extends MasterModel {
                         ".$lesionado['id_lesionado']."
                     )
                 ";
-
                 $this->insert($sqlRelacion);
-
             break;
-
             case 'senal_mal_estado':
-
                 // Registrar señal en mal estado
                 $sql = "
                     INSERT INTO solicitudes_senal_mal_estado (
@@ -315,13 +292,10 @@ class SolicitudesModel extends MasterModel {
                         ".$datos['id_orientacion']."
                     )
                 ";
-
                 $this->insert($sql);
-
             break;
 
             case 'nueva_senalizacion':
-
                 // Registrar nueva señalización
                 $sql = "
                     INSERT INTO solicitudes_nueva_senalizacion (
@@ -339,9 +313,7 @@ class SolicitudesModel extends MasterModel {
                 ";
 
                 $this->insert($sql);
-
             break;
-
             case 'reductor_mal_estado':
 
                 // Registrar reductor en mal estado
@@ -359,13 +331,10 @@ class SolicitudesModel extends MasterModel {
                         ".$datos['id_tipo_danio']."
                     )
                 ";
-
                 $this->insert($sql);
-
             break;
 
             case 'nuevo_reductor':
-
                 // Registrar nuevo reductor
                 $sql = "
                     INSERT INTO solicitudes_nuevo_reductor (
@@ -379,13 +348,9 @@ class SolicitudesModel extends MasterModel {
                         ".$datos['id_tipo_reductor']."
                     )
                 ";
-
                 $this->insert($sql);
-
             break;
-
             case 'via_publica_mal_estado':
-
                 // Registrar vía pública en mal estado
                 $sql = "
                     INSERT INTO solicitudes_via_publica_mal_estado (
@@ -397,13 +362,9 @@ class SolicitudesModel extends MasterModel {
                         ".$datos['id_tipo_danio']."
                     )
                 ";
-
                 $this->insert($sql);
-
             break;
-
             case 'pqrsf':
-
                 // Registrar detalle PQRSF
                 $sql = "
                     INSERT INTO solicitudes_pqrsf (
@@ -415,21 +376,15 @@ class SolicitudesModel extends MasterModel {
                         ".$datos['id_tipo_pqrsf']."
                     )
                 ";
-
                 $this->insert($sql);
-
             break;
         }
     }
-
+    // Función para crear una solicitud completa, incluyendo su detalle según el tipo
     public function crearSolicitudCompleta($datos, $codigo_tipo) {
-
-
         $solicitud = $this->crearSolicitud($datos);
-
         // Obtener el id generado
         $solicitud = pg_fetch_assoc($solicitud);
-
         // Registrar el detalle según el tipo de solicitud
         $this->crearDetalleSolicitud(
             $solicitud['id_solicitud'],
@@ -440,7 +395,7 @@ class SolicitudesModel extends MasterModel {
         // Retornar la solicitud creada
         return $solicitud;
     }
-
+        // Función para cambiar el estado de una solicitud
     public function cambiarEstadoSolicitud($id_solicitud, $id_estado_solicitud) {
 
         // Actualizar el estado de una solicitud
@@ -452,7 +407,7 @@ class SolicitudesModel extends MasterModel {
 
         return $this->update($sql);
     }
-
+        // Función para registrar la respuesta de un funcionario a una solicitud
     public function registrarRespuesta(
         $id_solicitud,
         $id_usuario,
@@ -478,7 +433,7 @@ class SolicitudesModel extends MasterModel {
 
         return $this->insert($sql);
     }
-
+        // Función para obtener todas las respuestas asociadas a una solicitud específica
     public function obtenerRespuestasSolicitud($id_solicitud) {
 
         // Consultar todas las respuestas asociadas a una solicitud
@@ -501,6 +456,7 @@ class SolicitudesModel extends MasterModel {
 
         return $this->select($sql);
     }
+    // Función para obtener los detalles de una solicitud junto con el correo del ciudadano que la realizó
     public function obtenerSolicitudConCorreo($id_solicitud) {
 
         // Trae los datos de la solicitud junto con el correo del ciudadano

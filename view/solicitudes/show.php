@@ -128,7 +128,7 @@
                     <div class="col-12">
                         <label for="mensaje" class="form-label fw-semibold">Respuesta</label>
                         <textarea class="form-control" id="mensaje" name="mensaje" rows="4" required
-                                  placeholder="Escriba su respuesta..."></textarea>
+                                placeholder="Escriba su respuesta..."></textarea>
                     </div>
 
                     <div class="col-12">

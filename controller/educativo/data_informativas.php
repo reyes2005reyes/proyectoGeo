@@ -1,7 +1,7 @@
 <?php
 
 return array(
-
+// SEÑALES INFORMATIVAS
 array(
     'codigo' => 'SI-01',
     'nombre' => 'Ruta Nacional',

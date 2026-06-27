@@ -6,7 +6,6 @@ header('Content-Type: text/html; charset=utf-8');
 <?php include_once '../view/partials/header.php'; ?>
 <?php include_once '../view/partials/navbar.php'; ?>
 
-
     <?php if(isset($_SESSION['bienvenida'])): ?>
         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
             <i class="fas fa-check-circle me-2"></i>
@@ -23,7 +22,7 @@ header('Content-Type: text/html; charset=utf-8');
             );
             $modulo = strtolower($_GET['modulo']);
             if(in_array($modulo, $modulosProtegidos)){
-                include_once '../lib/helpersLogin.php';
+                
             }
             resolve();
         } else {

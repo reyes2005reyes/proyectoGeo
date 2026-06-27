@@ -61,14 +61,16 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                     <!-- Imagen: oculta si es PQRSF -->
                     <div class="col-12" id="campo-imagen">
                         <label for="imagen" class="form-label fw-semibold">Imagen</label>
-                        <input type="file" class="form-control" id="imagen" name="imagen" accept=".jpg,.jpeg,.png" required>
-                        <div class="form-text">Formatos permitidos: JPG, JPEG, PNG</div>
+                        <input type="file" class="form-control" id="imagen" name="imagen" 
+                            accept=".jpg,.jpeg,.png" required>
+                        <div class="form-text">Formatos permitidos: JPG, JPEG, PNG. Máximo 5 MB.</div>
+                        <div id="error-imagen" class="text-danger small mt-1" style="display:none;"></div>
                     </div>
 
                     <div class="col-12">
                         <label for="descripcion" class="form-label fw-semibold">Descripción General</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" rows="4"
-                                  placeholder="Describa detalladamente la solicitud..." required></textarea>
+                                placeholder="Describa detalladamente la solicitud..." required></textarea>
                     </div>
 
                 </div>
@@ -110,3 +112,17 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
 
 <script src="/proyectoGeo/web/js/createSoli.js"></script>
 <script src="/proyectoGeo/web/js/capturarCoordenadas.js"></script>
+<script>
+document.getElementById('imagen').addEventListener('change', function() {
+    var error = document.getElementById('error-imagen');
+    var maxSize = 5 * 1024 * 1024; // 5 MB en bytes
+
+    if (this.files[0] && this.files[0].size > maxSize) {
+        error.textContent = 'La imagen no puede superar los 5 MB.';
+        error.style.display = 'block';
+        this.value = ''; // Limpia el input
+    } else {
+        error.style.display = 'none';
+    }
+});
+</script>

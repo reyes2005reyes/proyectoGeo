@@ -98,6 +98,8 @@ class ReportesModel extends MasterModel {
         return $this->select($sql);
     }
 
+    // Funciones para el historial de reportes
+
     public function registrarHistorial($id_usuario, $tipo_reporte, $fecha_inicio, $fecha_fin, $id_estado_solicitud, $nombre_archivo) {
         $id_usuario   = (int) $id_usuario;
         $tipo_reporte = pg_escape_string($tipo_reporte);
@@ -115,9 +117,10 @@ class ReportesModel extends MasterModel {
         return $this->select($sql);
     }
 
+    // Función para obtener el historial de reportes generados por un usuario específico
     public function obtenerHistorial($id_usuario, $id_rol) {
             $id_usuario = (int) $id_usuario;
-            $id_rol     = (int) $id_rol;
+            $id_rol  = (int) $id_rol;
             $condicion = ($id_rol === 1) ? '' : "WHERE hr.id_usuario = $id_usuario";
 
             $sql = "SELECT hr.*, u.primer_nombre, u.primer_apellido
@@ -129,6 +132,7 @@ class ReportesModel extends MasterModel {
 
             return $this->select($sql);
         }
+        // Función para obtener el total de solicitudes por tipo
         public function obtenerTotalesPorTipo() {
         $sql = "SELECT ts.nombre AS tipo, COUNT(s.id_solicitud) AS total
                 FROM solicitudes s

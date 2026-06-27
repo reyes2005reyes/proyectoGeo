@@ -2,7 +2,7 @@
 include_once '../model/MasterModel.php';
 
 class AccesoModel extends MasterModel{
-
+    // Obtiene los permisos asociados a un rol específico
     public function obtenerPermisosRol($id_rol)
     {
         $sql = "

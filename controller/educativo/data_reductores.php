@@ -1,7 +1,7 @@
 <?php
 
 return array(
-
+// Reductores de velocidad
 array(
     'codigo' => 'RV-01',
     'nombre' => 'Resalto trapezoidal',

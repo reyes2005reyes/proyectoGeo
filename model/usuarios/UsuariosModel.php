@@ -25,7 +25,7 @@ class UsuariosModel extends MasterModel {
             $fila = pg_fetch_assoc($resultado);
             return isset($fila['id_usuario']) ? $fila['id_usuario'] : false;
         }
-
+        // fin de las funciones para el registro de un usuario y para verificar si el numero de documento o el correo ya existen en la base de datos
         public function existeDocumento($numero_documento) {
             $sql = "SELECT existe_documento($1) AS existe";
             $resultado = $this->query($sql, array((int) $numero_documento));
@@ -38,13 +38,14 @@ class UsuariosModel extends MasterModel {
             $fila = pg_fetch_assoc($resultado);
             return isset($fila['existe']) && $fila['existe'] === 't';
         }
+        // Esta función obtiene el nombre del tipo de documento según su ID
         public function tipo_documento($tipo_documento) {
             $sql = "SELECT obtener_tipo_documento($1) AS nombre_tipo_documento";
             $resultado = $this->query($sql, array((int) $tipo_documento));
             $fila = pg_fetch_assoc($resultado);
             return isset($fila['nombre_tipo_documento']) ? $fila['nombre_tipo_documento'] : null;
         }
-    // aqui termina el registro del usuario
+
 
 
 
@@ -59,7 +60,6 @@ class UsuariosModel extends MasterModel {
                 AND id_estado_usuario = 1";
         return $this->select($sql);
     }
-
     public function guardarCodigo($id_usuario, $codigo) {
         // Eliminar códigos anteriores del usuario
         $this->delete("DELETE FROM codigos_recuperacion WHERE id_usuario = $id_usuario");
@@ -68,7 +68,6 @@ class UsuariosModel extends MasterModel {
                 VALUES ($id_usuario, '$codigo', 0, NOW() + INTERVAL '15 minutes', FALSE)";
         return $this->insert($sql);
     }
-
     public function verificarCodigo($id_usuario, $codigo) {
         $codigo = pg_escape_string($codigo);
         $sql = "SELECT * FROM codigos_recuperacion 
@@ -78,7 +77,7 @@ class UsuariosModel extends MasterModel {
                 AND expira_en > NOW()";
         return $this->select($sql);
     }
-
+ // Esta función verifica si el código de recuperación existe y no ha sido usado
     public function existeCodigo($id_usuario, $codigo) {
     $codigo = pg_escape_string($codigo);
 
@@ -90,14 +89,14 @@ class UsuariosModel extends MasterModel {
 
         return $this->select($sql);
     }
-
+    // Esta función incrementa el contador de intentos de recuperación para un usuario
     public function incrementarIntentos($id_usuario) {
         $sql = "UPDATE codigos_recuperacion 
                 SET intentos = intentos + 1 
                 WHERE id_usuario = $id_usuario AND usado = FALSE";
         return $this->update($sql);
     }
-
+    // Esta función obtiene el número de intentos de recuperación para un usuario
     public function getIntentos($id_usuario) {
         $sql = "SELECT intentos FROM codigos_recuperacion 
                 WHERE id_usuario = $id_usuario AND usado = FALSE";
@@ -108,18 +107,18 @@ class UsuariosModel extends MasterModel {
         }
         return 0;
     }
-
+    // Esta función elimina el código de recuperación para un usuario
     public function eliminarCodigo($id_usuario) {
         $sql = "DELETE FROM codigos_recuperacion WHERE id_usuario = $id_usuario";
         return $this->delete($sql);
     }
-
+    // Esta función marca el código de recuperación como usado para un usuario
     public function marcarCodigoUsado($id_usuario) {
         $sql = "UPDATE codigos_recuperacion SET usado = TRUE 
                 WHERE id_usuario = $id_usuario";
         return $this->update($sql);
     }
-
+    // Esta función actualiza la contraseña de un usuario
     public function actualizarContrasena($id_usuario, $nueva_contrasena) {
         $hash = md5($nueva_contrasena);
         $hash = pg_escape_string($hash);
@@ -127,19 +126,18 @@ class UsuariosModel extends MasterModel {
             WHERE id_usuario = $id_usuario";
         return $this->update($sql);
     }
-    // aqui termina la funcion para enviar el correo de recuperacion de contraseña
+    
 
 
     // aqui comienza la funcion para mostrar los usuarios registrados en el sistema
     public function obtenerUsuarios($numeroDocumento = '') {
         $numeroDocumento = trim($numeroDocumento);
         $condicion = '';
-
         if ($numeroDocumento !== '' && is_numeric($numeroDocumento)) {
             $numeroDocumento = pg_escape_string($numeroDocumento);
             $condicion = "WHERE u.numero_documento = $numeroDocumento";
         }
-
+        // Consulta SQL para obtener los usuarios con sus roles y estados
         $sql = "SELECT
                     u.id_usuario,
                     u.id_rol,
@@ -200,7 +198,7 @@ class UsuariosModel extends MasterModel {
         $row = pg_fetch_assoc($result);
         return $row['id_estado_usuario'];
     }
-
+    // Esta función obtiene los IDs de los estados de usuario "habilitado" e "inhabilitado"
     public function obtenerIdsEstados() {
         $sql = "SELECT id_estado_usuario, nombre_estado_usuario FROM estados_usuario";
         $result = $this->select($sql);
@@ -221,7 +219,7 @@ class UsuariosModel extends MasterModel {
             'inhabilitado' => $idEstadoInhabilitado
         );
     }
-
+    // Esta función cambia el estado de un usuario
     public function cambiarEstadoUsuario($idUsuario, $nuevoEstado) {
         $sql = "UPDATE usuarios SET id_estado_usuario = $nuevoEstado WHERE id_usuario = $idUsuario";
         return $this->update($sql);
@@ -282,7 +280,7 @@ class UsuariosModel extends MasterModel {
 
         return null;
     }
-
+    // Esta función verifica si un correo electrónico ya está asociado a otro usuario distinto al proporcionado
     public function correoExisteEnOtroUsuario($correo, $idUsuario){
         $correo = pg_escape_string($correo);
 
@@ -310,7 +308,7 @@ class UsuariosModel extends MasterModel {
 
         return $this->update($sql);
     }
-
+    // Esta función valida si la contraseña actual proporcionada coincide con la almacenada en la base de datos para un usuario específico
     public function validarContrasenaActual($id_usuario, $contrasena){
 
         $hash = md5($contrasena);

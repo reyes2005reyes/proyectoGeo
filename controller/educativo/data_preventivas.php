@@ -1,7 +1,7 @@
 <?php
 
 return array(
-
+// Preventivas
 array(
     'codigo' => 'PP-01',
     'nombre' => 'Curva cerrada a la izquierda',

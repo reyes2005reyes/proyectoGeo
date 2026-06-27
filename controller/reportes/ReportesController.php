@@ -7,37 +7,36 @@ require_once '../lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
 
 class ReportesController {
-
+    // Muestra la vista de reportes con los filtros y el historial
     public function index() {
         $model  = new ReportesModel();
         $estados  = array();
         $historial = array();
         $totales_tipo = array();
-
+        // Obtener los estados de los reportes
         $result = $model->obtenerEstados();
         if ($result && pg_num_rows($result) > 0) {
             while ($row = pg_fetch_assoc($result)) {
                 $estados[] = $row;
             }
         }
-
+        // Obtener el historial de descargas del usuario
         $id_usuario = isset($_SESSION['id_usuario']) ? (int)$_SESSION['id_usuario'] : 0;
         $id_rol  = isset($_SESSION['id_rol'])  ? (int)$_SESSION['id_rol'] : 0;
-
+        // Obtener el historial de descargas del usuario
         $resultH = $model->obtenerHistorial($id_usuario, $id_rol);
         if ($resultH && pg_num_rows($resultH) > 0) {
             while ($row = pg_fetch_assoc($resultH)) {
                 $historial[] = $row;
             }
         }
-
+        // Obtener los totales por tipo de reporte
         $resultT = $model->obtenerTotalesPorTipo();
         if ($resultT && pg_num_rows($resultT) > 0) {
             while ($row = pg_fetch_assoc($resultT)) {
                 $totales_tipo[] = $row;
             }
         }
-
         require_once dirname(__FILE__) . '/../../view/reportes/reportes.php';
     }
 
@@ -56,7 +55,7 @@ class ReportesController {
             $fecha_inicio = isset($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : '';
             $fecha_fin = isset($_POST['fecha_fin']) ? $_POST['fecha_fin'] : '';
             $estado = isset($_POST['estado']) ? $_POST['estado'] : '';
-
+            // Validar campos obligatorios
             if (empty($tipo_reporte) || empty($fecha_inicio) || empty($fecha_fin)) {
                 $_SESSION['error_reportes'] = 'Debe completar todos los campos obligatorios antes de generar el reporte.';
                 redirect('index.php?modulo=reportes&controlador=reportes&funcion=index');
@@ -76,8 +75,6 @@ class ReportesController {
                 redirect('index.php?modulo=reportes&controlador=reportes&funcion=index');
                 return;
             }
-
-
             // 3 segun tipo de reporte
             $model = new ReportesModel();
             $nombres_reporte = array(
@@ -85,7 +82,7 @@ class ReportesController {
                 'senales'  => 'Reporte de Señalizacion Vial en Mal Estado',
                 'reductores' => 'Reporte de Reductores de Velocidad en Mal Estado',
             );
-
+            // Validar tipo de reporte
             switch ($tipo_reporte) {
                 case 'accidentes':
                     $result = $model->obtenerAccidentes($fecha_inicio, $fecha_fin, $estado);
@@ -119,8 +116,8 @@ class ReportesController {
             //4 Construir el archivo XLSX 
             $nombreReporte = $nombres_reporte[$tipo_reporte];
             $fechaGeneracion = date('d/m/Y H:i');
-            $fechaArchivo    = date('Ymd_His');
-
+            $fechaArchivo = date('Ymd_His');
+            // Crear objeto PHPExcel
             $excel = new PHPExcel();
             $hoja  = $excel->getActiveSheet();
             $hoja->setTitle('Reporte');
@@ -135,6 +132,7 @@ class ReportesController {
                 'color' => array(
                 'rgb' => 'FFFFFF'
             )
+            // style de fondo azul oscuro para el encabezado
             ),
                 'fill' => array(
                 'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -171,7 +169,8 @@ class ReportesController {
             'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
             )
             )
-            );  
+            );
+            // Ajustar altura de la fila 2
             $hoja->getRowDimension(2)->setRowHeight(22);
 
             // Fila 3: Periodo consultado 
@@ -209,11 +208,11 @@ class ReportesController {
                 'F' => 'Descripción de la Problemática',
                 'G' => 'Estado Actual',
             );
-
+            // Escribir encabezados
             foreach ($columnas as $col => $titulo) {
                 $hoja->setCellValue("{$col}4", $titulo);
             }
-
+            // Estilo de encabezados
             $hoja->getStyle('A4:G4')->applyFromArray(array(
                 'font' => array(
                 'bold' => true,
@@ -242,6 +241,7 @@ class ReportesController {
             )
             )
         );
+        // Ajustar altura de la fila 4
             $hoja->getRowDimension(4)->setRowHeight(20);
 
             // Filas de datos
@@ -292,7 +292,6 @@ class ReportesController {
             foreach ($anchos as $col => $ancho) {
                 $hoja->getColumnDimension($col)->setWidth($ancho);
             }
-
             //5 Enviar el archivo al navegador
             // Nomenclatura: Reporte_[TipoReporte]_[FechaGeneracion].xlsx  (RF025)
             $tipoNombreArchivo = str_replace(' ', '_', $nombreReporte);
@@ -302,10 +301,9 @@ class ReportesController {
             if (ob_get_length()) {
                 ob_end_clean();
             }
-
+            // Configurar encabezados para la descarga del archivo
             header('Content-Type: application/vnd.ms-excel');
             $nombreArchivo = "Reporte_{$tipoNombreArchivo}_{$fechaArchivo}.xls";
-
             // Registrar en historial
             $model->registrarHistorial(
                 $_SESSION['id_usuario'],
@@ -315,10 +313,10 @@ class ReportesController {
                 $estado,
                 $nombreArchivo
             );
-
+            // descarga del archivo
             header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
             header('Cache-Control: max-age=0');
-
+            // Guardar el archivo en formato Excel5 (XLS)
             $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
             $writer->save('php://output');
             exit;

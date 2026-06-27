@@ -1,7 +1,7 @@
 <?php
 
 return array(
-
+// Señales reglamentarias
 array(
     'codigo' => 'SR-01',
     'nombre' => 'Pare',
