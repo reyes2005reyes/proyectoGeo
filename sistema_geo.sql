@@ -491,45 +491,70 @@ INSERT INTO acciones (nombre_accion) VALUES
 
 INSERT INTO permisos (id_rol, id_modulo, id_accion) VALUES
 
--- ROL 3
-(3,1,2),
+-- ===========================
+-- ROL 3 - CIUDADANO
+-- ===========================
 
-(3,2,1),
-(3,2,2),
+-- Solicitudes
+(3,2,1), -- Listar
+(3,2,2), -- Registrar
 
-(3,3,1),
+-- GeoVisor
+(3,3,1), -- Listar
 
-(3,4,1),
+-- Educación Vial
+(3,4,1), -- Listar
 
--- ROL 2
-(2,1,1),
+-- ===========================
+-- ROL 2 - FUNCIONARIO
+-- ===========================
 
-(2,2,1),
-(2,2,3),
+-- Administración (Usuarios)
+(2,1,1), -- Listar
 
-(2,3,1),
+-- Solicitudes (incluye PQRSF)
+(2,2,1), -- Listar
+(2,2,2), -- Registrar
+(2,2,3), -- Editar
 
-(2,4,1),
-(2,4,3),
+-- GeoVisor
+(2,3,1), -- Listar
 
-(2,5,1),
+-- Educación Vial
+(2,4,1), -- Listar
+(2,4,3), -- Editar
 
--- ROL 1
-(1,1,1),
-(1,1,3),
-(1,1,4),
+-- Reportes
+(2,5,1), -- Listar
 
-(1,2,1),
-(1,2,3),
-(1,2,4),
+-- ===========================
+-- ROL 1 - ADMINISTRADOR
+-- ===========================
 
-(1,3,1),
+-- Administración (Usuarios)
+(1,1,1), -- Listar
+(1,1,2), -- Registrar
+(1,1,3), -- Editar
+(1,1,4), -- Anular
 
-(1,4,1),
-(1,4,3),
+-- Solicitudes (incluye PQRSF)
+(1,2,1), -- Listar
+(1,2,2), -- Registrar
+(1,2,3), -- Editar
+(1,2,4), -- Anular
 
-(1,5,1),
-(1,5,2);
+-- GeoVisor
+(1,3,1), -- Listar
+
+-- Educación Vial
+(1,4,1), -- Listar
+(1,4,2), -- Registrar
+(1,4,3), -- Editar
+(1,4,4), -- Anular
+
+-- Reportes
+(1,5,1), -- Listar
+(1,5,2); -- Registrar
 
 -- =====================================
 -- USUARIOS
