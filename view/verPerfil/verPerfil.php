@@ -60,7 +60,7 @@ if (!isset($perfil) || !is_array($perfil)) {
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Número de identificación</label>
-                                <input type="text"s
+                                <input type="text"
                                     class="form-control"
                                     value="<?php echo htmlspecialchars($perfil['numero_documento']); ?>"
                                     readonly>
@@ -213,7 +213,7 @@ if (!isset($perfil) || !is_array($perfil)) {
     <div class="modal fade" id="modalContrasena" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="<?php echo getUrl('usuarios','usuarios','postActualizarContrasena', false); ?>" method="POST">
+                <form id="formContrasena"  action="<?php echo getUrl('usuarios','usuarios','postActualizarContrasena', false); ?>" method="POST">
                     <div class="modal-header">
                         <h5 class="modal-title">Actualizar contraseña</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"> </button>
@@ -226,11 +226,13 @@ if (!isset($perfil) || !is_array($perfil)) {
                         </div>
                         <div class="mb-3">
                             <label>Nueva contraseña</label>
-                            <input type="password" class="form-control"  name="password_nueva" required>
+                            <input id="password_nueva" type="password" class="form-control"  name="password_nueva" required>
+                            <div id="mensajeNuevaPassword"></div>
                         </div>
                         <div class="mb-3">
                             <label>Confirmar contraseña</label>
-                            <input type="password" class="form-control" name="password_confirmacion" required>
+                            <input id="password_confirmacion" type="password" class="form-control" name="password_confirmacion" required>
+                            <div id="mensajeConfirmacion"></div>
                         </div>
                     </div>
                     <div class="modal-footer">

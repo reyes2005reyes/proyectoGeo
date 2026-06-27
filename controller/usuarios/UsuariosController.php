@@ -791,6 +791,12 @@ class UsuariosController{
             redirect(getUrl("usuarios","usuarios","ver"));
             return;
         }
+        // Validar longitud mínima
+        if (strlen($nueva) < 8) {
+            $_SESSION['error_perfil'] = "La nueva contraseña debe tener al menos 8 caracteres.";
+            redirect(getUrl("usuarios","usuarios","ver"));
+            return;
+        }
         // Validar longitud mínima de la nueva contraseña
         if(!$obj->validarContrasenaActual($idUsuario,$actual)){
             $_SESSION['error_perfil'] = "La contraseña actual es incorrecta.";
