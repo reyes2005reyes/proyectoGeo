@@ -25,6 +25,27 @@ class UsuariosController{
                 redirect('/proyectoGeo/view/registro/Registro.php');
                 return;
             }
+            
+            // Validar seguridad media de contraseña
+            $contrasena = $_POST['contrasena'];
+
+            if (!preg_match('/[A-Z]/', $contrasena)) {
+                $_SESSION['error_registro'] = 'La contraseña debe contener al menos una letra mayúscula.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            if (!preg_match('/[0-9]/', $contrasena)) {
+                $_SESSION['error_registro'] = 'La contraseña debe contener al menos un número.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
+
+            if (!preg_match('/[^a-zA-Z0-9]/', $contrasena)) {
+                $_SESSION['error_registro'] = 'La contraseña debe contener al menos un símbolo especial.';
+                redirect('/proyectoGeo/view/registro/Registro.php');
+                return;
+            }
 
             // Criterio 1:  El usuario intenta registrarse con un número de identificación que ya existe en el sistema
             if ($obj->existeDocumento($_POST['numero_documento'])) {

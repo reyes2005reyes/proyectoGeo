@@ -499,6 +499,26 @@ class SolicitudesModel extends MasterModel {
 
         return $this->select($sql);
     }
+    public function obtenerSolicitudConCorreo($id_solicitud) {
+
+    // Trae los datos de la solicitud junto con el correo del ciudadano
+    $sql = "
+        SELECT
+            s.id_solicitud,
+            ts.nombre AS nombre_tipo_solicitud,
+            u.primer_nombre,
+            u.primer_apellido,
+            u.correo
+        FROM solicitudes s
+        INNER JOIN tipos_solicitud ts
+            ON s.id_tipo_solicitud = ts.id_tipo_solicitud
+        INNER JOIN usuarios u
+            ON s.id_usuario = u.id_usuario
+        WHERE s.id_solicitud = $id_solicitud
+    ";
+
+    return $this->select($sql);
+}
 
 }
 ?>

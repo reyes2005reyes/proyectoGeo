@@ -1,3 +1,11 @@
+<?php if (isset($_SESSION['respuesta_exitosa'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <?php echo $_SESSION['respuesta_exitosa']; unset($_SESSION['respuesta_exitosa']); ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<?php endif; ?>
+
 <div class="container py-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -151,3 +159,37 @@
     </div>
 
 </div>
+
+<?php if ($_SESSION['id_rol'] == 2): ?>
+
+<div id="loadingOverlay" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(26, 41, 66, 0.75);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+">
+    <div class="spinner-border text-light mb-3" style="width:3rem; height:3rem;" role="status"></div>
+    <p class="text-white fw-semibold fs-5">Enviando respuesta y notificando al ciudadano...</p>
+</div>
+
+<script>
+document.querySelector('form[action*="postResponder"]').addEventListener('submit', function(e) {
+    e.preventDefault(); // Detiene el envío inmediato
+
+    var form = this;
+    var overlay = document.getElementById('loadingOverlay');
+    overlay.style.display = 'flex';
+
+    // Espera mínimo 2 segundos antes de enviar
+    setTimeout(function() {
+        form.submit();
+    }, 2000); // 2000ms = 2 segundos
+});
+</script>
+
+<?php endif; ?>
