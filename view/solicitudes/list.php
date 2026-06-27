@@ -13,7 +13,35 @@
             <p class="text-muted mb-0">Listado de solicitudes registradas</p>
         </div>
     </div>
+    <!-- Filtro por rango de fecha -->
+    <form method="GET" action="index.php" class="card shadow-sm mb-4">
+        <input type="hidden" name="modulo" value="solicitudes">
+        <input type="hidden" name="controlador" value="solicitudes">
+        <input type="hidden" name="funcion" value="listar">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Fecha inicio</label>
+                    <input type="date" name="fecha_inicio" class="form-control" max="<?php echo date('Y-m-d'); ?>"
+                        value="<?php echo isset($_GET['fecha_inicio']) ? htmlspecialchars($_GET['fecha_inicio']) : ''; ?>">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Fecha fin</label>
+                    <input type="date" name="fecha_fin" class="form-control" max="<?php echo date('Y-m-d'); ?>"
+                        value="<?php echo isset($_GET['fecha_fin']) ? htmlspecialchars($_GET['fecha_fin']) : ''; ?>">
+                </div>
 
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn text-white w-100" style="background-color: #1a2942;">
+                        <i class="fa fa-search me-1"></i> Filtrar
+                    </button>
+                    <a href="<?php echo getUrl('solicitudes','solicitudes','listar'); ?>" class="btn btn-outline-secondary w-100">
+                        <i class="fa fa-times me-1"></i> Limpiar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
     <div class="card shadow-sm">
         <div class="card-header text-white fw-semibold" style="background-color: #1a2942;">
             <i class="fa fa-list me-2"></i> Solicitudes
@@ -38,7 +66,6 @@
                                 <td><?php echo htmlspecialchars($solicitud['id_solicitud']); ?></td>
                                 <td><?php echo htmlspecialchars($solicitud['nombre_tipo_solicitud']); ?></td>
                                 <td>
-                                    <td>
                                         <?php
                                             $colores = array(
                                                 'Pendiente'   => 'bg-warning text-dark',
@@ -53,7 +80,6 @@
                                         <span class="badge <?php echo $clase; ?>">
                                             <?php echo htmlspecialchars($estado); ?>
                                         </span>
-                                    </td>
                                 </td>
                                 <td><?php echo htmlspecialchars($solicitud['direccion']); ?></td>
                                 <td><?php echo htmlspecialchars($solicitud['fecha_solicitud']); ?></td>

@@ -9,17 +9,14 @@ class SolicitudesController {
 
         $obj = new SolicitudesModel();
 
-        // Ciudadano: solo ve sus solicitudes
+        $fecha_inicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : null;
+        $fecha_fin = isset($_GET['fecha_fin'])  ? $_GET['fecha_fin']  : null;
+
         if ($_SESSION['id_rol'] == 3) {
-
-            $id_usuario = $_SESSION['id_usuario'];
-
-            $solicitudes = $obj->listarSolicitudes($id_usuario);
-
+            $id_usuario  = $_SESSION['id_usuario'];
+            $solicitudes = $obj->listarSolicitudes($id_usuario, $fecha_inicio, $fecha_fin);
         } else {
-
-            // Funcionario ve todas
-            $solicitudes = $obj->listarSolicitudes();
+            $solicitudes = $obj->listarSolicitudes(null, $fecha_inicio, $fecha_fin);
         }
 
         include_once "../view/solicitudes/list.php";

@@ -120,7 +120,7 @@ class SolicitudesModel extends MasterModel {
         return $this->select($sql);
     }
 
-    public function listarSolicitudes($id_usuario = null) {
+    public function listarSolicitudes($id_usuario = null, $fecha_inicio = null, $fecha_fin = null) {
 
         $sql = "
             SELECT
@@ -132,25 +132,27 @@ class SolicitudesModel extends MasterModel {
                 u.primer_nombre,
                 u.primer_apellido
             FROM solicitudes s
-            INNER JOIN tipos_solicitud ts
-                ON s.id_tipo_solicitud = ts.id_tipo_solicitud
-            INNER JOIN estados_solicitud es
-                ON s.id_estado_solicitud = es.id_estado_solicitud
-            INNER JOIN usuarios u
-                ON s.id_usuario = u.id_usuario
+            INNER JOIN tipos_solicitud ts ON s.id_tipo_solicitud = ts.id_tipo_solicitud
+            INNER JOIN estados_solicitud es ON s.id_estado_solicitud = es.id_estado_solicitud
+            INNER JOIN usuarios u ON s.id_usuario = u.id_usuario
+            WHERE 1=1
         ";
 
-        // Si es ciudadano solo ve sus solicitudes
         if ($id_usuario != null) {
-
-            $sql .= "
-                WHERE s.id_usuario = $id_usuario
-            ";
+            $sql .= " AND s.id_usuario = $id_usuario";
         }
 
-        $sql .= "
-            ORDER BY s.fecha_solicitud DESC
-        ";
+        if (!empty($fecha_inicio)) {
+            $fecha_inicio = pg_escape_string($fecha_inicio);
+            $sql .= " AND s.fecha_solicitud::DATE >= '$fecha_inicio'";
+        }
+
+        if (!empty($fecha_fin)) {
+            $fecha_fin = pg_escape_string($fecha_fin);
+            $sql .= " AND s.fecha_solicitud::DATE <= '$fecha_fin'";
+        }
+
+        $sql .= " ORDER BY s.fecha_solicitud DESC";
 
         return $this->select($sql);
     }
@@ -501,24 +503,25 @@ class SolicitudesModel extends MasterModel {
     }
     public function obtenerSolicitudConCorreo($id_solicitud) {
 
-    // Trae los datos de la solicitud junto con el correo del ciudadano
-    $sql = "
-        SELECT
-            s.id_solicitud,
-            ts.nombre AS nombre_tipo_solicitud,
-            u.primer_nombre,
-            u.primer_apellido,
-            u.correo
-        FROM solicitudes s
-        INNER JOIN tipos_solicitud ts
-            ON s.id_tipo_solicitud = ts.id_tipo_solicitud
-        INNER JOIN usuarios u
-            ON s.id_usuario = u.id_usuario
-        WHERE s.id_solicitud = $id_solicitud
-    ";
+        // Trae los datos de la solicitud junto con el correo del ciudadano
+        $sql = "
+            SELECT
+                s.id_solicitud,
+                ts.nombre AS nombre_tipo_solicitud,
+                u.primer_nombre,
+                u.primer_apellido,
+                u.correo
+            FROM solicitudes s
+            INNER JOIN tipos_solicitud ts
+                ON s.id_tipo_solicitud = ts.id_tipo_solicitud
+            INNER JOIN usuarios u
+                ON s.id_usuario = u.id_usuario
+            WHERE s.id_solicitud = $id_solicitud
+        ";
 
-    return $this->select($sql);
-}
+        return $this->select($sql);
+    }
+    
 
 }
 ?>
