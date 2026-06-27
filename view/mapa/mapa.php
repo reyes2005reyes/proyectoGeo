@@ -2,7 +2,17 @@
 
 include_once '../../lib/conf/connection.php';
 
-session_start();
+    session_start();
+
+    if(!extension_loaded("MapScript")){
+            dl('php_mapscript.'.PHP_SHLIB_SUFFIX);
+        }
+
+    $mapObject = ms_newMapObj("C:/ms4w/Apache/htdocs/proyectoGeo/web/cali.map");
+    $mapImage = $mapObject -> draw();
+    $urlImage = $mapImage -> saveWebImage();
+    $mapLegend= $mapObject -> drawLegend();
+    $urlLegend= $mapLegend -> saveWebImage();
 
     $objConexion = new Connection();
     $conexion = $objConexion->getConnect();
@@ -114,7 +124,7 @@ session_start();
                             <form name="select_layers">
                                 <div class="form-switch">
                                     <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[0]" value="Cali" id="chk0">
-                                    <label class="form-check-label" for="chk0">Cali</label>
+                                    <label class="form-check-label" for="chk0">Area de Cali</label>
                                 </div>
                                 <div class="form-switch">
                                     <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[1]" value="Comunas" id="chk1">
@@ -165,7 +175,7 @@ session_start();
                                     </div>
                                 </div>
 
-                                <button id="btn_crear_solicitud" type="button" class="btn btn-success w-100" onclick="irAlFormulario()">
+                                <button id="btn_crear_solicitud" type="button" class="btn btn-sm text-white" style="background-color: #1a2942;  w-100" onclick="irAlFormulario()">
                                       Crear Solicitud
                                 </button>
 
@@ -350,6 +360,7 @@ session_start();
         }
 
     </script>
+    <img src="<?php echo $urlLegend;?>" alt="leyenda" border="0">
     <div class="modal fade" id="modalReporte" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
