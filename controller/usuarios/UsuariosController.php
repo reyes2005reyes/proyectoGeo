@@ -760,6 +760,23 @@ class UsuariosController{
 
             return;
         }
+        if (!preg_match('/[A-Z]/', $nueva)) {
+            $_SESSION['error_perfil'] = "La nueva contraseña debe contener al menos una letra mayúscula.";
+            redirect(getUrl("usuarios","usuarios","ver"));
+            return;
+        }
+
+        if (!preg_match('/[0-9]/', $nueva)) {
+            $_SESSION['error_perfil'] = "La nueva contraseña debe contener al menos un número.";
+            redirect(getUrl("usuarios","usuarios","ver"));
+            return;
+        }
+
+        if (!preg_match('/[^a-zA-Z0-9]/', $nueva)) {
+            $_SESSION['error_perfil'] = "La nueva contraseña debe contener al menos un símbolo especial.";
+            redirect(getUrl("usuarios","usuarios","ver"));
+            return;
+        }
 
         if(!$obj->validarContrasenaActual($idUsuario,$actual)){
 

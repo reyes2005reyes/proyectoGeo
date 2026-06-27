@@ -111,6 +111,7 @@ class SolicitudesController {
         );
 
         if ($resultado) {
+            $_SESSION['solicitud_exitosa'] = 'La solicitud fue registrada exitosamente.';
 
             redirect(getUrl("solicitudes","solicitudes", "listar"));
 

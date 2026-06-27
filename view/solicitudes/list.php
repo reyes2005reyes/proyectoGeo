@@ -1,3 +1,11 @@
+<?php if (isset($_SESSION['solicitud_exitosa'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <?php echo $_SESSION['solicitud_exitosa']; unset($_SESSION['solicitud_exitosa']); ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<?php endif; ?>
+
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -30,9 +38,22 @@
                                 <td><?php echo htmlspecialchars($solicitud['id_solicitud']); ?></td>
                                 <td><?php echo htmlspecialchars($solicitud['nombre_tipo_solicitud']); ?></td>
                                 <td>
-                                    <span class="badge bg-secondary">
-                                        <?php echo htmlspecialchars($solicitud['nombre_estado_solicitud']); ?>
-                                    </span>
+                                    <td>
+                                        <?php
+                                            $colores = array(
+                                                'Pendiente'   => 'bg-warning text-dark',
+                                                'En revisión' => 'bg-info text-dark',
+                                                'En proceso'  => 'bg-primary',
+                                                'Rechazada' => 'bg-danger',
+                                                'Completada'  => 'bg-success',
+                                            );
+                                            $estado = $solicitud['nombre_estado_solicitud'];
+                                            $clase  = isset($colores[$estado]) ? $colores[$estado] : 'bg-secondary';
+                                        ?>
+                                        <span class="badge <?php echo $clase; ?>">
+                                            <?php echo htmlspecialchars($estado); ?>
+                                        </span>
+                                    </td>
                                 </td>
                                 <td><?php echo htmlspecialchars($solicitud['direccion']); ?></td>
                                 <td><?php echo htmlspecialchars($solicitud['fecha_solicitud']); ?></td>

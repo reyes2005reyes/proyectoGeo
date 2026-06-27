@@ -6,6 +6,7 @@
     </div>
 <?php endif; ?>
 
+
 <div class="container py-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -34,8 +35,19 @@
 
                 <div class="col-md-4">
                     <p class="text-muted mb-0 fw-semibold">Estado</p>
-                    <span class="badge bg-secondary">
-                        <?php echo htmlspecialchars($solicitud['nombre_estado_solicitud']); ?>
+                    <?php
+                        $colores = array(
+                        'Pendiente' => 'bg-warning text-dark',
+                        'En revisión'  => 'bg-info text-dark',
+                        'En proceso' => 'bg-primary',
+                        'Rechazada' => 'bg-danger',
+                        'Completada' => 'bg-success',
+                    );
+                        $estado = $solicitud['nombre_estado_solicitud'];
+                        $clase  = isset($colores[$estado]) ? $colores[$estado] : 'bg-secondary';
+                    ?>
+                    <span class="badge <?php echo $clase; ?>">
+                        <?php echo htmlspecialchars($estado); ?>
                     </span>
                 </div>
 
@@ -143,9 +155,14 @@
                             <strong><?php echo htmlspecialchars($respuesta['primer_nombre'] . ' ' . $respuesta['primer_apellido']); ?></strong>
                             <small class="text-muted"><?php echo htmlspecialchars($respuesta['fecha']); ?></small>
                         </div>
-                        <span class="badge bg-secondary mb-2">
-                            <?php echo htmlspecialchars($respuesta['nombre_estado_solicitud']); ?>
-                        </span>
+                        <?php
+                        $estadoResp = $respuesta['nombre_estado_solicitud'];
+                        $claseResp  = isset($colores[$estadoResp]) ? $colores[$estadoResp] : 'bg-secondary';
+                    ?>
+                    <span class="badge <?php echo $claseResp; ?> mb-2"
+                        <?php if ($estadoResp === 'En revisión') echo 'style="background-color:#6f42c1;"'; ?>>
+                        <?php echo htmlspecialchars($estadoResp); ?>
+                    </span>
                         <p class="mb-0"><?php echo nl2br(htmlspecialchars($respuesta['mensaje'])); ?></p>
                     </div>
                 <?php } ?>
