@@ -553,298 +553,42 @@ INSERT INTO usuarios (
 ) VALUES
 
 -- Administrador
-(1,1,1,'Carlos','Ramírez',1023456789,'admin@geo.gov.co',3001234567,
+(1,1,1,'Jhon','Sanchez',1005934810,'jhonalejandrosanchez791@gmail.com',3001234567,
 'Calle 10 #5-20 Cali',
 '5f4dcc3b5aa765d61d8327deb882cf99'),
 
--- Funcionario
-(1,2,1,'Andrés','Moreno',1067890123,'funcionario@geo.gov.co',3023456789,
+-- Administrador
+(1,1,1,'Johan','Reyes',1105896324,'sebastian45montoya@gmail.com',3023456789,
 'Avenida 6N #12-40 Cali',
 '5f4dcc3b5aa765d61d8327deb882cf99'),
 
--- Ciudadanos
-(1,3,1,'Juan','García',1098765432,'juan.garcia@gmail.com',3045678901,
+-- Funcionario
+(1,2,1,'Alejandra','Quintero',1122334455,'jeros1307@gmail.com',3045678901,
 'Calle 45 #10-22 Cali',
 '5f4dcc3b5aa765d61d8327deb882cf99'),
 
-(1,3,1,'María','López',1087654321,'maria.lopez@gmail.com',3114567890,
+-- Ciudadano 2
+(1,3,1,'Victor','Hernandez',6677889900,'victtormanuelhernandezortiz@gmail.com',3114567890,
 'Carrera 15 #30-45 Cali',
 '5f4dcc3b5aa765d61d8327deb882cf99'),
 
-(1,3,1,'Luis','Martínez',1076543210,'luis.martinez@gmail.com',3156789012,
+-- Ciudadano 3
+(1,3,1,'Jhoan','Guevara',1112497308,'jhoanguevara350@gmail.com',3237997431,
 'Calle 80 #12-18 Cali',
-'5f4dcc3b5aa765d61d8327deb882cf99'),
-
-(1,3,1,'Ana','Rodríguez',1065432109,'ana.rodriguez@gmail.com',3167890123,
-'Barrio El Ingenio, Cali',
-'5f4dcc3b5aa765d61d8327deb882cf99'),
-
-(1,3,1,'Santiago','Castro',1054321098,'santiago.castro@gmail.com',3178901234,
-'Ciudad Jardín, Cali',
 '5f4dcc3b5aa765d61d8327deb882cf99');
 
+-- Update de alejandra
 
--- =====================================
--- SOLICITUDES (INFORMACIÓN GENERAL)
--- =====================================
+SELECT *
+FROM modulos;
 
-INSERT INTO solicitudes (
-    id_usuario,
-    id_estado_solicitud,
-    id_tipo_solicitud,
-    descripcion,
-    direccion,
-    coordenadas,
-    imagen_url,
-    fecha_solicitud
-)
-VALUES
+UPDATE modulos
+SET nombre_modulo = 'Administracion'
+WHERE nombre_modulo = 'Usuarios';
 
--- Juan García
-(3,1,1,'Reporte de accidente de tránsito',
-'Carrera 1 con Calle 5, Cali',
-ST_SetSRID(GeometryFromText('POINT(-76.5320 3.4516)'),4326),
-'https://storage.geo.gov.co/img/acc001.jpg',
-'2026-01-10 08:23:00'),
-
--- María López
-(4,2,2,'Señal de tránsito deteriorada',
-'Carrera 8 #14-20 Cali',
-ST_SetSRID(GeometryFromText('POINT(-76.5120 3.4558)'),4326),
-'https://storage.geo.gov.co/img/sen001.jpg',
-'2026-01-15 10:45:00'),
-
--- Luis Martínez
-(5,3,3,'Solicitud de nueva señalización',
-'Avenida 4N #22-10 Cali',
-ST_SetSRID(GeometryFromText('POINT(-76.5250 3.4720)'),4326),
-'https://storage.geo.gov.co/img/sen002.jpg',
-'2026-01-20 14:00:00'),
-
--- Ana Rodríguez
-(6,1,4,'Reductor de velocidad deteriorado',
-'Calle 25 #8-45 Cali',
-ST_SetSRID(GeometryFromText('POINT(-76.3035 3.5394)'),4326),
-'https://storage.geo.gov.co/img/red001.jpg',
-'2026-02-03 09:10:00'),
-
--- Santiago Castro
-(7,2,5,'Solicitud de instalación de reductor',
-'Carrera 44 #5-80 Cali',
-ST_SetSRID(GeometryFromText('POINT(-76.5410 3.4310)'),4326),
-'https://storage.geo.gov.co/img/red002.jpg',
-'2026-02-10 11:30:00'),
-
--- Juan García
-(3,1,7,'PQRSF por demora en atención',
-'Calle 70 #2-34 Cali',
-ST_SetSRID(GeometryFromText('POINT(-76.5180 3.4980)'),4326),
-NULL,
-'2026-02-15 16:20:00'),
-
--- María López
-(4,2,1,'Segundo reporte de accidente',
-'Carretera Cali - Buenaventura km 18',
-ST_SetSRID(GeometryFromText('POINT(-76.7200 3.4100)'),4326),
-'https://storage.geo.gov.co/img/acc002.jpg',
-'2026-03-01 06:45:00'),
-
--- Luis Martínez
-(5,1,6,'Daño en vía pública',
-'Av. Simón Bolívar',
-ST_SetSRID(GeometryFromText('POINT(-76.5300 3.4650)'),4326),
-'https://storage.geo.gov.co/img/via001.jpg',
-'2026-03-08 12:00:00'),
-
--- Ana Rodríguez
-(6,3,3,'Solicitud de señal para parqueo de discapacidad',
-'Calle 10 #4-50 Cali',
-ST_SetSRID(GeometryFromText('POINT(-76.2982 3.8995)'),4326),
-'https://storage.geo.gov.co/img/sen003.jpg',
-'2026-03-15 09:30:00'),
-
--- Santiago Castro
-(7,1,7,'Solicitud de información sobre malla vial',
-'Barrio El Poblado',
-ST_SetSRID(GeometryFromText('POINT(-76.5450 3.4200)'),4326),
-NULL,
-'2026-04-01 08:00:00');
-
-
--- =====================================
--- REPORTE DE ACCIDENTES
--- =====================================
-
-INSERT INTO solicitudes_reporte_accidentes
-(id_solicitud, id_causa_accidente)
-VALUES
-(1,1),
-(7,4);
-
--- =====================================
--- LESIONADOS
--- =====================================
-
-INSERT INTO lesionados
-(numero_lesionados)
-VALUES
-(2),
-(1);
-
-
-INSERT INTO reporte_lesionado
-(id_solicitud_reporte_accidente, id_lesionado)
-VALUES
-(1,1),
-(2,2);
-
-
--- =====================================
--- VEHÍCULOS INVOLUCRADOS
--- =====================================
-
-INSERT INTO vehiculos
-(id_solicitud_reporte_accidente, id_tipo_vehiculo)
-VALUES
-(1,2),
-(1,1),
-(2,4);
-
-
--- =====================================
--- SEÑAL EN MAL ESTADO
--- =====================================
-
-INSERT INTO solicitudes_senal_mal_estado
-(id_solicitud, id_tipo_senal, id_categoria, id_tipo_danio, id_orientacion)
-VALUES
-(2,1,1,1,1);
-
-
--- =====================================
--- NUEVA SEÑALIZACIÓN
--- =====================================
-
-INSERT INTO solicitudes_nueva_senalizacion
-(id_solicitud, id_tipo_senal, id_categoria, id_orientacion)
-VALUES
-(3,1,5,1),
-(9,3,12,2);
-
-
--- =====================================
--- REDUCTOR EN MAL ESTADO
--- =====================================
-
-INSERT INTO solicitudes_reductor_mal_estado
-(id_solicitud, id_categoria, id_tipo_reductor, id_tipo_danio)
-VALUES
-(4,10,1,12);
-
-
--- =====================================
--- NUEVO REDUCTOR
--- =====================================
-
-INSERT INTO solicitudes_nuevo_reductor
-(id_solicitud, id_categoria, id_tipo_reductor)
-VALUES
-(5,10,1);
-
-
--- =====================================
--- VÍA PÚBLICA EN MAL ESTADO
--- =====================================
-
-INSERT INTO solicitudes_via_publica_mal_estado
-(id_solicitud, id_tipo_danio)
-VALUES
-(8,9);
-
-
--- =====================================
--- PQRSF
--- =====================================
-
-INSERT INTO solicitudes_pqrsf
-(id_solicitud, id_tipo_pqrsf)
-VALUES
-(6,2),
-(10,1);
-
-
--- =====================================
--- RESPUESTAS DEL FUNCIONARIO
--- id_usuario_respuesta = 2 (Andrés Moreno)
--- =====================================
-
-INSERT INTO respuestas_solicitud (
-    id_solicitud,
-    id_usuario_respuesta,
-    id_estado_solicitud,
-    mensaje,
-    fecha
-) VALUES
-(2,2,2,
-'La solicitud fue recibida y actualmente se encuentra en proceso de revisión técnica.',
-'2026-01-16 09:00:00'),
-
-(3,2,3,
-'Se programó una visita técnica para validar la necesidad de la nueva señalización.',
-'2026-01-25 14:30:00'),
-
-(5,2,2,
-'La solicitud fue asignada al área encargada para su evaluación.',
-'2026-02-11 08:45:00'),
-
-(6,2,3,
-'La PQRSF fue revisada y se emitirá una respuesta oficial dentro del plazo establecido.',
-'2026-02-18 10:15:00'),
-
-(8,2,2,
-'Se notificó a la dependencia encargada del mantenimiento vial para la inspección correspondiente.',
-'2026-03-10 15:40:00');
-
--- Filas de prueba para reportes
-INSERT INTO solicitudes (
-    id_usuario,
-    id_estado_solicitud,
-    id_tipo_solicitud,
-    descripcion,
-    direccion,
-    coordenadas,
-    imagen_url,
-    fecha_solicitud
-)
-SELECT
-    (random() * 4 + 3)::int,
-    (random() * 4 + 1)::int,
-    (ARRAY[1,2,4])[floor(random()*3+1)],
-    CASE
-        WHEN (ARRAY[1,2,4])[floor(random()*3+1)] = 1
-            THEN 'Accidente de tránsito reportado #' || gs
-        WHEN (ARRAY[1,2,4])[floor(random()*3+1)] = 2
-            THEN 'Señal de tránsito deteriorada #' || gs
-        ELSE
-            'Reductor de velocidad deteriorado #' || gs
-    END,
-    'Dirección de prueba #' || gs || ', Cali',
-
-    ST_SetSRID(
-        ST_MakePoint(
-            -76.55 + (random() * 0.10),
-            3.45 + (random() * 0.10)s
-        ),
-        4326
-    ),
-
-    'https://storage.geo.gov.co/img/prueba' || gs || '.jpg',
-
-    TIMESTAMP '2026-01-01'
-        + (random() * INTERVAL '180 days')
-
-FROM generate_series(1,3000) gs;
-
+UPDATE modulos
+SET nombre_modulo = 'EducacionVial'
+WHERE nombre_modulo = 'MaterialCapacita';
 
 -- funciom para el registro de un usuario 
 CREATE OR REPLACE FUNCTION registrar_usuario(
