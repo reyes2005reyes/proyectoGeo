@@ -1,5 +1,7 @@
 <?php
 include_once '../model/solicitudes/SolicitudesModel.php';
+require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.phpmailer.php';
+require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.smtp.php';
 
 class SolicitudesController {
 
@@ -134,27 +136,112 @@ class SolicitudesController {
         include_once "../view/solicitudes/show.php";
     }
 
+    private function enviarCorreoRespuesta($solicitud, $mensaje) {
+
+
+        $mail = new PHPMailer();
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'reyesmontoyamonor@gmail.com';
+        $mail->Password   = 'iylaxpku mury dmgk';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+        $mail->CharSet    = 'UTF-8';
+        $mail->setFrom('reyesmontoyamonor@gmail.com', 'SIAV ');
+        $mail->addAddress(
+            $solicitud['correo'],
+            $solicitud['primer_nombre'] . ' ' . $solicitud['primer_apellido']
+        );
+        $mail->isHTML(true);
+        $mail->Subject = 'Respuesta a tu solicitud';
+        $mail->Body = '
+            <table width="100%" cellpadding="0" cellspacing="0"
+                style="font-family:Arial,sans-serif; background:#f4f4f4;">
+            <tr>
+                <td align="center" style="padding:30px 0;">
+                <table width="600" cellpadding="0" cellspacing="0"
+                        style="background:#ffffff; border-radius:8px; overflow:hidden;">
+
+                    <!-- Cabecera -->
+                    <tr>
+                    <td style="background:#1a2942; padding:20px 30px;">
+                        <h2 style="color:#ffffff; margin:0; font-size:18px;">
+                        SIAV &mdash; Sistema de Información de Accidentalidad Vial
+                        </h2>
+                    </td>
+                    </tr>
+
+                    <!-- Cuerpo -->
+                    <tr>
+                    <td style="padding:30px;">
+                        <p style="margin:0 0 10px; font-size:15px;">
+                        Hola, <strong>' . $solicitud['primer_nombre'] . '</strong>:
+                        </p>
+                        <p style="margin:0 0 20px; font-size:14px; color:#555;">
+                        Tu solicitud (<em>' . $solicitud['nombre_tipo_solicitud'] . '</em>)
+                        ha recibido una respuesta.
+                        </p>
+
+                        <!-- Caja del mensaje -->
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="background:#f0f4f8; border-left:4px solid #1a2942;
+                                    padding:15px 20px; border-radius:4px;">
+                            <p style="margin:0; font-size:14px; color:#333;">
+                                ' . nl2br(htmlspecialchars($mensaje)) . '
+                            </p>
+                            </td>
+                        </tr>
+                        </table>
+
+                        <p style="margin:20px 0 0; font-size:13px; color:#888;">
+                        Puedes ingresar al sistema para ver el detalle completo
+                        de tu solicitud.
+                        </p>
+                    </td>
+                    </tr>
+
+                    <!-- Pie -->
+                    <tr>
+                    <td style="background:#f0f0f0; padding:15px 30px;
+                                font-size:12px; color:#999; text-align:center;">
+                        Este es un mensaje autom&aacute;tico, por favor no respondas
+                        directamente a este correo.
+                    </td>
+                    </tr>
+
+                </table>
+                </td>
+            </tr>
+            </table>
+        ';
+
+        // Versión texto plano (fallback)
+        $mail->AltBody =
+            'Hola ' . $solicitud['primer_nombre'] . ', ' .
+            'tu solicitud  ha recibido una respuesta: ' .
+            $mensaje;
+
+        if (!$mail->send()) {
+            // No interrumpir el flujo principal si el correo falla
+            $_SESSION['error_correo'] = 'No se pudo enviar el correo: ' . $mail->ErrorInfo;
+        }
+    }
+
     public function postResponder() {
 
         $obj = new SolicitudesModel();
 
-        // Datos enviados desde el formulario
-        $id_solicitud = $_POST['id_solicitud'];
+        $id_solicitud  = $_POST['id_solicitud'];
         $id_estado_solicitud = $_POST['id_estado_solicitud'];
-        $mensaje = trim($_POST['mensaje']);
+        $mensaje  = trim($_POST['mensaje']);
 
-        // Validación básica
-        if (
-            empty($id_solicitud) ||
-            empty($id_estado_solicitud) ||
-            empty($mensaje)
-        ) {
-
+        if (empty($id_solicitud) || empty($id_estado_solicitud) || empty($mensaje)) {
             echo "Todos los campos son obligatorios.";
             return;
         }
 
-        // Registrar respuesta
         $respuesta = $obj->registrarRespuesta(
             $id_solicitud,
             $_SESSION['id_usuario'],
@@ -164,25 +251,26 @@ class SolicitudesController {
 
         if ($respuesta) {
 
-            // Actualizar estado actual de la solicitud
-            $obj->cambiarEstadoSolicitud(
-                $id_solicitud,
-                $id_estado_solicitud
-            );
+            $obj->cambiarEstadoSolicitud($id_solicitud, $id_estado_solicitud);
+
+            // ── Enviar correo al ciudadano
+            $solicitud = $obj->obtenerSolicitudConCorreo($id_solicitud);
+            $solicitud = pg_fetch_assoc($solicitud);
+
+            $this->enviarCorreoRespuesta($solicitud, $mensaje);
+            $_SESSION['respuesta_exitosa'] = 'La respuesta fue registrada y el ciudadano fue notificado por correo.';
+        
 
             redirect(
                 getUrl(
                     "solicitudes",
                     "solicitudes",
                     "getShow",
-                    array(
-                        "id_solicitud" => $id_solicitud
-                    )
+                    array("id_solicitud" => $id_solicitud)
                 )
             );
 
         } else {
-
             echo "Error al registrar la respuesta.";
         }
     }

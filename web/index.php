@@ -11,6 +11,7 @@ header('Content-Type: text/html; charset=utf-8');
         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
             <i class="fas fa-check-circle me-2"></i>
             <?php echo $_SESSION['bienvenida']; unset($_SESSION['bienvenida']); ?>
+                Para poder hacer una solicitud o reporte, seleccione una ubicación en el mapa y luego haga clic en el botón <strong><i class="fas fa-plus-circle"></i> Crear Solicitud</strong>.
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>

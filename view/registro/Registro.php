@@ -119,6 +119,10 @@ if (!file_exists('../../lib/helpers.php') || !file_exists('../../view/partials/h
             <p class="seccion-titulo"><i class="fas fa-lock me-1"></i>Seguridad</p>
             <div class="field-wrap">
                 <label for="contrasena">Contraseña <i class="text-danger">*</i></label>
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Mínimo una mayúscula, un número y un símbolo especial.
+                    </small>
                 <i class="fas fa-lock fi"></i>
                 <input type="password" id="contrasena" name="contrasena" required minlength="8" maxlength="20" placeholder="Mínimo 8 caracteres" oninvalid="this.setCustomValidity('La contraseña debe tener mínimo 8 caracteres')" oninput="this.setCustomValidity('')">
                 <button type="button" class="toggle-pass" onclick="togglePass()" aria-label="Mostrar u ocultar contraseña">

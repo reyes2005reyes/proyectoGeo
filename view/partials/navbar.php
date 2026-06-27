@@ -267,7 +267,7 @@
 						<i class="fas fa-exclamation-triangle me-2"></i>
 						<strong>Acceso limitado.</strong> Debe 
 						<a href="/proyectoGeo/web/login.php" class="alert-link">iniciar sesión</a> 
-						para poder enviar solicitudes o consultarlas.
+						para poder enviar solicitudes, consultarlas y ver la capa de reportes de accidentes.
 						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 					</div>
 				<?php endif; ?>

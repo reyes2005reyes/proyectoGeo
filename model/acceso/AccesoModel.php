@@ -18,6 +18,7 @@ class AccesoModel extends MasterModel{
 
         return $this->select($sql);
     }
+    
 
 }
 ?>
