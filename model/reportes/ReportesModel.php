@@ -17,7 +17,6 @@ class ReportesModel extends MasterModel {
                     ts.nombre AS tipo_solicitud,
                     TO_CHAR(s.fecha_solicitud, 'DD/MM/YYYY') AS fecha_registro,
                     s.direccion  AS ubicacion,
-                    ST_AsText(s.coordenadas) AS coordenadas,
                     s.descripcion AS descripcion,
                     es.nombre_estado_solicitud AS estado
                 FROM solicitudes s
@@ -48,7 +47,6 @@ class ReportesModel extends MasterModel {
                     ts.nombre AS tipo_solicitud,
                     TO_CHAR(s.fecha_solicitud, 'DD/MM/YYYY') AS fecha_registro,
                     s.direccion AS ubicacion,
-                    ST_AsText(s.coordenadas) AS coordenadas,
                     s.descripcion AS descripcion,
                     es.nombre_estado_solicitud AS estado
                 FROM solicitudes s
@@ -77,7 +75,6 @@ class ReportesModel extends MasterModel {
                     ts.nombre AS tipo_solicitud,
                     TO_CHAR(s.fecha_solicitud, 'DD/MM/YYYY') AS fecha_registro,
                     s.direccion AS ubicacion,
-                    ST_AsText(s.coordenadas) AS coordenadas,
                     s.descripcion AS descripcion,
                     es.nombre_estado_solicitud AS estado
                 FROM solicitudes s

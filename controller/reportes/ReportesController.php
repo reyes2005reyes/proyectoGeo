@@ -123,7 +123,7 @@ class ReportesController {
             $hoja->setTitle('Reporte');
 
             // Encabezado institucional
-            $hoja->mergeCells('A1:G1');
+            $hoja->mergeCells('A1:F1');
             $hoja->setCellValue('A1', 'Secretaría de Movilidad - Sistema de Información de Accidentes Viales (SIAV)');
             $hoja->getStyle('A1')->applyFromArray(array(
                 'font' => array(
@@ -148,7 +148,7 @@ class ReportesController {
             $hoja->getRowDimension(1)->setRowHeight(28);
 
             // Fila 2: Nombre del reporte y fecha de generacion
-            $hoja->mergeCells('A2:G2');
+            $hoja->mergeCells('A2:F2');
             $hoja->setCellValue('A2', $nombreReporte . ' | Generado: ' . $fechaGeneracion);
             $hoja->getStyle('A2')->applyFromArray(array(
                 'font' => array(
@@ -174,7 +174,7 @@ class ReportesController {
             $hoja->getRowDimension(2)->setRowHeight(22);
 
             // Fila 3: Periodo consultado 
-            $hoja->mergeCells('A3:G3');
+            $hoja->mergeCells('A3:F3');
             $fi = date('d/m/Y', strtotime($fecha_inicio));
             $ff = date('d/m/Y', strtotime($fecha_fin));
             $hoja->setCellValue('A3', "Período: $fi  –  $ff");
@@ -204,16 +204,15 @@ class ReportesController {
                 'B' => 'Tipo de Solicitud',
                 'C' => 'Fecha de Registro',
                 'D' => 'Dirección / Ubicación',
-                'E' => 'Coordenadas',
-                'F' => 'Descripción de la Problemática',
-                'G' => 'Estado Actual',
+                'E' => 'Descripción de la Problemática',
+                'F' => 'Estado Actual',
             );
             // Escribir encabezados
             foreach ($columnas as $col => $titulo) {
                 $hoja->setCellValue("{$col}4", $titulo);
             }
             // Estilo de encabezados
-            $hoja->getStyle('A4:G4')->applyFromArray(array(
+            $hoja->getStyle('A4:F4')->applyFromArray(array(
                 'font' => array(
                 'bold' => true,
                 'color' => array(
@@ -251,13 +250,12 @@ class ReportesController {
                 $hoja->setCellValue("B{$fila}", $registro['tipo_solicitud']);
                 $hoja->setCellValue("C{$fila}", $registro['fecha_registro']);
                 $hoja->setCellValue("D{$fila}", $registro['ubicacion']);
-                $hoja->setCellValue("E{$fila}", $registro['coordenadas']);
-                $hoja->setCellValue("F{$fila}", $registro['descripcion']);
-                $hoja->setCellValue("G{$fila}", $registro['estado']);
+                $hoja->setCellValue("E{$fila}", $registro['descripcion']);
+                $hoja->setCellValue("F{$fila}", $registro['estado']);
 
                 // Filas alternas
                 $colorFondo = ($i % 2 === 0) ? 'FFFFFF' : 'EAF2FB';
-                $hoja->getStyle("A{$fila}:G{$fila}")->applyFromArray(
+                $hoja->getStyle("A{$fila}:F{$fila}")->applyFromArray(
                 array(
                     'fill' => array(
                         'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -283,12 +281,12 @@ class ReportesController {
                 // Centrar columnas concretas (radicado, fecha, estado)
                 $hoja->getStyle("A{$fila}")->getAlignment() ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $hoja->getStyle("C{$fila}")->getAlignment() ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $hoja->getStyle("G{$fila}")->getAlignment() ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $hoja->getStyle("F{$fila}")->getAlignment() ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $fila++;
             }
 
             // Ancho automatico de columnas 
-            $anchos = array('A' => 12, 'B' => 30, 'C' => 16, 'D' => 35, 'E' => 24, 'F' => 50, 'G' => 18);
+            $anchos = array('A' => 12, 'B' => 30, 'C' => 16, 'D' => 35, 'E' => 24, 'F' => 50);
             foreach ($anchos as $col => $ancho) {
                 $hoja->getColumnDimension($col)->setWidth($ancho);
             }
