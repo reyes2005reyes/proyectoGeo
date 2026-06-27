@@ -208,9 +208,9 @@
 				<!-- Navbar Header -->
 				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
 					<div class="container-fluid">
- 
+							<h4>Sistema de información de accidentabilidad vial</h4>
 						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
- 
+							
 							<!-- Perfil usuario -->
 							<li class="nav-item topbar-user dropdown hidden-caret">
 								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
