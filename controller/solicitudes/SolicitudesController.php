@@ -1,5 +1,6 @@
 <?php
 include_once '../model/solicitudes/SolicitudesModel.php';
+include_once '../lib/helpersLogin.php';
 require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.phpmailer.php';
 require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.smtp.php';
 
@@ -7,20 +8,31 @@ class SolicitudesController {
 
     // Listar solicitudes
     public function listar() {
+        
+        if (!estaLogueado()) {
+            redirect('/proyectoGeo/web/login.php');
+            return;
+        }
+
         $obj = new SolicitudesModel();
         // Obtener filtros de fecha desde la URL
-        $fecha_inicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : null;
-        $fecha_fin = isset($_GET['fecha_fin'])  ? $_GET['fecha_fin']  : null;
-        if ($_SESSION['id_rol'] == 3) {
-            $id_usuario  = $_SESSION['id_usuario'];
-            $solicitudes = $obj->listarSolicitudes($id_usuario, $fecha_inicio, $fecha_fin);
+
+        if (tienePermiso('Solicitudes', 'editar')) {
+            $solicitudes = $obj->listarSolicitudes(); // ve todas
         } else {
-            $solicitudes = $obj->listarSolicitudes(null, $fecha_inicio, $fecha_fin);
+            $solicitudes = $obj->listarSolicitudes($_SESSION['id_usuario']); // ve las suyas
         }
         include_once "../view/solicitudes/list.php";
     }
     // Mostrar formulario de creación de solicitud
     public function getCreate() {
+
+        if (!estaLogueado() || !tienePermiso('Solicitudes', 'registrar')) {
+            $_SESSION['error'] = 'No tiene permisos para crear solicitudes.';
+            redirect('/proyectoGeo/web/index.php');
+            return;
+        }
+
         $obj = new SolicitudesModel();
         // Tipos de solicitud
         $tipos = $obj->obtenerTiposSolicitud();
@@ -35,6 +47,13 @@ class SolicitudesController {
         include_once "../view/solicitudes/forms/pqrsf.php";
     }
     public function postCreate() {
+
+        if (!estaLogueado() || !tienePermiso('Solicitudes', 'registrar')) {
+            $_SESSION['error'] = 'No tiene permisos para crear solicitudes.';
+            redirect('/proyectoGeo/web/index.php');
+            return;
+        }
+
         $obj = new SolicitudesModel();
         // Datos generales
         $datos = array();

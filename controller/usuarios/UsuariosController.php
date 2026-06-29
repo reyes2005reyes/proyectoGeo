@@ -1,5 +1,6 @@
 <?php   
     include_once '../model/usuarios/UsuariosModel.php';
+    include_once '../lib/helpersLogin.php';
     require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.phpmailer.php';
     require_once dirname(__FILE__) . '/../../vendor/phpmailer/phpmailer/class.smtp.php';
 
@@ -367,6 +368,16 @@ class UsuariosController{
 
     // esta funcion es para mostrar la lista de usuarios
     public function lista() {
+        if (!estaLogueado()) {
+            redirect('/proyectoGeo/web/login.php');
+            return;
+        }
+
+        if (!tienePermiso('Administracion', 'listar')) {
+            $_SESSION['error'] = 'No tiene permisos para acceder a esta sección.';
+            redirect('/proyectoGeo/web/index.php');
+            return;
+        }
         $numeroDocumento = isset($_GET['numero_documento']) ? trim($_GET['numero_documento']) : '';
 
         $model = new UsuariosModel();
@@ -488,6 +499,15 @@ class UsuariosController{
 
     // Método para actualizar datos del usuario
     public function actualizarUsuario() {
+
+        if (!tienePermiso('Administracion', 'editar')) {
+            echo json_encode(array(
+            'success' => false,
+            'message' => 'No tiene permisos para editar usuarios.'
+            ));
+        exit;
+        }
+
         header('Content-Type: application/json; charset=utf-8');
         // Recoger datos de sesión y POST
         $idRolSesion = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
@@ -661,6 +681,15 @@ class UsuariosController{
 
     // Método para cambiar estado del usuario (AJAX)
     public function cambiarEstadoUsuario() {
+        
+        if (!tienePermiso('Administracion', 'anular')) {
+            echo json_encode(array(
+            'success' => false,
+            'message' => 'No tiene permisos para cambiar el estado de un usuario.'
+            ));
+        exit;
+        }
+
         header('Content-Type: application/json; charset=utf-8');
 
         // Solo el administrador puede cambiar el estado

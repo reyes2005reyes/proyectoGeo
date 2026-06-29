@@ -26,11 +26,7 @@
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
- 
-						<!-- ===================== -->
-						<!-- MENÚ - Modifica aquí  -->
-						<!-- ===================== -->
- 
+
 						<!-- Mapa: módulo público, visible para cualquier visitante -->
 						<li class="nav-item active">
 							<a href="index.php">
@@ -38,19 +34,13 @@
 								<p>Mapa</p>
 							</a>
 						</li>
- 
+
 						<?php
-							// Dentro del módulo "Administracion" hay dos zonas:
-							// - Usuarios: solo requiere poder "listar".
-							// - Roles: requiere alguna acción administrativa real
-							//   (registrar, editar o anular), no solo listar.
-							//   Así Funcionario (que solo tiene "listar") ve Usuarios
-							//   pero no Roles, sin necesidad de un módulo aparte.
 							$puedeAdministrarRoles = tienePermiso('Administracion', 'registrar')
 								|| tienePermiso('Administracion', 'editar')
 								|| tienePermiso('Administracion', 'anular');
 						?>
- 
+
 						<?php if ($puedeAdministrarRoles): ?>
 							<li class="nav-item">
 								<a data-bs-toggle="collapse" href="#rolesmenu" aria-expanded="false">
@@ -76,16 +66,16 @@
 								</div>
 							</li>
 						<?php endif; ?>
- 
+
 						<?php if (estaLogueado()): ?>
- 
+
 							<li class="nav-section">
 								<span class="sidebar-mini-icon">
 									<i class="fa fa-ellipsis-h"></i>
 								</span>
 								<h4 class="text-section">Sistema</h4>
 							</li>
- 
+
 							<?php if (tienePermiso('Administracion', 'listar')): ?>
 								<li class="nav-item">
 									<a href="<?php echo getUrl('usuarios', 'usuarios', 'lista', false); ?>">
@@ -94,7 +84,7 @@
 									</a>
 								</li>
 							<?php endif; ?>
- 
+
 							<?php if (tieneModulo('Solicitudes')): ?>
 								<li class="nav-item">
 									<a data-bs-toggle="collapse" href="#solicitudesMenu" aria-expanded="false">
@@ -122,7 +112,7 @@
 									</div>
 								</li>
 							<?php endif; ?>
- 
+
 							<?php if (tienePermiso('Reportes', 'listar')): ?>
 								<li class="nav-item">
 									<a href="<?php echo getUrl('reportes', 'reportes', 'index', false); ?>">
@@ -131,7 +121,7 @@
 									</a>
 								</li>
 							<?php endif; ?>
- 
+
 							<?php if (tienePermiso('EducacionVial', 'listar')): ?>
 								<li class="nav-item">
 									<a href="<?php echo getUrl('educativo', 'educativo', 'catalogo', false); ?>">
@@ -139,18 +129,24 @@
 										<p>Educación Vial</p>
 									</a>
 								</li>
-
+							<?php endif; ?>
+							<?php if (tienePermiso('Manuales', 'listar')): ?>
 								<li class="nav-item">
+									<a href="<?php echo getUrl('manuales', 'manuales', 'index', false); ?>">
+										<i class="fas fa-book"></i>
+										<p>Manuales</p>
+									</a>
+								</li>
+							<?php endif; ?>
+							<li class="nav-item">
 								<a href="<?php echo getUrl('acercade', 'acercade', 'index', false); ?>">
 									<i class="fas fa-info-circle"></i>
-									<p>Acerca De..</p>
+									<p>Acerca De.. PRUEBA</p>
 								</a>
 							</li>
-							<?php endif; ?>
- 
-						<?php else: ?>
- 
-							<!-- Educación Vial es contenido público: visible también para visitantes no logueados -->
+							<?php else: ?>
+
+							<!-- Educación Vial es contenido público -->
 							<li class="nav-item">
 								<a href="<?php echo getUrl('educativo', 'educativo', 'catalogo', false); ?>">
 									<i class="fas fa-info-circle"></i>
@@ -163,29 +159,30 @@
 									<p>Acerca De..</p>
 								</a>
 							</li>
- 
+
 						<?php endif; ?>
- 
+
 						<li class="nav-item">
 							<?php if (estaLogueado()): ?>
 								<a class="dropdown-item text-danger" href="<?php echo getUrl('acceso', 'acceso', 'logout', false); ?>">
-									<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
+									<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+								</a>
 							<?php else: ?>
 								<a class="dropdown-item text-primary" href="login.php">
-									<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</a>
+									<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+								</a>
 							<?php endif; ?>
 						</li>
- 
+
 					</ul>
 				</div>
 			</div>
 		</div>
 		<!-- End Sidebar -->
- 
+
 		<div class="main-panel">
 			<div class="main-header">
 				<div class="main-header-logo">
-					<!-- Logo Header -->
 					<div class="logo-header" data-background-color="dark">
 						<a href="index.php" class="logo">
 							<img src="assets/img/logoGeoNav.png" alt="navbar brand" class="navbar-brand" height="60">
@@ -202,16 +199,12 @@
 							<i class="gg-more-vertical-alt"></i>
 						</button>
 					</div>
-					<!-- End Logo Header -->
 				</div>
- 
-				<!-- Navbar Header -->
+
 				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
 					<div class="container-fluid">
-							<h4>Sistema de información de accidentabilidad vial</h4>
+						<h4>Sistema de información de accidentabilidad vial</h4>
 						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-							
-							<!-- Perfil usuario -->
 							<li class="nav-item topbar-user dropdown hidden-caret">
 								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
 									<div class="avatar-sm">
@@ -254,19 +247,17 @@
 									</div>
 								</ul>
 							</li>
- 
 						</ul>
 					</div>
 				</nav>
-				<!-- End Navbar -->
 			</div>
 			<div class="container">
 				<div class="page-inner">
 				<?php if (!estaLogueado()): ?>
 					<div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
 						<i class="fas fa-exclamation-triangle me-2"></i>
-						<strong>Acceso limitado.</strong> Debe 
-						<a href="/proyectoGeo/web/login.php" class="alert-link">iniciar sesión</a> 
+						<strong>Acceso limitado.</strong> Debe
+						<a href="/proyectoGeo/web/login.php" class="alert-link">iniciar sesión</a>
 						para poder enviar solicitudes, consultarlas y ver la capa de reportes de accidentes.
 						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 					</div>

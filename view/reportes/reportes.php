@@ -2,8 +2,7 @@
 
 $id_rol = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
 
-if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok' ||
-    !in_array($id_rol, array(1, 2))) {
+if (!estaLogueado() || !tienePermiso('Reportes', 'listar')) {
     redirect('/proyectoGeo/web/login.php');
     exit;
 }

@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL );
 include_once '../model/reportes/ReportesModel.php';
+include_once '../lib/helpersLogin.php';
 require_once '../lib/PHPExcel/Classes/PHPExcel.php';
 require_once '../lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
@@ -45,7 +46,7 @@ class ReportesController {
         
         try {
             // 1 Validar sesion y rol
-            if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
+            if (!estaLogueado() || !tienePermiso('Reportes', 'registrar')) {
                 redirect('/proyectoGeo/web/login.php');
                 return;
             }
