@@ -14,55 +14,66 @@ class RolesController {
     }
     // Método para procesar la creación de roles
     public function postCreate() {
-        $obj = new MasterModel();
-        $rol_nombre = trim($_POST['rol_nombre']);
-        if (strlen($rol_nombre) < 3) {
-            echo "<script>
-                alert('El nombre del rol debe tener mínimo 3 caracteres');
-                history.back();
-              </script>";
-            exit();
-        }
-        // Validar si el nombre del rol ya existe en la base de datos
-        $sql = "SELECT * FROM roles WHERE LOWER(nombre_rol) = LOWER('$rol_nombre')";
-        $validar = $obj->select($sql);
-        // Si ya existe un rol con ese nombre, mostrar un mensaje de error y regresar al formulario
-        if (pg_num_rows($validar) > 0) {
-            echo "<script>
-                alert('Ya existe un rol con ese nombre');
-                history.back();
-              </script>";
-            exit();
-        }
-        // Insertar el nuevo rol en la base de datos
-        $rol_id = $obj->autoincrement("roles", "id_rol");
-        $sql = "INSERT INTO roles (id_rol, nombre_rol) VALUES($rol_id, '$rol_nombre')";
-        $obj->insert($sql);
-        // Insertar los permisos asociados al rol en la base de datos
-        if (isset($_POST['permisos'])) {
-            $permisos = $_POST['permisos'];
-        } else {
-            $permisos = array();
-        }
-        // Recorrer los permisos seleccionados y guardarlos en la base de datos
-        foreach ($permisos as $modulo_id => $acciones) {
-        foreach ($acciones as $accion_id => $valor) {
+    $obj = new MasterModel();
+    
+    $rol_nombre = trim($_POST['rol_nombre']);
+    if (strlen($rol_nombre) < 3) {
+        $_SESSION['error_rol'] = 'El nombre del rol debe tener mínimo 3 caracteres.';
+        redirect(getUrl("roles", "roles", "getCreate"));
+        return;
+    }
 
+    // Validar que se haya asignado al menos un permiso
+    if (!isset($_POST['permisos']) || count($_POST['permisos']) === 0) {
+        $_SESSION['error_rol'] = 'Debe asignar al menos un permiso al rol.';
+        redirect(getUrl("roles", "roles", "getCreate"));
+        return;
+    }
+
+    // Validar que dentro de los módulos seleccionados exista al menos una acción marcada
+    $tienePermisoSeleccionado = false;
+    foreach ($_POST['permisos'] as $modulo_id => $acciones) {
+        if (count($acciones) > 0) {
+            $tienePermisoSeleccionado = true;
+            break;
+        }
+    }
+
+    if (!$tienePermisoSeleccionado) {
+        $_SESSION['error_rol'] = 'Debe asignar al menos un permiso al rol.';
+        redirect(getUrl("roles", "roles", "getCreate"));
+        return;
+    }
+
+    // Validar si el nombre del rol ya existe en la base de datos
+    $sql = "SELECT * FROM roles WHERE LOWER(nombre_rol) = LOWER('$rol_nombre')";
+    $validar = $obj->select($sql);
+    if (pg_num_rows($validar) > 0) {
+        $_SESSION['error_rol'] = 'Ya existe un rol con ese nombre.';
+        redirect(getUrl("roles", "roles", "getCreate"));
+        return;
+    }
+
+    // Insertar el nuevo rol en la base de datos
+    $rol_id = $obj->autoincrement("roles", "id_rol");
+    $sql = "INSERT INTO roles (id_rol, nombre_rol) VALUES($rol_id, '$rol_nombre')";
+    $obj->insert($sql);
+
+    $permisos = $_POST['permisos'];
+
+    foreach ($permisos as $modulo_id => $acciones) {
+        foreach ($acciones as $accion_id => $valor) {
             $per_id = $obj->autoincrement("permisos", "id_permiso");
-            // Insertar el permiso en la base de datos
             $sql = "INSERT INTO permisos
                     (id_permiso, id_rol, id_modulo, id_accion)
                     VALUES($per_id, $rol_id, $modulo_id, $accion_id)";
-
             $obj->insert($sql);
-            }
         }
-        // Mostrar un mensaje de éxito y redirigir a la lista de roles
-        echo "<script>
-                alert('Rol registrado correctamente');
-          </script>";
-        redirect(getUrl("roles", "roles", "getRoles"));
     }
+
+    $_SESSION['exito_rol'] = 'Rol registrado correctamente.';
+    redirect(getUrl("roles", "roles", "getCreate"));
+}
     // Método para mostrar la lista de roles
     public function getRoles() {
         $obj = new MasterModel();
@@ -102,23 +113,18 @@ class RolesController {
         $rol_nombre = trim($_POST['rol_nombre']);
         // Validar que el nombre del rol tenga al menos 3 caracteres
         if (strlen($rol_nombre) < 3) {
-            echo "<script>
-                    alert('El nombre del rol debe tener mínimo 3 caracteres');
-                    history.back();
-                </script>";
-            exit();
+            $_SESSION['error_rol'] = 'El nombre del rol debe tener mínimo 3 caracteres.';
+            redirect(getUrl("roles", "roles", "getCreate"));
+            return;
         }
         // Validar si el nombre del rol ya existe en la base de datos
         $sql = "SELECT * FROM roles WHERE LOWER(nombre_rol) = LOWER('$rol_nombre') AND id_rol <> $id_rol";
         $validar = $obj->select($sql);
         // Si ya existe un rol con ese nombre, mostrar un mensaje de error y regresar al formulario
         if (pg_num_rows($validar) > 0) {
-
-            echo "<script>
-                    alert('Ya existe un rol con ese nombre');
-                    history.back();
-                </script>";
-            exit();
+            $_SESSION['error_rol'] = 'Ya existe un rol con ese nombre.';
+            redirect(getUrl("roles", "roles", "getCreate"));
+            return;
         }
         // Actualizar el nombre del rol en la base de datos
         $sql = "UPDATE roles SET nombre_rol = '$rol_nombre' WHERE id_rol = $id_rol";
@@ -142,11 +148,8 @@ class RolesController {
             }
         }
         // Mostrar un mensaje de éxito y redirigir a la lista de roles
-        echo "<script>
-                alert('Rol actualizado correctamente');
-            </script>";
-
-        redirect(getUrl("roles", "roles", "getRoles"));
+        $_SESSION['exito_rol'] = 'Rol actualizado correctamente.';
+        redirect(getUrl("roles", "roles", "getCreate"));
     }
 }
 ?>

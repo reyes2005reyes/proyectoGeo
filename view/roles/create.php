@@ -1,5 +1,6 @@
-<div class="container-fluid mt-4">
 
+<div class="container-fluid mt-4">
+    
     <h1 class="mb-2">Registro Rol</h1>
 
     <p class="text-muted">
@@ -13,6 +14,19 @@
         </div>
 
         <div class="card-body">
+            <?php if (isset($_SESSION['error_rol'])): ?>
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="fas fa-circle-exclamation me-2"></i>
+                    <?php echo htmlspecialchars($_SESSION['error_rol']); unset($_SESSION['error_rol']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['exito_rol'])): ?>
+                <div class="alert alert-success d-flex align-items-center" role="alert">
+                    <i class="fas fa-circle-check me-2"></i>
+                    <?php echo htmlspecialchars($_SESSION['exito_rol']); unset($_SESSION['exito_rol']); ?>
+                </div>
+            <?php endif; ?>
 
             <form action="<?php echo getUrl("roles", "roles", "postCreate"); ?>" method="post">
 
