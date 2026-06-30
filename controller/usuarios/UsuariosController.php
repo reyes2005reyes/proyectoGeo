@@ -393,6 +393,7 @@ class UsuariosController{
         $buscarEscapado = pg_escape_string($buscar);
         $sql = "SELECT
                     u.id_usuario,
+                    u.id_rol,
                     td.nombre_tipo_documento,
                     u.numero_documento,
                     u.primer_nombre,
