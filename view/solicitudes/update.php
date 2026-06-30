@@ -1,5 +1,5 @@
 <div class="mt-5">
-    <h1 class="display-4">Actualizar Solicitud</h1>
+    <h1 class="display-4">Actualizar solicitud</h1>
 </div>
 
 <div class="mt-4">
@@ -30,7 +30,7 @@
             </div>
 
             <div class="col-md-4 mt-3">
-                <label for="direccion">Direccion</label>
+                <label for="direccion">Dirección</label>
                 <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo htmlspecialchars($solicitud['direccion']); ?>" required>
             </div>
         </div>
@@ -48,7 +48,7 @@
         </div>
 
         <div class="mt-3">
-            <label for="descripcion">Descripcion</label>
+            <label for="descripcion">Descripción</label>
             <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required><?php echo htmlspecialchars($solicitud['descripcion']); ?></textarea>
         </div>
 

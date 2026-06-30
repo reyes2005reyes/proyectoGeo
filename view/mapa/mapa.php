@@ -9,6 +9,7 @@ include_once '../../lib/conf/connection.php';
 
     $dir1 = $_GET['x'];
     $dir2 = $_GET['y'];
+
     // Consulta para obtener los reportes de accidentes cercanos a las coordenadas proporcionadas
     $sqlconsult = "
         SELECT
@@ -80,7 +81,7 @@ include_once '../../lib/conf/connection.php';
                     <div class="card-header text-white text-center fw-semibold" style="background-color:#1A3C5E;">
                         Mapa de Cali
                     </div>
-                    <div id="dc_main" class="mscross border w-100" style="height:550px; position:relative; overflow:hidden;"> </div>
+                    <div id="dc_main" class="mscross border w-100" style="height:600px; position:relative; overflow:hidden;"> </div>
                 </div>
 
                 <!-- Inputs hidden de coordenadas -->
@@ -114,7 +115,7 @@ include_once '../../lib/conf/connection.php';
                             <form name="select_layers">
                                 <div class="form-switch">
                                     <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[0]" value="Cali" id="chk0">
-                                    <label class="form-check-label" for="chk0">Area de Cali</label>
+                                    <label class="form-check-label" for="chk0">Área de Cali</label>
                                 </div>
                                 <div class="form-switch">
                                     <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[1]" value="Comunas" id="chk1">
@@ -126,13 +127,13 @@ include_once '../../lib/conf/connection.php';
                                 </div>
                                 <div class="form-switch">
                                     <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[3]" value="MallaVial" id="chk3">
-                                    <label class="form-check-label" for="chk3">Malla Vial</label>
+                                    <label class="form-check-label" for="chk3">Malla vial</label>
                                 </div>
 
                                 <?php if(isset($_SESSION['id_usuario'])){ ?>
                                     <div class="form-switch">
                                         <input class="form-check-input" checked onclick="chgLayers()" type="checkbox" name="layer[4]" value="ReportesAccidentes" id="chk4">
-                                        <label class="form-check-label" for="chk4">Reportes Accidentes</label>
+                                        <label class="form-check-label" for="chk4">Reportes de accidentes</label>
                                     </div>
                                 <?php } ?>
                             </form>
@@ -148,7 +149,7 @@ include_once '../../lib/conf/connection.php';
 
                             <!-- inicial -->
                             <p id="hint_click" class="text-muted small mb-0">
-                                Haz clic en el mapa<br>para seleccionar una ubicación
+                                Haz clic en el mapa<br>Para seleccionar una ubicación.
                             </p>
 
                             <!-- Panel Boton solicitud -->
@@ -166,7 +167,7 @@ include_once '../../lib/conf/connection.php';
                                 </div>
 
                                 <button id="btn_crear_solicitud" type="button" class="btn btn-sm text-white" style="background-color: #1a2942;  w-100" onclick="irAlFormulario()">
-                                      Crear Solicitud
+                                      Crear solicitud
                                 </button>
 
                                 <button type="button" class="btn btn-link btn-sm text-muted mt-1 w-100" onclick="limpiarUbicacion()">
@@ -226,6 +227,7 @@ include_once '../../lib/conf/connection.php';
                 var infola2 = new msTool('Ver descripción del reporte', infolay2,'/proyectoGeo/web/misc/img/descripcion.png', query2);
                 myMap1.getToolbar(0).addMapTool(infola2);
             <?php } ?>
+            
             // Agregar evento de clic en el mapa principal para seleccionar coordenadas
             document.getElementById('dc_main').onclick = function(e){
                 // Obtener las coordenadas del clic en el mapa
@@ -281,14 +283,17 @@ include_once '../../lib/conf/connection.php';
         }
 
         function query2(event,map,x,y,xx,yy){
+
             // Si se ha seleccionado la herramienta de ver descripción del reporte
             if(seleccionado2){
+
                 // Crear un objeto AJAX para consultar la información del reporte
                 consulta2 = objetoAjax();
                 consulta2.open("GET","mapa.php?accion=consultar&x="+xx+"&y="+yy,true);
                 consulta2.onreadystatechange = function(){
                     // Cuando la consulta AJAX esté completa
                     if(consulta2.readyState == 4){
+
                         // Parsear la respuesta JSON de la consulta
                         var datos = JSON.parse(consulta2.responseText);
                         if(datos){
@@ -342,20 +347,20 @@ include_once '../../lib/conf/connection.php';
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"> Informacion del reporte </h5>
+                    <h5 class="modal-title"> Información del reporte  </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">  
                     </button>
                 </div>
 
                 <div class="modal-body">
                     <p>
-                        <strong>Direccion</strong>
+                        <strong>Dirección</strong>
                         <br>
                         <span id="direccionReporte"></span>
                     </p>
                     <hr>
                     <p>
-                        <strong>Descripcion Reporte</strong>
+                        <strong>Descripción del reporte</strong>
                         <br>
                         <span id="descripcionReporte"></span>
                     </p>

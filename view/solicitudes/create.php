@@ -8,8 +8,8 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
 
 <div class="container py-4">
     <div class="mb-4">
-        <h2 class="fw-bold">Nueva Solicitud</h2>
-        <p class="text-muted">Complete los campos para registrar una nueva solicitud</p>
+        <h2 class="fw-bold">Nueva solicitud</h2>
+        <p class="text-muted">Complete los campos para registrar una nueva solicitud.</p>
     </div>
 
     <form action="<?php echo getUrl('solicitudes', 'solicitudes', 'postCreate'); ?>" method="post" enctype="multipart/form-data" id="formSolicitud">
@@ -22,10 +22,10 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                 <div class="row g-3">
 
                     <div class="col-md-4">
-                        <label for="id_tipo_solicitud" class="form-label fw-semibold">Tipo de Solicitud</label>
+                        <label for="id_tipo_solicitud" class="form-label fw-semibold">Tipo de solicitud</label>
                         <select class="form-select" id="id_tipo_solicitud" name="id_tipo_solicitud" required>
                             <option value="">Seleccione un tipo</option>
-                            // no muestar pqrsf
+                             <!-- no muestar pqrsf -->
                             <?php foreach ($tipos as $tipo) { 
                                 if($tipo['codigo'] != 'pqrsf') {
                                     echo '<option value="' . $tipo['id_tipo_solicitud'] . '" data-codigo="' . htmlspecialchars($tipo['codigo']) . '">' . htmlspecialchars($tipo['nombre']) . '</option>';

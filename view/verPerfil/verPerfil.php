@@ -186,7 +186,7 @@ if (!isset($perfil) || !is_array($perfil)) {
 
                         </div>
 
-                        <small class="text-muted"> Por seguridad la contraseña no se muestra. </small>
+                        <small class="text-muted"> Por seguridad, la contraseña no se muestra. </small>
 
                     </div>
 

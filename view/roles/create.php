@@ -1,15 +1,15 @@
 <div class="container-fluid mt-4">
 
-    <h1 class="mb-2">Registro Rol</h1>
+    <h1 class="mb-2">Registro rol</h1>
 
     <p class="text-muted">
-        Complete los campos para registrar un nuevo rol
+        Complete los campos para registrar un nuevo rol.
     </p>
 
     <div class="card shadow-sm border-0">
 
         <div class="card-header text-white" style="background:#22314d;">
-            Información del Rol
+            Información del rol
         </div>
 
         <div class="card-body">
@@ -79,7 +79,7 @@
 
                 <button type="submit"
                         class="btn btn-success mt-3">
-                    Registrar Rol
+                    Registrar rol
                 </button>
 
             </form>
