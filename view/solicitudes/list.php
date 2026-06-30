@@ -104,7 +104,7 @@
                         <tr>
                             <td colspan="7" class="text-center py-4 text-muted">
                                 <i class="fa fa-inbox fa-2x d-block mb-2"></i>
-                                No hay solicitudes registradas
+                              No hay solicitudes registradas.
                             </td>
                         </tr>
                     <?php } ?>

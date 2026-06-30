@@ -1,12 +1,12 @@
 <div class="card shadow-sm mt-4">
     <div class="card-header text-white fw-semibold" style="background-color: #1a2942;">
-        <i class="fa fa-car-crash me-2"></i> Reporte de Accidente
+        <i class="fa fa-car-crash me-2"></i> Reporte de accidente
     </div>
     <div class="card-body">
         <div class="row g-3">
 
             <div class="col-md-6">
-                <label for="id_tipo_vehiculo" class="form-label fw-semibold">Tipo de Vehículo</label>
+                <label for="id_tipo_vehiculo" class="form-label fw-semibold">Tipo de vehículo</label>
                 <select class="form-select detalle-required" id="id_tipo_vehiculo" name="id_tipo_vehiculo">
                     <option value="">Seleccione</option>
                     <?php foreach ($catalogos['tipos_vehiculo'] as $vehiculo) { ?>

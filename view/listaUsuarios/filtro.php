@@ -3,8 +3,15 @@ if (!isset($usuariosArray) || !is_array($usuariosArray)) {
     $usuariosArray = array();
 }
 
+$idRolSesion = isset($_SESSION['id_rol']) ? (int)$_SESSION['id_rol'] : 0;
+$esAdmin = ($idRolSesion === 1);
+
 if (!empty($usuariosArray)) {
     foreach ($usuariosArray as $usuario) {
+        $idRolObjetivo = isset($usuario['id_rol']) ? (int)$usuario['id_rol'] : 0;
+        $puedeEditar = $esAdmin || ($idRolSesion === 2 && $idRolObjetivo === 3);
+        $puedeCambiarEstado = $esAdmin;
+
         echo '<tr>';
         echo '<td>' . htmlspecialchars($usuario['id_usuario']) . '</td>';
         echo '<td>' . htmlspecialchars($usuario['nombre_tipo_documento']) . '</td>';
@@ -16,8 +23,12 @@ if (!empty($usuariosArray)) {
         echo '<td>' . htmlspecialchars(isset($usuario['nombre_estado_usuario']) ? $usuario['nombre_estado_usuario'] : '') . '</td>';
         echo '<td class="text-end">';
         echo '<div class="btn-group" role="group" aria-label="Acciones usuario">';
-        echo '<button type="button" class="btn btn-sm btn-primary" onclick="abrirModalEditar(' . (int)$usuario['id_usuario'] . ')">Actualizar datos</button>';
-        echo '<button type="button" class="btn btn-sm btn-warning" onclick="abrirModalCambiarEstado(' . (int)$usuario['id_usuario'] . ')">Cambiar estado</button>';
+        if ($puedeEditar) {
+            echo '<button type="button" class="btn btn-sm btn-primary" onclick="abrirModalEditar(' . (int)$usuario['id_usuario'] . ')">Actualizar datos</button>';
+        }
+        if ($puedeCambiarEstado) {
+            echo '<button type="button" class="btn btn-sm btn-warning" onclick="abrirModalCambiarEstado(' . (int)$usuario['id_usuario'] . ')">Cambiar estado</button>';
+        }
         echo '</div>';
         echo '</td>';
         echo '</tr>';

@@ -191,7 +191,7 @@
     flex-direction: column;
 ">
     <div class="spinner-border text-light mb-3" style="width:3rem; height:3rem;" role="status"></div>
-    <p class="text-white fw-semibold fs-5">Enviando respuesta y notificando al ciudadano...</p>
+    <p class="text-white fw-semibold fs-5">Enviando respuesta y notificando al ciudadano…</p>
 </div>
 
 <script>

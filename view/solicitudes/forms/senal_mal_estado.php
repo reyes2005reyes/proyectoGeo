@@ -1,12 +1,12 @@
 <div class="card shadow-sm mt-4">
     <div class="card-header text-white fw-semibold" style="background-color: #1a2942;">
-        <i class="fa fa-exclamation-triangle me-2"></i> Señal en Mal Estado
+        <i class="fa fa-exclamation-triangle me-2"></i> Señal en mal estado
     </div>
     <div class="card-body">
         <div class="row g-3">
 
             <div class="col-md-3">
-                <label for="id_tipo_senal" class="form-label fw-semibold">Tipo de Señal</label>
+                <label for="id_tipo_senal" class="form-label fw-semibold">Tipo de señal</label>
                 <select class="form-select detalle-required" id="id_tipo_senal" name="id_tipo_senal">
                     <option value="">Seleccione</option>
                     <?php foreach ($catalogos['tipos_senal'] as $senal) { ?>
@@ -45,7 +45,7 @@
             </div>
 
             <div class="col-md-3">
-                <label for="id_tipo_danio" class="form-label fw-semibold">Tipo de Daño</label>
+                <label for="id_tipo_danio" class="form-label fw-semibold">Tipo de daño</label>
                 <select class="form-select detalle-required" id="id_tipo_danio" name="id_tipo_danio">
                     <option value="">Seleccione</option>
                     <?php foreach ($catalogos['tipos_danio'] as $danio) { ?>

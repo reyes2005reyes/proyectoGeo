@@ -141,7 +141,7 @@
 							<li class="nav-item">
 								<a href="<?php echo getUrl('acercade', 'acercade', 'index', false); ?>">
 									<i class="fas fa-info-circle"></i>
-									<p>Acerca De.. PRUEBA</p>
+									<p>Acerca De...</p>
 								</a>
 							</li>
 							<?php else: ?>

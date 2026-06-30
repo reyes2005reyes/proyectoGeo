@@ -1,12 +1,12 @@
 <div class="card shadow-sm mt-4">
     <div class="card-header text-white fw-semibold" style="background-color: #1a2942;">
-        <i class="fa fa-plus-circle me-2"></i> Nuevo Reductor
+        <i class="fa fa-plus-circle me-2"></i> Nuevo reductor
     </div>
     <div class="card-body">
         <div class="row g-3">
 
             <div class="col-md-6">
-                <label for="id_tipo_reductor" class="form-label fw-semibold">Tipo de Reductor</label>
+                <label for="id_tipo_reductor" class="form-label fw-semibold">Tipo de reductor</label>
                 <select class="form-select detalle-required" id="id_tipo_reductor" name="id_tipo_reductor">
                     <option value="">Seleccione</option>
                     <?php foreach ($catalogos['tipos_reductor'] as $reductor) { ?>

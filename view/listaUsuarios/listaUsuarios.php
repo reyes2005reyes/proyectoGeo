@@ -39,7 +39,7 @@ function formatEstado($estado)
 
 <div id="listaUsuariosCard" class="card shadow-sm mt-0">
     <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Lista de Usuarios</h4>
+        <h4 class="mb-0">Lista de usuarios</h4>
     </div>
     <div class="card-body">
         <div class="mb-3 row align-items-center">
@@ -120,7 +120,7 @@ function formatEstado($estado)
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarLabel">Actualizar Datos del Usuario</h5>
+                <h5 class="modal-title" id="modalEditarLabel">Actualizar datos del usuario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="formEditarUsuario" method="POST" action="<?php echo getUrl('usuarios','usuarios','actualizarUsuario',false,'ajax'); ?>">
@@ -227,7 +227,7 @@ function formatEstado($estado)
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalCambiarEstadoLabel">Cambiar Estado del Usuario</h5>
+                <h5 class="modal-title" id="modalCambiarEstadoLabel">Cambiar estado del usuario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="formCambiarEstado" method="POST" action="<?php echo getUrl('usuarios','usuarios','cambiarEstadoUsuario',false,'ajax'); ?>">

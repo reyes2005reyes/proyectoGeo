@@ -3,7 +3,7 @@
     <h1 class="mb-2">Actualizar Rol</h1>
 
     <p class="text-muted">
-        Modifique la información y permisos del rol
+        Modifique la información y permisos del rol.
     </p>
 
     <?php while($rol = pg_fetch_assoc($roles)){ ?>
@@ -11,7 +11,7 @@
     <div class="card shadow-sm border-0">
 
         <div class="card-header text-white" style="background:#22314d;">
-            Información del Rol
+            Información del rol
         </div>
 
         <div class="card-body">
@@ -112,7 +112,7 @@
 
                 <button type="submit"
                         class="btn btn-success mt-3">
-                    Actualizar Rol
+                    Actualizar rol
                 </button>
 
             </form>

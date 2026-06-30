@@ -10,7 +10,7 @@
         
 
         <article style="font-size: 20px; text-align: justify; width: 100%; display: flex; justify-content: center; text-align: justify; margin-top: 20px;">
-            Somos una empresa desarrolladora de software, que busca brindar soluciones a problemas de la vida cotidiana, mediante el uso de la tecnologia, con el fin de mejorar la calidad de vida de las personas y la eficiencia de los procesos en las empresas.
+          Somos una empresa desarrolladora de software, que busca brindar soluciones a problemas de la vida cotidiana mediante el uso de la tecnología, con el fin de mejorar la calidad de vida de las personas y la eficiencia de los procesos en las empresas.
         </article>
     </div>
 
@@ -24,16 +24,16 @@
             <!-- <img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
                 <h5 class="card-title">Jhon Alejandro Sanchez</h5>
-                <p class="card-text">CARGO: SCRUM Master<br>Descripcion: Seguimiento del proyecto atravez del agilismo de scrum quitando impedimentos en el equipo de desarrollo</p>
-                <p></p>
+                <p class="card-text"><br>Cargo: Scrum Master<br>
+                Descripción: Seguimiento del proyecto a través del agilismo de Scrum, quitando impedimentos en el equipo de desarrollo.</p>
             </div>
         </div>
 
         <div class="card" style="width: 20rem; height:auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); padding: 10px; border-radius: 10px;">
             <!-- <img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
-                <h5 class="card-title">Johan Sebastian Reyes</h5>
-                <p class="card-text">CARGO: Desarrollador Full Stack <br> DESCRIPCION: desarrollador full-stack y encargado del las credenciales y acceso al sistema</p>
+                <h5 class="card-title">Johan Sebastian Reyes<br></h5>
+                <p class="card-text"><br>Cargo: Desarrollador Full Stack <br> DESCRIPCIÓN: Desarrollador full-stack y encargado de las credenciales y acceso al sistema.</p>
                 <p></p>
             </div>
         </div>
@@ -41,7 +41,7 @@
             <!-- <img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
                 <h5 class="card-title">Jhoan Alexander  Guevara</h5>
-                <p class="card-text">CARGO: Desarrollador Full stack <br> DESCRIPCION: desarrollador full-stack y creador del product Backlog del sistema</p>
+                <p class="card-text">Cargo: Desarrollador Full stack <br> DESCRIPCIÓN: Desarrollador full-stack y creador del product backlog del sistema.</p>
                 <p></p>
             </div>
         </div>
@@ -50,7 +50,7 @@
             <!-- <img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
                 <h5 class="card-title">Andrea Alejandra Quintero</h5>
-                <p class="card-text">CARGO: Desarrollador Full stack <br> DESCRIPCION: Desarrollador full-stack responsable de la Educacion vial dentro del sistema</p>
+                <p class="card-text">CARGO: Desarrollador Full stack <br> DESCRIPCIÓN: Desarrollador full-stack responsable de la educación vial dentro del sistema.</p>
                 <p></p>
             </div>
         </div>
@@ -59,7 +59,7 @@
             <!-- <img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
                 <h5 class="card-title">Victor Hernandez</h5>
-                <p class="card-text">CARGO: Product Owner <br> Desarrollador full-stack y creador del product Backlog del sistema</p>
+                <p class="card-text">CARGO: Product Owner <br> Desarrollador full-stack y creador del product backlog del sistema.</p>
                 <p></p>
             </div>
         </div>
