@@ -1,18 +1,32 @@
-<div class="container-fluid mt-4">
 
-    <h1 class="mb-2">Registro rol</h1>
+<div class="container-fluid mt-4">
+    
+    <h1 class="mb-2">Registro Rol</h1>
 
     <p class="text-muted">
-        Complete los campos para registrar un nuevo rol.
+        Complete los campos para registrar un nuevo rol
     </p>
 
     <div class="card shadow-sm border-0">
 
         <div class="card-header text-white" style="background:#22314d;">
-            Información del rol
+            Información del Rol
         </div>
 
         <div class="card-body">
+            <?php if (isset($_SESSION['error_rol'])): ?>
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="fas fa-circle-exclamation me-2"></i>
+                    <?php echo htmlspecialchars($_SESSION['error_rol']); unset($_SESSION['error_rol']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['exito_rol'])): ?>
+                <div class="alert alert-success d-flex align-items-center" role="alert">
+                    <i class="fas fa-circle-check me-2"></i>
+                    <?php echo htmlspecialchars($_SESSION['exito_rol']); unset($_SESSION['exito_rol']); ?>
+                </div>
+            <?php endif; ?>
 
             <form action="<?php echo getUrl("roles", "roles", "postCreate"); ?>" method="post">
 
@@ -79,7 +93,7 @@
 
                 <button type="submit"
                         class="btn btn-success mt-3">
-                    Registrar rol
+                    Registrar Rol
                 </button>
 
             </form>
