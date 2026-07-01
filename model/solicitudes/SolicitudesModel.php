@@ -46,9 +46,35 @@ class SolicitudesModel extends MasterModel {
 
         $catalogos['categorias'] = $this->resultadoAArray(
             $this->select("
-                SELECT *
+                SELECT
+                    id_categoria,
+                    id_tipo_senal,
+                    nombre_categoria
                 FROM categorias
                 ORDER BY nombre_categoria
+            ")
+        );
+
+        $catalogos['categorias_reductor'] = $this->resultadoAArray(
+            $this->select("
+                SELECT
+                    id_categoria_reductor,
+                    nombre_categoria
+                FROM categorias_reductor
+                ORDER BY nombre_categoria
+            ")
+        );
+
+        $catalogos['senales'] = $this->resultadoAArray(
+            $this->select("
+                SELECT
+                    id_senal,
+                    id_categoria,
+                    codigo,
+                    nombre_senal,
+                    descripcion
+                FROM senales
+                ORDER BY codigo
             ")
         );
 
@@ -68,9 +94,39 @@ class SolicitudesModel extends MasterModel {
             ")
         );
 
+        $catalogos['tipos_danio_senal'] = $this->resultadoAArray(
+            $this->select("
+                SELECT id_tipo_danio, nombre_tipo_danio
+                FROM tipos_danio
+                WHERE id_tipo_danio IN (1, 2, 3, 4, 5, 6)
+                ORDER BY id_tipo_danio
+            ")
+        );
+
+        $catalogos['tipos_danio_via'] = $this->resultadoAArray(
+            $this->select("
+                SELECT id_tipo_danio, nombre_tipo_danio
+                FROM tipos_danio
+                WHERE id_tipo_danio IN (7, 8, 9, 10, 11)
+                ORDER BY id_tipo_danio
+            ")
+        );
+
+        $catalogos['tipos_danio_reductor'] = $this->resultadoAArray(
+            $this->select("
+                SELECT id_tipo_danio, nombre_tipo_danio
+                FROM tipos_danio
+                WHERE id_tipo_danio IN (12, 13, 14, 15)
+                ORDER BY id_tipo_danio
+            ")
+        );
+
         $catalogos['tipos_reductor'] = $this->resultadoAArray(
             $this->select("
-                SELECT *
+                SELECT
+                    id_tipo_reductor,
+                    id_categoria_reductor,
+                    nombre_tipo_reductor
                 FROM tipos_reductor
                 ORDER BY nombre_tipo_reductor
             ")
@@ -86,6 +142,7 @@ class SolicitudesModel extends MasterModel {
 
         return $catalogos;
     }
+
     // Función para obtener los tipos de solicitud disponibles
     public function obtenerTiposSolicitud() {
         $sql = "
@@ -157,7 +214,9 @@ class SolicitudesModel extends MasterModel {
                 ts.codigo,
                 es.nombre_estado_solicitud,
                 u.primer_nombre,
-                u.primer_apellido
+                u.primer_apellido,
+                sen.codigo AS senal_codigo,
+                sen.nombre_senal AS senal_nombre
             FROM solicitudes s
             INNER JOIN tipos_solicitud ts
                 ON s.id_tipo_solicitud = ts.id_tipo_solicitud
@@ -165,6 +224,12 @@ class SolicitudesModel extends MasterModel {
                 ON s.id_estado_solicitud = es.id_estado_solicitud
             INNER JOIN usuarios u
                 ON s.id_usuario = u.id_usuario
+            LEFT JOIN solicitudes_senal_mal_estado ssme
+                ON s.id_solicitud = ssme.id_solicitud
+            LEFT JOIN solicitudes_nueva_senalizacion sns
+                ON s.id_solicitud = sns.id_solicitud
+            LEFT JOIN senales sen
+                ON sen.id_senal = COALESCE(ssme.id_senal, sns.id_senal)
             WHERE s.id_solicitud = $id_solicitud
         ";
         return $this->select($sql);
@@ -279,15 +344,13 @@ class SolicitudesModel extends MasterModel {
                 $sql = "
                     INSERT INTO solicitudes_senal_mal_estado (
                         id_solicitud,
-                        id_tipo_senal,
-                        id_categoria,
+                        id_senal,
                         id_tipo_danio,
                         id_orientacion
                     )
                     VALUES (
                         $id_solicitud,
-                        ".$datos['id_tipo_senal'].",
-                        ".$datos['id_categoria'].",
+                        ".$datos['id_senal'].",
                         ".$datos['id_tipo_danio'].",
                         ".$datos['id_orientacion']."
                     )
@@ -300,34 +363,33 @@ class SolicitudesModel extends MasterModel {
                 $sql = "
                     INSERT INTO solicitudes_nueva_senalizacion (
                         id_solicitud,
-                        id_tipo_senal,
-                        id_categoria,
+                        id_senal,
                         id_orientacion
                     )
                     VALUES (
                         $id_solicitud,
-                        ".$datos['id_tipo_senal'].",
-                        ".$datos['id_categoria'].",
+                        ".$datos['id_senal'].",
                         ".$datos['id_orientacion']."
                     )
                 ";
 
                 $this->insert($sql);
             break;
+
             case 'reductor_mal_estado':
 
                 // Registrar reductor en mal estado
                 $sql = "
                     INSERT INTO solicitudes_reductor_mal_estado (
                         id_solicitud,
+                        id_categoria_reductor,
                         id_tipo_reductor,
-                        id_categoria,
                         id_tipo_danio
                     )
                     VALUES (
                         $id_solicitud,
+                        ".$datos['id_categoria_reductor'].",
                         ".$datos['id_tipo_reductor'].",
-                        ".$datos['id_categoria'].",
                         ".$datos['id_tipo_danio']."
                     )
                 ";
@@ -339,12 +401,12 @@ class SolicitudesModel extends MasterModel {
                 $sql = "
                     INSERT INTO solicitudes_nuevo_reductor (
                         id_solicitud,
-                        id_categoria,
+                        id_categoria_reductor,
                         id_tipo_reductor
                     )
                     VALUES (
                         $id_solicitud,
-                        ".$datos['id_categoria'].",
+                        ".$datos['id_categoria_reductor'].",
                         ".$datos['id_tipo_reductor']."
                     )
                 ";

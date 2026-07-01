@@ -22,7 +22,10 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                 <div class="row g-3">
 
                     <div class="col-md-4">
-                        <label for="id_tipo_solicitud" class="form-label fw-semibold">Tipo de solicitud</label>
+                       <label for="id_tipo_solicitud" class="form-label fw-semibold">
+                            Tipo de solicitud
+                            <span class="text-danger">*</span>
+                        </label>
                         <select class="form-select" id="id_tipo_solicitud" name="id_tipo_solicitud" required>
                             <option value="">Seleccione un tipo</option>
                              <!-- no muestar pqrsf -->
@@ -36,9 +39,124 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                         <input type="hidden" id="id_estado_solicitud" name="id_estado_solicitud" value="1">
                     </div>
 
-                    <div class="col-md-8">
-                        <label for="direccion" class="form-label fw-semibold">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Ej: Calle 5 # 10-20" required>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold"> Dirección de la solicitud </label>
+
+                        <div class="small text-muted mb-3">
+                            Los campos marcados con <span class="text-danger fw-bold">*</span> son obligatorios.
+                        </div>
+
+                        <div class="row g-2 align-items-end">
+
+                            <!-- Tipo vía -->
+                            <div class="col-md-3">
+                                <label class="form-label">
+                                    Tipo de vía <span class="text-danger">*</span>
+                                </label>
+
+                                <select class="form-select" id="tipo_via" required>
+                                    <option value="">Seleccione</option>
+                                    <option>Calle</option>
+                                    <option>Carrera</option>
+                                    <option>Avenida</option>
+                                    <option>Diagonal</option>
+                                    <option>Transversal</option>
+                                    <option>Circular</option>
+                                    <option>Autopista</option>
+                                </select>
+                            </div>
+
+                            <!-- Número principal -->
+                            <div class="col-md-1">
+                                <label class="form-label">
+                                    Número
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="number" class="form-control" id="numero1" min="1">
+                            </div>
+
+                            <!-- Letra -->
+                            <div class="col-md-1">
+                                <label class="form-label"> Letra </label>
+
+                                <select class="form-select" id="letra1">
+                                    <option value=""></option>
+
+                                    <?php foreach(range('A','Z') as $letra){ ?>
+                                        <option><?php echo $letra; ?></option>
+                                    <?php } ?>
+
+                                </select>
+                            </div>
+
+                            <!-- Bis -->
+                            <div class="col-md-2">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="bis">
+
+                                    <label class="form-check-label" for="bis">
+                                        Bis
+                                        <i class="fa fa-question-circle text-primary" data-bs-toggle="tooltip"
+                                            title="Marque esta opción únicamente si la dirección contiene la palabra 'Bis'. Ejemplo: Calle 15 Bis # 20-30.">
+                                        </i>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Número # -->
+                            <div class="col-md-1">
+                                <label class="form-label">
+                                    #
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="number" class="form-control" id="numero2" min="1">
+                            </div>
+
+                            <!-- Letra secundaria -->
+                            <div class="col-md-1">
+                                <label class="form-label">
+                                    Letra
+                                </label>
+                                <select class="form-select" id="letra2">
+                                    <option value=""></option>
+                                    <?php foreach(range('A','Z') as $letra){ ?>
+                                        <option><?php echo $letra; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <!-- Número final -->
+                            <div class="col-md-1">
+                                <label class="form-label">
+                                    -
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="number" class="form-control" id="numero3" min="1">
+                            </div>
+
+                            <!-- Complemento -->
+                            <div class="col-md-2">
+                               <label class="form-label">
+                                Complemento
+
+                                <i class="fa fa-question-circle text-primary" data-bs-toggle="tooltip"
+                                title="Ingrese información adicional para ubicar el lugar, por ejemplo: Apartamento 302, Torre B, Local 5, Interior 2 o Casa 10. Si la dirección no tiene complemento, deje este campo vacío.">
+                                </i>
+                            </label>
+
+                            <input type="text" class="form-control" id="complemento" placeholder="Ej: Apto 302, Torre B, Local 5">
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="form-label fw-semibold"> Dirección generada </label>
+
+                            <input type="text" class="form-control" id="direccion_preview" readonly>
+
+                            <div id="errorDireccion" class="text-danger small mt-2" style="display:none;"> </div>
+                        </div>
+                        <input type="hidden" id="direccion" name="direccion">
                     </div>
 
                     <div class="col-md-6">
@@ -60,7 +178,10 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                     </div>
                     <!-- Imagen: oculta si es PQRSF -->
                     <div class="col-12" id="campo-imagen">
-                        <label for="imagen" class="form-label fw-semibold">Imagen</label>
+                        <label for="imagen" class="form-label fw-semibold">
+                            Imagen
+                            <span class="text-danger">*</span>
+                        </label>
                         <input type="file" class="form-control" id="imagen" name="imagen" 
                             accept=".jpg,.jpeg,.png" required>
                         <div class="form-text">Formatos permitidos: JPG, JPEG, PNG. Máximo 5 MB.</div>
@@ -68,9 +189,11 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                     </div>
 
                     <div class="col-12">
-                        <label for="descripcion" class="form-label fw-semibold">Descripción General</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4"
-                                placeholder="Describa detalladamente la solicitud..." required></textarea>
+                        <label for="descripcion" class="form-label fw-semibold">
+                            Descripción General
+                            <span class="text-danger">*</span>
+                        </label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="5" placeholder="Describa detalladamente la solicitud..." required></textarea>
                     </div>
 
                 </div>

@@ -9,7 +9,7 @@
                 <label for="id_tipo_danio" class="form-label fw-semibold">Tipo de daño</label>
                 <select class="form-select detalle-required" id="id_tipo_danio" name="id_tipo_danio">
                     <option value="">Seleccione</option>
-                    <?php foreach ($catalogos['tipos_danio'] as $danio) { ?>
+                    <?php foreach ($catalogos['tipos_danio_via'] as $danio) { ?>
                         <option value="<?php echo $danio['id_tipo_danio']; ?>"
                             <?php echo (isset($detalle['id_tipo_danio']) && $detalle['id_tipo_danio'] == $danio['id_tipo_danio']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($danio['nombre_tipo_danio']); ?>

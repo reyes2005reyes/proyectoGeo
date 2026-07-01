@@ -66,6 +66,19 @@
                     <p><?php echo htmlspecialchars($solicitud['direccion']); ?></p>
                 </div>
 
+                <?php if (!empty($solicitud['senal_codigo']) || !empty($solicitud['senal_nombre'])) { ?>
+                <div class="col-md-4">
+                    <p class="text-muted mb-0 fw-semibold">Señal</p>
+                    <p>
+                        <?php
+                            echo htmlspecialchars(
+                                trim($solicitud['senal_codigo'] . ' - ' . $solicitud['senal_nombre'], ' -')
+                            );
+                        ?>
+                    </p>
+                </div>
+                <?php } ?>
+
                 <?php if (!empty($solicitud['coord_x'])) { ?>
                 <div class="col-md-2">
                     <p class="text-muted mb-0 fw-semibold">Coordenada X</p>
