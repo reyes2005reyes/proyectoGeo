@@ -126,6 +126,12 @@ class RolesController {
             redirect(getUrl("roles", "roles", "getCreate"));
             return;
         }
+        // Validar que se haya asignado al menos un permiso
+        if (!isset($_POST['permisos']) || count($_POST['permisos']) === 0) {
+            $_SESSION['error_rol'] = 'Debe asignar al menos un permiso al rol.';
+            redirect(getUrl("roles", "roles", "getCreate"));
+            return;
+        }
         // Actualizar el nombre del rol en la base de datos
         $sql = "UPDATE roles SET nombre_rol = '$rol_nombre' WHERE id_rol = $id_rol";
 
