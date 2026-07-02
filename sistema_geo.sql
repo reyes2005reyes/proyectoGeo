@@ -833,7 +833,7 @@ SELECT
     ST_SetSRID(
         ST_MakePoint(
             -76.55 + (random() * 0.10),
-            3.45 + (random() * 0.10)s
+            3.45 + (random() * 0.10)
         ),
         4326
     ),
