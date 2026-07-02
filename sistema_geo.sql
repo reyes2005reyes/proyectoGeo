@@ -787,7 +787,7 @@ INSERT INTO permisos (id_rol, id_modulo, id_accion) VALUES
 (1,2,1),(1,2,2),(1,2,3),
 (1,3,1),
 (1,4,1),(1,4,3),
-(1,5,1),
+(1,5,1),(1,5,2),(1,5,3),
 (1,6,1),(1,6,3),
 
 -- Funcionario
