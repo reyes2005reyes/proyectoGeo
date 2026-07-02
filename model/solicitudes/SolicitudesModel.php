@@ -249,8 +249,34 @@ class SolicitudesModel extends MasterModel {
         return $this->select($sql);
     }
 
+    public function obtenerTipoSolicitudPorCodigo($codigo) {
+        $codigo = pg_escape_string($codigo);
+        $sql = "
+            SELECT
+                id_tipo_solicitud,
+                codigo,
+                nombre
+            FROM tipos_solicitud
+            WHERE codigo = '$codigo'
+        ";
+
+        return $this->select($sql);
+    }
+
     // Función para crear una nueva solicitud en la base de datos
     public function crearSolicitud($datos) {
+        $descripcion = isset($datos['descripcion']) ? pg_escape_string($datos['descripcion']) : '';
+        $direccion = isset($datos['direccion']) ? pg_escape_string($datos['direccion']) : '';
+        $imagen_url = isset($datos['imagen_url']) ? pg_escape_string($datos['imagen_url']) : '';
+
+        $coord_x = isset($datos['coord_x']) && trim($datos['coord_x']) !== '' ? trim($datos['coord_x']) : null;
+        $coord_y = isset($datos['coord_y']) && trim($datos['coord_y']) !== '' ? trim($datos['coord_y']) : null;
+
+        $coordenadas_sql = 'NULL';
+        if ($coord_x !== null && $coord_y !== null) {
+            $coordenadas_sql = "ST_SetSRID(GeometryFromText('POINT($coord_x $coord_y)'), 4326)";
+        }
+
         $sql = "
             INSERT INTO solicitudes (
                 id_usuario,
@@ -265,13 +291,10 @@ class SolicitudesModel extends MasterModel {
                 ".$datos['id_usuario'].",
                 ".$datos['id_estado_solicitud'].",
                 ".$datos['id_tipo_solicitud'].",
-                '".$datos['descripcion']."',
-                '".$datos['direccion']."',
-                ST_SetSRID(
-                    GeometryFromText('POINT(".$datos['coord_x']." ".$datos['coord_y'].")'),
-                    4326
-                ),
-                '".$datos['imagen_url']."'
+                '$descripcion',
+                '$direccion',
+                $coordenadas_sql,
+                '$imagen_url'
             )
             RETURNING id_solicitud
         ";

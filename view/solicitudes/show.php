@@ -117,7 +117,7 @@
     </div>
 
     <!-- Responder solicitud -->
-    <?php if ($_SESSION['id_rol'] == 2 ) { ?>
+    <?php if (isset($_SESSION['id_rol']) && in_array((int)$_SESSION['id_rol'], array(1, 2), true)) { ?>
     <div class="card shadow-sm mb-4">
         <div class="card-header text-white fw-semibold" style="background-color: #1a2942;">
             <i class="fa fa-reply me-2"></i> Responder Solicitud
@@ -190,7 +190,7 @@
 
 </div>
 
-<?php if ($_SESSION['id_rol'] == 2): ?>
+<?php if (isset($_SESSION['id_rol']) && in_array((int)$_SESSION['id_rol'], array(1, 2), true)): ?>
 
 <div id="loadingOverlay" style="
     display: none;

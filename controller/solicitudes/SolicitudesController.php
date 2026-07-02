@@ -15,12 +15,13 @@ class SolicitudesController {
         }
 
         $obj = new SolicitudesModel();
-        // Obtener filtros de fecha desde la URL
+        $fecha_inicio = isset($_GET['fecha_inicio']) ? trim($_GET['fecha_inicio']) : null;
+        $fecha_fin = isset($_GET['fecha_fin']) ? trim($_GET['fecha_fin']) : null;
 
         if (tienePermiso('Solicitudes', 'editar')) {
-            $solicitudes = $obj->listarSolicitudes(); // ve todas
+            $solicitudes = $obj->listarSolicitudes(null, $fecha_inicio, $fecha_fin); // ve todas
         } else {
-            $solicitudes = $obj->listarSolicitudes($_SESSION['id_usuario']); // ve las suyas
+            $solicitudes = $obj->listarSolicitudes($_SESSION['id_usuario'], $fecha_inicio, $fecha_fin); // ve las suyas
         }
         include_once "../view/solicitudes/list.php";
     }
@@ -42,10 +43,67 @@ class SolicitudesController {
     }
     // Mostrar formulario específico para PQRSF
     public function getPQRSF() {
+        if (!estaLogueado() || !tienePermiso('Solicitudes', 'registrar')) {
+            $_SESSION['error'] = 'No tiene permisos para crear solicitudes.';
+            redirect('/proyectoGeo/web/index.php');
+            return;
+        }
+
         $obj = new SolicitudesModel();
         $catalogos = $obj->obtenerCatalogosFormulario();
         include_once "../view/solicitudes/forms/pqrsf.php";
     }
+
+    public function postPQRSF() {
+        if (!estaLogueado() || !tienePermiso('Solicitudes', 'registrar')) {
+            $_SESSION['error'] = 'No tiene permisos para crear solicitudes.';
+            redirect('/proyectoGeo/web/index.php');
+            return;
+        }
+
+        $obj = new SolicitudesModel();
+
+        $id_tipo_pqrsf = isset($_POST['id_tipo_pqrsf']) ? trim($_POST['id_tipo_pqrsf']) : '';
+        $descripcion = isset($_POST['descripcion']) ? trim($_POST['descripcion']) : '';
+
+        if ($id_tipo_pqrsf === '' || $descripcion === '') {
+            $_SESSION['error'] = 'Debe completar el tipo de PQRSF y la descripción.';
+            redirect(getUrl('solicitudes', 'Solicitudes', 'getPQRSF', false));
+            return;
+        }
+
+        $tipoSolicitud = $obj->obtenerTipoSolicitudPorCodigo('pqrsf');
+        $tipoSolicitud = pg_fetch_assoc($tipoSolicitud);
+
+        if (!$tipoSolicitud) {
+            $_SESSION['error'] = 'No se encontró el tipo de solicitud PQRSF en la configuración.';
+            redirect(getUrl('solicitudes', 'Solicitudes', 'getPQRSF', false));
+            return;
+        }
+
+        $datos = array(
+            'id_usuario' => $_SESSION['id_usuario'],
+            'id_estado_solicitud' => 1,
+            'id_tipo_solicitud' => (int) $tipoSolicitud['id_tipo_solicitud'],
+            'descripcion' => $descripcion,
+            'direccion' => 'Sin dirección especificada',
+            'coord_x' => '0',
+            'coord_y' => '0',
+            'imagen_url' => '',
+            'id_tipo_pqrsf' => $id_tipo_pqrsf
+        );
+
+        $resultado = $obj->crearSolicitudCompleta($datos, 'pqrsf');
+
+        if ($resultado) {
+            $_SESSION['solicitud_exitosa'] = 'La PQRSF fue registrada exitosamente.';
+            redirect(getUrl('solicitudes', 'Solicitudes', 'listar', false));
+        } else {
+            $_SESSION['error'] = 'No se pudo registrar la PQRSF.';
+            redirect(getUrl('solicitudes', 'Solicitudes', 'getPQRSF', false));
+        }
+    }
+
     public function postCreate() {
 
         if (!estaLogueado() || !tienePermiso('Solicitudes', 'registrar')) {

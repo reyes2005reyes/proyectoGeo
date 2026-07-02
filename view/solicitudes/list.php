@@ -91,7 +91,7 @@
                                         <i class="fa fa-eye me-1"></i> Ver
                                     </a>
                                     <?php } ?>
-                                    <?php if (isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 2) { ?>
+                                    <?php if (isset($_SESSION['id_rol']) && in_array((int)$_SESSION['id_rol'], array(1, 2), true)) { ?>
                                         <a class="btn btn-sm btn-outline-secondary"
                                            href="<?php echo getUrl('solicitudes','solicitudes','getShow', array('id_solicitud' => $solicitud['id_solicitud'])); ?>">
                                             <i class="fa fa-reply me-1"></i> Responder

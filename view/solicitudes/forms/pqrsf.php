@@ -4,7 +4,7 @@
         <p class="text-muted">Petición, Queja, Reclamo, Sugerencia o Felicitación</p>
     </div>
 
-    <form action="<?php echo getUrl('solicitudes', 'Solicitudes', 'postCreate', false); ?>" method="post" id="formPqrsf">
+    <form action="<?php echo getUrl('solicitudes', 'Solicitudes', 'postPQRSF', false); ?>" method="post" id="formPqrsf">
 
         <input type="hidden" name="id_estado_solicitud" value="1">
         <input type="hidden" name="id_tipo_solicitud" value="5">
@@ -42,7 +42,7 @@
             <button type="submit" class="btn text-white px-4" style="background-color: #1a2942;">
                 <i class="fa fa-save me-1"></i> Registrar
             </button>
-            <a class="btn btn-secondary px-4" href="<?php echo getUrl('solicitudes', 'pqrsf', 'listar', false); ?>">
+            <a class="btn btn-secondary px-4" href="<?php echo getUrl('solicitudes', 'Solicitudes', 'listar', false); ?>">
                 <i class="fa fa-arrow-left me-1"></i> Volver
             </a>
         </div>
