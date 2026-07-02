@@ -90,7 +90,7 @@
             </div>
 
             <div class="col-12">
-                <label class="form-label fw-semibold">DescripciÃ³n de la seÃ±al</label>
+                <label class="form-label fw-semibold">Descripcion de la señal</label>
 
                 <textarea
                     class="form-control descripcion-senal"

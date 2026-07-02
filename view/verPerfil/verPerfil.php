@@ -131,6 +131,7 @@ if (!isset($perfil) || !is_array($perfil)) {
                             <div class="col-md-6 mb-3">
                                 <label for="correo" class="form-label">
                                     Correo electrónico
+                                     <span class="text-danger">*</span>
                                 </label>
 
                                 <input type="email"
@@ -143,7 +144,7 @@ if (!isset($perfil) || !is_array($perfil)) {
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="telefono" class="form-label"> Teléfono </label>
+                                <label for="telefono" class="form-label"> Teléfono  <span class="text-danger">*</span></label>
                                 <input type="number"
                                     class="form-control perfil-campo  campo-editable"
                                     id="telefono"
@@ -156,7 +157,7 @@ if (!isset($perfil) || !is_array($perfil)) {
                         </div>
 
                         <div class="mb-3">
-                            <label for="direccion" class="form-label"> Dirección de residencia </label>
+                            <label for="direccion" class="form-label"> Dirección de residencia  <span class="text-danger">*</span></label>
                             <input type="text"
                                 class="form-control perfil-campo  campo-editable"  
                                 id="direccion" name="direccion"  
