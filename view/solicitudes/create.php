@@ -181,6 +181,9 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== 'ok') {
                         <label for="imagen" class="form-label fw-semibold">
                             Imagen
                             <span class="text-danger">*</span>
+                              <i class="fa fa-question-circle text-primary" data-bs-toggle="tooltip"
+                               title="Sube una fotografía clara del lugar donde se presenta la situación o donde se solicita la intervención. La imagen debe mostrar la zona afectada o el sitio donde se requiere la señalización, el reductor u otra acción.">
+                              </i>
                         </label>
                         <input type="file" class="form-control" id="imagen" name="imagen" 
                             accept=".jpg,.jpeg,.png" required>
