@@ -41,56 +41,37 @@
                 </div>
 
                 <div class="table-responsive">
-
                     <table class="table table-bordered table-hover align-middle">
-
                         <thead class="table-light">
                             <tr>
                                 <th>ACCION/MODULO</th>
-
                                 <?php
                                     $modulosArray = array();
-
                                     while ($modulo = pg_fetch_assoc($modulos)) {
-
                                         echo "<th>" . $modulo['nombre_modulo'] . "</th>";
-
                                         $modulosArray[] = $modulo;
                                     }
                                 ?>
                             </tr>
                         </thead>
-
                         <tbody>
-
                             <?php
-
                                 while ($accion = pg_fetch_assoc($acciones)) {
-
                                     echo "<tr>";
-
                                     echo "<td>" . $accion['nombre_accion'] . "</td>";
-
                                     foreach ($modulosArray as $modulo) {
-
                                         echo "<td>";
                                         echo "<input type='checkbox' ";
                                         echo "name='permisos[" . $modulo['id_modulo'] . "][" . $accion['id_accion'] . "]' ";
                                         echo "value='1'>";
                                         echo "</td>";
                                     }
-
                                     echo "</tr>";
                                 }
-
                             ?>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
                 <button type="submit"
                         class="btn btn-success mt-3">
                     Registrar Rol

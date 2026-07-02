@@ -495,19 +495,19 @@ INSERT INTO estados_usuario (nombre_estado_usuario) VALUES
     ('Habilitado'), ('Inhabilitado');
 
 INSERT INTO modulos (nombre_modulo) VALUES
-    ('Administración'), ('Solicitudes'), ('GeoVisor'), ('EducaciónVial'), ('Reportes'), ('Manuales');
+    ('Administracion'), ('Solicitudes'), ('GeoVisor'), ('EducacionVial'), ('Reportes'), ('Manuales');
 
 INSERT INTO estados_solicitud (nombre_estado_solicitud) VALUES
     ('Pendiente'), ('En revisión'), ('En proceso'), ('Rechazada'), ('Completada');
 
 INSERT INTO tipos_solicitud (codigo, nombre) VALUES
-    ('reporte_accidente',      'Reporte de accidente'),
-    ('senal_mal_estado',       'Señal en mal estado'),
-    ('nueva_senalizacion',     'Nueva señalización'),
-    ('reductor_mal_estado',    'Reductor en Mal estado'),
-    ('nuevo_reductor',         'Nuevo reductor'),
-    ('via_publica_mal_estado', 'Vía pública en mal estado'),
-    ('pqrsf',                  'PQRSF');
+    ('reporte_accidente','Reporte de accidente'),
+    ('senal_mal_estado','Señal en mal estado'),
+    ('nueva_senalizacion','Nueva señalización'),
+    ('reductor_mal_estado','Reductor en mal estado'),
+    ('nuevo_reductor','Nuevo reductor'),
+    ('via_publica_mal_estado', 'Reportar daño en la vía pública'),
+    ('pqrsf','PQRSF');
 
 INSERT INTO orientaciones (nombre_orientacion) VALUES ('Vertical'), ('Horizontal');
 
@@ -751,21 +751,21 @@ INSERT INTO senales (id_categoria,codigo,nombre_senal,descripcion) VALUES
     (12,'SI-30','HOTEL (6)','Ubica hotel.');
 
 INSERT INTO tipos_danio (nombre_tipo_danio, descripcion_danio) VALUES
-    ('Señal Borrosa o Desteñida',           'Pérdida de visibilidad.'),
-    ('Señal Derribada o Inclinada',          'Golpe o vandalismo.'),
-    ('Señal Vandalizada o Grafiteada',       'Grafitis o stickers.'),
-    ('Señal Tapada por Vegetación',          'Obstrucción vegetal.'),
-    ('Ausencia de Señal',                    'Falta de señal.'),
-    ('Demarcación Horizontal Desgastada',    'Líneas no visibles.'),
-    ('Hueco o Bache Crítico',                'Daño peligroso en pavimento.'),
-    ('Piel de Cocodrilo o Fisuración',       'Grietas en asfalto.'),
-    ('Hundimiento o Deformación de Calzada', 'Desnivel de vía.'),
-    ('Tapa de Alcantarilla Faltante',        'Ausencia de tapa.'),
-    ('Semáforo Averiado o Apagado',          'Falla semafórica.'),
-    ('Deterioro Estructural de Reductor',    'Grietas o desgaste.'),
-    ('Piezas Faltantes en Reductor',         'Componentes faltantes.'),
-    ('Inconsistencia Geométrica',            'Forma alterada.'),
-    ('Riesgo Estructural para Actor Vial',   'Elementos peligrosos.');
+    ('Señal Borrosa o Desteñida','Pérdida de visibilidad.'),
+    ('Señal Derribada o Inclinada','Golpe o vandalismo.'),
+    ('Señal Vandalizada o Grafiteada','Grafitis o stickers.'),
+    ('Señal Tapada por Vegetación','Obstrucción vegetal.'),
+    ('Ausencia de Señal','Falta de señal.'),
+    ('Demarcación Horizontal Desgastada','Líneas no visibles.'),
+    ('Hueco o Bache Crítico','Daño peligroso en pavimento.'),
+    ('Piel de Cocodrilo o Fisuración','Grietas en asfalto.'),
+    ('Hundimiento o Deformación de Calzada','Desnivel de vía.'),
+    ('Tapa de Alcantarilla Faltante','Ausencia de tapa.'),
+    ('Semáforo Averiado o Apagado','Falla semafórica.'),
+    ('Deterioro Estructural de Reductor','Grietas o desgaste.'),
+    ('Piezas Faltantes en Reductor','Componentes faltantes.'),
+    ('Inconsistencia Geométrica','Forma alterada.'),
+    ('Riesgo Estructural para Actor Vial','Elementos peligrosos.');
 
 INSERT INTO causas_accidente (id_tipo_choque, nombre_causa) VALUES
     (1,'Automóvil'),(1,'Motocicleta'),(1,'Bus / Buseta'),(1,'Camión / Tractocamión'),
@@ -780,72 +780,29 @@ INSERT INTO acciones (nombre_accion) VALUES
 ('editar'),
 ('inhabilitar');
 
+-- =====================================
 INSERT INTO permisos (id_rol, id_modulo, id_accion) VALUES
+-- Administrador
+(1,1,1),(1,1,2),(1,1,3),(1,1,4),
+(1,2,1),(1,2,2),(1,2,3),
+(1,3,1),
+(1,4,1),(1,4,3),
+(1,5,1),
+(1,6,1),(1,6,3),
 
--- ===========================
--- ROL 3 - CIUDADANO
--- ===========================
+-- Funcionario
+(2,1,1),
+(2,2,1),(2,2,2),(2,2,3),
+(2,3,1),
+(2,4,1),(2,4,3),
+(2,5,1),(2,5,2),(2,5,3),
+(2,6,1),(2,6,2),(2,6,3),
 
--- Solicitudes
-(3,2,1), -- Listar
-(3,2,2), -- Registrar
-
--- GeoVisor
-(3,3,1), -- Listar
-
--- Educación Vial
-(3,4,1), -- Listar
-
--- ===========================
--- ROL 2 - FUNCIONARIO
--- ===========================
-
--- Administración (Usuarios)
-(2,1,1), -- Listar
-
--- Solicitudes (incluye PQRSF)
-(2,2,1), -- Listar
-(2,2,2), -- Registrar
-(2,2,3), -- Editar
-
--- GeoVisor
-(2,3,1), -- Listar
-
--- Educación Vial
-(2,4,1), -- Listar
-(2,4,3), -- Editar
-
--- Reportes
-(2,5,1), -- Listar
-
--- ===========================
--- ROL 1 - ADMINISTRADOR
--- ===========================
-
--- Administración (Usuarios)
-(1,1,1), -- Listar
-(1,1,2), -- Registrar
-(1,1,3), -- Editar
-(1,1,4), -- Anular
-
--- Solicitudes (incluye PQRSF)
-(1,2,1), -- Listar
-(1,2,2), -- Registrar
-(1,2,3), -- Editar
-(1,2,4), -- Anular
-
--- GeoVisor
-(1,3,1), -- Listar
-
--- Educación Vial
-(1,4,1), -- Listar
-(1,4,2), -- Registrar
-(1,4,3), -- Editar
-(1,4,4), -- Anular
-
--- Reportes
-(1,5,1), -- Listar
-(1,5,2); -- Registrar
+-- Ciudadano
+(3,2,1),(3,2,2),
+(3,3,1),
+(3,4,1),
+(3,6,1);
 
 -- =====================================
 -- USUARIOS

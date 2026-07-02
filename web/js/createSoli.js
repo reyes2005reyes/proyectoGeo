@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ===========================
     // Mostrar formularios según tipo
-    // ===========================
     var tipoSelect = document.getElementById('id_tipo_solicitud');
     var sections = document.querySelectorAll('.tipo-section');
 
@@ -33,9 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
     mostrarSeccion();
 
 
-    // ===========================
+
     // Tipo señal -> Categoría -> Señal
-    // ===========================
 
     sections.forEach(function (seccion) {
 
@@ -104,11 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             filtrarCategorias();
         }
 
-
-        // ===========================
         // Categoría reductor -> Tipo reductor
-        // ===========================
-
         var categoriaReductor = seccion.querySelector('.categoria-reductor-filtro');
         var tipoReductor = seccion.querySelector('#id_tipo_reductor');
 
@@ -129,18 +122,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
             }
-
             categoriaReductor.addEventListener('change', filtrarReductores);
-
             filtrarReductores();
         }
-
     });
 
-    // ===========================
     // Construcción de dirección
-    // ===========================
-
     var tipoVia = document.getElementById("tipo_via");
     var numero1 = document.getElementById("numero1");
     var letra1 = document.getElementById("letra1");
@@ -253,10 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         actualizarDireccion();
 
-        // ===========================
         // Validación antes de enviar
-        // ===========================
-
         document.getElementById("formSolicitud").addEventListener("submit", function (e) {
 
             var valido = true;
