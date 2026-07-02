@@ -1,10 +1,7 @@
-
 <body>
 	<div class="wrapper">
-		<!-- Sidebar -->
 		<div class="sidebar" data-background-color="dark">
 			<div class="sidebar-logo">
-				<!-- Logo Header -->
 				<div class="logo-header " data-background-color="dark">
 					<a href="index.php" class="logo">
 						<img src="assets/img/logo.png" alt="navbar brand" class="navbar-brand text-center" height="70">
@@ -21,13 +18,11 @@
 						<i class="gg-more-vertical-alt"></i>
 					</button>
 				</div>
-				<!-- End Logo Header -->
 			</div>
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
 
-						<!-- Mapa: módulo público, visible para cualquier visitante -->
 						<li class="nav-item active">
 							<a href="index.php">
 								<i class="fas fa-map-marked-alt"></i>
@@ -36,9 +31,9 @@
 						</li>
 
 						<?php
+							// ← CAMBIO: se eliminó 'editar' de esta condición
 							$puedeAdministrarRoles = tienePermiso('Administracion', 'registrar')
-								|| tienePermiso('Administracion', 'editar')
-								|| tienePermiso('Administracion', 'anular');
+								|| tienePermiso('Administracion', 'inhabilitar');
 						?>
 
 						<?php if ($puedeAdministrarRoles): ?>
@@ -130,6 +125,7 @@
 									</a>
 								</li>
 							<?php endif; ?>
+
 							<?php if (tienePermiso('Manuales', 'listar')): ?>
 								<li class="nav-item">
 									<a href="<?php echo getUrl('manuales', 'manuales', 'index', false); ?>">
@@ -138,15 +134,16 @@
 									</a>
 								</li>
 							<?php endif; ?>
+
 							<li class="nav-item">
 								<a href="<?php echo getUrl('acercade', 'acercade', 'index', false); ?>">
 									<i class="fas fa-info-circle"></i>
 									<p>Acerca De...</p>
 								</a>
 							</li>
-							<?php else: ?>
 
-							<!-- Educación Vial es contenido público -->
+						<?php else: ?>
+
 							<li class="nav-item">
 								<a href="<?php echo getUrl('educativo', 'educativo', 'catalogo', false); ?>">
 									<i class="fas fa-info-circle"></i>

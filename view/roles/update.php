@@ -15,6 +15,23 @@
         </div>
 
         <div class="card-body">
+            <?php if (isset($_SESSION['error_rol'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <?php echo $_SESSION['error_rol']; unset($_SESSION['error_rol']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['exito_rol'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <?php echo $_SESSION['exito_rol']; unset($_SESSION['exito_rol']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+<div class="container-fluid mt-4">
 
             <form action="<?php echo getUrl("roles","roles","postUpdate"); ?>" method="post">
 

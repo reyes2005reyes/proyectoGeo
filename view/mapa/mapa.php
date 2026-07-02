@@ -62,9 +62,11 @@ include_once '../../lib/conf/connection.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visor Dinámico Cali</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/proyectoGeo/web/assets/css/listaUsuarios.css">
     <script type="text/javascript" src="/proyectoGeo/web/misc/lib/mscross-1.1.9.js"></script>
 </head>
 <body>
+    <div id="flashContainer" style="position:fixed;top:20px;right:20px;z-index:9999;min-width:300px;max-width:400px;"></div>
     <nav class="navbar shadow-sm mb-3" style="background-color:#1A3C5E;">
         <div class="container-fluid">
             <span class="navbar-brand text-white">Visor Dinámico Cali</span>
@@ -185,6 +187,26 @@ include_once '../../lib/conf/connection.php';
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
+        function mostrarFlash(mensaje, tipo) {
+            const iconos = { success: '&#10003;', error: '&#10007;', warning: '&#9888;' };
+            const icono  = iconos[tipo] || '&#9432;';
+            const div = document.createElement('div');
+            div.className = 'flash-msg ' + tipo;
+            div.innerHTML =
+                '<span class="flash-icon">' + icono + '</span>' +
+                '<span class="flash-text">' + mensaje + '</span>' +
+                '<button class="flash-close" onclick="cerrarFlash(this)">&#10005;</button>';
+            document.getElementById('flashContainer').appendChild(div);
+            setTimeout(() => cerrarFlash(div.querySelector('.flash-close')), 4000);
+        }
+
+        function cerrarFlash(btn) {
+            const div = btn.closest('.flash-msg');
+            if (div) {
+                div.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => { if (div.parentNode) div.parentNode.removeChild(div); }, 300);
+            }
+        }
         // URL del formulario de creación de solicitud
         var URL_FORMULARIO = '/proyectoGeo/web/index.php?modulo=solicitudes&controlador=solicitudes&funcion=getCreate';
 
@@ -314,11 +336,15 @@ include_once '../../lib/conf/connection.php';
         }
         // Función para redirigir al formulario de creación de solicitud con las coordenadas seleccionadas
         function irAlFormulario(){
-            var btn = document.getElementById('btn_crear_solicitud');
-            var x = btn.dataset.x;
-            var y = btn.dataset.y;
-            var url = URL_FORMULARIO + '&coord_x=' + encodeURIComponent(x) + '&coord_y=' + encodeURIComponent(y);
-            window.top.location.href = url;
+            <?php if(!isset($_SESSION['id_usuario'])): ?>
+                mostrarFlash('Debe iniciar sesión para crear una solicitud.', 'warning');
+            <?php else: ?>
+                var btn = document.getElementById('btn_crear_solicitud');
+                var x = btn.dataset.x;
+                var y = btn.dataset.y;
+                var url = URL_FORMULARIO + '&coord_x=' + encodeURIComponent(x) + '&coord_y=' + encodeURIComponent(y);
+                window.top.location.href = url;
+            <?php endif; ?>
         }
         // Función para limpiar la selección de coordenadas y ocultar el panel de solicitud
         function limpiarUbicacion(){

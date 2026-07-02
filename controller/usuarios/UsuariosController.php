@@ -683,7 +683,7 @@ class UsuariosController{
     // Método para cambiar estado del usuario (AJAX)
     public function cambiarEstadoUsuario() {
         
-        if (!tienePermiso('Administracion', 'anular')) {
+        if (!tienePermiso('Administracion', 'inhabilitar')) {
             echo json_encode(array(
             'success' => false,
             'message' => 'No tiene permisos para cambiar el estado de un usuario.'

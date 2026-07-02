@@ -1,5 +1,4 @@
 <?php
-
 include_once '../model/MasterModel.php';
 
 class RolesController {
@@ -72,7 +71,7 @@ class RolesController {
     }
 
     $_SESSION['exito_rol'] = 'Rol registrado correctamente.';
-    redirect(getUrl("roles", "roles", "getCreate"));
+    redirect(getUrl("roles", "roles", "getRoles"));
 }
     // Método para mostrar la lista de roles
     public function getRoles() {
@@ -111,41 +110,41 @@ class RolesController {
         $obj = new MasterModel();
         $id_rol = $_POST['id_rol'];
         $rol_nombre = trim($_POST['rol_nombre']);
+
         // Validar que el nombre del rol tenga al menos 3 caracteres
         if (strlen($rol_nombre) < 3) {
             $_SESSION['error_rol'] = 'El nombre del rol debe tener mínimo 3 caracteres.';
-            redirect(getUrl("roles", "roles", "getCreate"));
+            redirect(getUrl("roles", "roles", "getUpdate", array('id_rol' => $id_rol)));
             return;
         }
+
         // Validar si el nombre del rol ya existe en la base de datos
         $sql = "SELECT * FROM roles WHERE LOWER(nombre_rol) = LOWER('$rol_nombre') AND id_rol <> $id_rol";
         $validar = $obj->select($sql);
         // Si ya existe un rol con ese nombre, mostrar un mensaje de error y regresar al formulario
         if (pg_num_rows($validar) > 0) {
             $_SESSION['error_rol'] = 'Ya existe un rol con ese nombre.';
-            redirect(getUrl("roles", "roles", "getCreate"));
+            redirect(getUrl("roles", "roles", "getUpdate", array('id_rol' => $id_rol)));
             return;
         }
+
         // Validar que se haya asignado al menos un permiso
         if (!isset($_POST['permisos']) || count($_POST['permisos']) === 0) {
             $_SESSION['error_rol'] = 'Debe asignar al menos un permiso al rol.';
-            redirect(getUrl("roles", "roles", "getCreate"));
+            redirect(getUrl("roles", "roles", "getUpdate", array('id_rol' => $id_rol)));
             return;
         }
-        // Actualizar el nombre del rol en la base de datos
+
+        // Todo válido — actualizar el nombre del rol en la base de datos
+        $permisos = $_POST['permisos'];
+
         $sql = "UPDATE roles SET nombre_rol = '$rol_nombre' WHERE id_rol = $id_rol";
-
         $obj->update($sql);
-        // Obtener los permisos seleccionados en el formulario
-        if (isset($_POST['permisos'])) {
-            $permisos = $_POST['permisos'];
-        } else {
-            $permisos = array();
-        }
 
+        // Recorrer los permisos seleccionados y guardarlos en la base de datos
         $sql = "DELETE FROM permisos WHERE id_rol = $id_rol";
         $obj->delete($sql);
-        // Recorrer los permisos seleccionados y guardarlos en la base de datos
+
         foreach ($permisos as $modulo_id => $acciones) {
             foreach ($acciones as $accion_id => $valor) {
                 $per_id = $obj->autoincrement("permisos", "id_permiso");
@@ -153,9 +152,10 @@ class RolesController {
                 $obj->insert($sql);
             }
         }
+
         // Mostrar un mensaje de éxito y redirigir a la lista de roles
         $_SESSION['exito_rol'] = 'Rol actualizado correctamente.';
-        redirect(getUrl("roles", "roles", "getCreate"));
+        redirect(getUrl("roles", "roles", "getRoles"));
     }
 }
 ?>
